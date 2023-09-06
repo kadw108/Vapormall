@@ -1,7 +1,7 @@
 import {CONSTANTS} from "./constants";
 import {SKILL_LIST} from "./skills";
 import {SOUL_LIST} from "./soul";
-import {Battle} from "./battle";
+import {Battle} from "./battle/battle";
 import {IndividualSoul} from "./individualsoul";
 
 export {

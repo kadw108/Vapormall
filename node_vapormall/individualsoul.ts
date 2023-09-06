@@ -1,5 +1,6 @@
 import {SkillData, SKILL_LIST} from "./skills";
 import {SoulSpecies, SOUL_LIST} from "./soul";
+import {CONSTANTS, StatDict} from "./constants";
 
 class Skill{
     data: SkillData;
@@ -39,13 +40,8 @@ class IndividualSoul {
     name: string;
     level: number;
 
-    hp: number;
-    max_hp: number;
-    offense: number;
-    defense: number;
-    glitch_offense: number;
-    glitch_defense: number;
-    speed: number;
+    currentHP: number;
+    stats: StatDict;
 
     skills: Array<Skill>;
 
@@ -54,6 +50,14 @@ class IndividualSoul {
         this.name = soul_species.name;
         this.level = level;
 
+        this.stats = {
+            [CONSTANTS.STATS.HP]: 0,
+            [CONSTANTS.STATS.OFFENSE]: 0,
+            [CONSTANTS.STATS.DEFENSE]: 0,
+            [CONSTANTS.STATS.GLITCHOFFENSE]: 0,
+            [CONSTANTS.STATS.GLITCHDEFENSE]: 0,
+            [CONSTANTS.STATS.SPEED]: 0
+        }
         this.initializeStats();
 
         this.skills = [];
@@ -61,15 +65,14 @@ class IndividualSoul {
     }
 
     initializeStats() {
-        this.max_hp = this.soul_species.stats[0].starting_stat;
-        this.hp = this.max_hp;
-        this.offense = this.soul_species.stats[1].starting_stat;
-        this.defense = this.soul_species.stats[2].starting_stat;
-        this.glitch_offense = this.soul_species.stats[3].starting_stat;
-        this.glitch_defense = this.soul_species.stats[4].starting_stat;
-        this.speed = this.soul_species.stats[5].starting_stat;
+        for (let key in this.stats) {
+            const keyType = key as unknown as CONSTANTS.STATS;
+            this.stats[keyType] = this.soul_species.stats[keyType];
+        }
         
         // TODO level stuff
+
+        this.currentHP = this.stats[CONSTANTS.STATS.HP];
     }
 
     initializeSkills() {

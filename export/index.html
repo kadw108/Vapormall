@@ -150,6 +150,36 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
   border: solid 1px #aaa;
   background: #000;
 }
+
+.skill-typeless {
+  border-color: #57c;
+  background: linear-gradient(#333, #000);
+}
+
+.skill-sweet {
+  border-color: #f6c;
+  background: linear-gradient(#905, #000);
+}
+
+.skill-sangfroid {
+  border-color: #fc6;
+  background: linear-gradient(#950, #000);
+}
+
+.skill-corporate {
+  border-color: #2d2d2d;
+  background: linear-gradient(#808080, #000);
+}
+
+.skill-edge {
+  border-color: #ca2600;
+  background: linear-gradient(#6c000b, #000);
+}
+
+.skill-error {
+  border: dashed 1px #aaa;
+  background: linear-gradient(#888, #222, #000, #222, #888);
+}
 /* twine-user-stylesheet #2: "Fonts" */
 /* FOR CUSTOM FONTS */
 /* Add in font variations as you need them for italic/bold/etc - see https://www.metaltoad.com/blog/how-use-font-face-avoid-faux-italic-and-bold-browser-styles */
@@ -331,6 +361,14 @@ CUSTOM STYLES
   font-size: 0.8em;
 }
 
+.noClick{
+  pointer-events: none;
+}
+
+.hidden {
+  display: none;
+}
+
 /*
 OVERRIDING DEFAULT CSS STYLES
 */
@@ -472,7 +510,6 @@ importScripts("vapormall.js");</script><tw-tag name="TODO" color="red"></tw-tag>
         &lt;/div&gt;
     &lt;/div&gt;
     &lt;div id=&quot;bottomhalf&quot; class=&quot;absoluteAlign blackBg&quot;&gt;
-        &lt;p&gt;What will your ADWARE do?&lt;/p&gt;
     &lt;/div&gt;
 &lt;/div&gt;
 
@@ -487,8 +524,6 @@ const enemy1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
 const test_battle = new ref.Battle(
     [player1], [enemy1]
 );
-
-test_battle.render();
 
 &lt;&lt;/script&gt;&gt;
 &lt;&lt;/done&gt;&gt;

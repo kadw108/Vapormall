@@ -1,11 +1,11 @@
 export namespace CONSTANTS {
   export enum STATS {
-    HP,
-    OFFENSE,
-    DEFENSE,
-    GLITCHOFFENSE,
-    GLITCHDEFENSE,
-    SPEED
+    HP = "HP",
+    OFFENSE = "offense",
+    DEFENSE = "defense",
+    GLITCHOFFENSE = "glitch offense",
+    GLITCHDEFENSE = "glitch defense",
+    SPEED = "speed"
   }
 
   export enum SKILLCATEGORIES {
@@ -33,3 +33,5 @@ export namespace CONSTANTS {
     NONE
   }
 }
+
+export type StatDict = { [key in CONSTANTS.STATS] : number };

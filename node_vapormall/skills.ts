@@ -1,8 +1,9 @@
 import {CONSTANTS} from "./constants";
 
 interface StatChange {
-  change: number;
+  change: -3|-2|-1|1|2|3;
   stat: CONSTANTS.STATS;
+  target: CONSTANTS.TARGETS;
 }
 
 interface SkillData {
@@ -59,11 +60,13 @@ const SKILL_LIST : Skills = {
         stat_changes: [
             {
                 change: 1,
-                stat: CONSTANTS.STATS.OFFENSE
+                stat: CONSTANTS.STATS.OFFENSE,
+                target: CONSTANTS.TARGETS.SELF
             },
             {
                 change: 1,
-                stat: CONSTANTS.STATS.GLITCHOFFENSE
+                stat: CONSTANTS.STATS.GLITCHOFFENSE,
+                target: CONSTANTS.TARGETS.SELF
             },
         ],
         target: CONSTANTS.TARGETS.SELF,
@@ -81,4 +84,4 @@ const SKILL_LIST : Skills = {
     },
 };
 
-export {SkillData, SKILL_LIST};
+export {SkillData, SKILL_LIST, StatChange};

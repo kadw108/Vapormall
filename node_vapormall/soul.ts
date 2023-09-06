@@ -1,10 +1,5 @@
-import {CONSTANTS} from "./constants";
+import {CONSTANTS, StatDict} from "./constants";
 import {SkillData, SKILL_LIST} from "./skills";
-
-interface StatWrapper {
-  stat: CONSTANTS.STATS;
-  starting_stat: number;
-}
 
 interface Sprites {
   front: string;
@@ -19,7 +14,7 @@ interface SkillWrapper {
 interface SoulSpecies {
   name: string;
   description: string;
-  stats: Array<StatWrapper>;
+  stats: StatDict;
   sprites: Sprites;
   types: Array<CONSTANTS.TYPES>;
   skills: Array<SkillWrapper>;
@@ -29,14 +24,14 @@ const SOUL_LIST = {
     Adware: {
         name: "ADWARE",
         description: "Churning glut of incoherence.",
-        stats: [
-            {stat: CONSTANTS.STATS.HP, starting_stat: 20},
-            {stat: CONSTANTS.STATS.OFFENSE, starting_stat: 3},
-            {stat: CONSTANTS.STATS.DEFENSE, starting_stat: 10},
-            {stat: CONSTANTS.STATS.GLITCHOFFENSE, starting_stat: 10},
-            {stat: CONSTANTS.STATS.GLITCHDEFENSE, starting_stat: 7},
-            {stat: CONSTANTS.STATS.SPEED, starting_stat: 8},
-        ],
+        stats: {
+            [CONSTANTS.STATS.HP]: 20,
+            [CONSTANTS.STATS.OFFENSE]: 3,
+            [CONSTANTS.STATS.DEFENSE]: 10,
+            [CONSTANTS.STATS.GLITCHOFFENSE]: 10,
+            [CONSTANTS.STATS.GLITCHDEFENSE]: 7,
+            [CONSTANTS.STATS.SPEED]: 8
+        },
         sprites: {
             front: "temp.gif",
             back: "temp.gif",

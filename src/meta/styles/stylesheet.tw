@@ -129,6 +129,14 @@ CUSTOM STYLES
   font-size: 0.8em;
 }
 
+.noClick{
+  pointer-events: none;
+}
+
+.hidden {
+  display: none;
+}
+
 /*
 OVERRIDING DEFAULT CSS STYLES
 */
