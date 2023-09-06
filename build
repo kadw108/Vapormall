@@ -1,0 +1,4 @@
+cd node_vapormall
+npx esbuild index.js --bundle --minify --outfile=../export/vapormall.js --global-name=vapormall
+cd ..
+./tweego_folder/tweego -l -o export/index.html src

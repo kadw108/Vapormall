@@ -1,0 +1,47 @@
+:: TagStyles [stylesheet]
+
+.menu #bg {
+  filter: blur(0px);
+}
+
+.outside #bg {
+  background-color: #ffffff;
+  background-image: url("assets/background3.png");
+  filter: blur(2px);
+  animation: none;
+}
+.outside #passages {
+  background-color: rgba(0, 0, 0, 0.95);
+}
+.outside a {
+  color: #aaaadd;
+  text-decoration: inherit;
+}
+.outside a:hover {
+  text-decoration: inherit;
+  color: #338899;
+}
+
+.future #bg {
+  background-color: #00090f;
+  background-image: url("assets/background2b.png");
+  filter: blur(20px) brightness(40%);
+  animation: none;
+}
+.future #passages {
+  background-color: rgba(0, 0, 0, 0.9);
+  box-shadow: 0px 0px 50px 50px rgb(0, 0, 0, 0.9);
+  border-radius: 60px;
+}
+.future a {
+  color: #88bbcc;
+  text-decoration: inherit;
+}
+.future a:hover {
+  text-decoration: inherit;
+  color: #007788;
+}
+
+.no-overflow .passage {
+  overflow: visible;
+}

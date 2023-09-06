@@ -1,0 +1,31 @@
+:: Battle {"position":"100,200","size":"100,100"}
+\<<nobr>>
+<div id="screenBg"/>
+
+<div id="screenContents" class="absoluteAlign">
+    <div id="tophalf" class="absoluteAlign">
+        <div id="messageContainer">
+        </div>
+    </div>
+    <div id="bottomhalf" class="absoluteAlign blackBg">
+        <p>What will your ADWARE do?</p>
+    </div>
+</div>
+
+<<done>>
+<<script>>
+
+const ref = window.vapormall;
+
+const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
+const enemy1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
+
+const test_battle = new ref.Battle(
+    [player1], [enemy1]
+);
+
+test_battle.render();
+
+<</script>>
+<</done>>
+<</nobr>>
