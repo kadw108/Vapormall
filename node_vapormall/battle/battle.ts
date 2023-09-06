@@ -42,8 +42,8 @@ class Battle {
 
     passTurn() {
        function compareSpeed(soulAbsA: BattleSoul, soulAbsB: BattleSoul)  {
-            return soulAbsA.soul.stats[CONSTANTS.STATS.SPEED] -
-                soulAbsB.soul.stats[CONSTANTS.STATS.SPEED];
+            return soulAbsA.calculateStat(CONSTANTS.STATS.SPEED) -
+                soulAbsB.calculateStat(CONSTANTS.STATS.SPEED);
        }
        const speed_order = this.souls.sort(compareSpeed);
 
@@ -172,8 +172,8 @@ class Battle {
         switch (skill.data.meta.category) {
             case CONSTANTS.SKILLCATEGORIES.NORMALDAMAGE:
                 if (skill.data.power !== null) {
-                    const damage_num = user.soul.stats[CONSTANTS.STATS.OFFENSE] * skill.data.power;
-                    const damage = Math.ceil(damage_num / target.soul.stats[CONSTANTS.STATS.DEFENSE]);
+                    const damage_num = user.calculateStat(CONSTANTS.STATS.OFFENSE) * skill.data.power;
+                    const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.DEFENSE));
 
                     target.soul.currentHP -= damage;
                     messages.push(Battle.getName(target) + " lost " + damage + " HP!");
@@ -182,8 +182,8 @@ class Battle {
 
             case CONSTANTS.SKILLCATEGORIES.GLITCHDAMAGE:
                 if (skill.data.power !== null) {
-                    const damage_num = user.soul.stats[CONSTANTS.STATS.GLITCHOFFENSE] * skill.data.power;
-                    const damage = Math.ceil(damage_num / target.soul.stats[CONSTANTS.STATS.GLITCHDEFENSE]);
+                    const damage_num = user.calculateStat(CONSTANTS.STATS.GLITCHOFFENSE) * skill.data.power;
+                    const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.GLITCHDEFENSE));
 
                     target.soul.currentHP -= damage;
                     messages.push(Battle.getName(target) + " lost " + damage + " HP!");

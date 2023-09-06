@@ -44,6 +44,20 @@ abstract class BattleSoul {
     getHPString() {
         return "HP: " + this.soul.currentHP + "/" + this.soul.stats[CONSTANTS.STATS.HP];
     }
+
+    calculateStat(stat: CONSTANTS.STATS) {
+        const base = this.soul.stats[stat];
+
+        let modifier;
+        if (this.stat_changes[stat] > 0) {
+            modifier = (2 + this.stat_changes[stat]) / 2;
+        }
+        else {
+            modifier = 2 / (2 - this.stat_changes[stat]);
+        }
+
+        return Math.max(Math.floor(base * modifier), 1);
+    }
 }
 
 class PlayerSoul extends BattleSoul {

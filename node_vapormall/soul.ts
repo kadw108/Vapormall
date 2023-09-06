@@ -26,7 +26,7 @@ const SOUL_LIST = {
         description: "Churning glut of incoherence.",
         stats: {
             [CONSTANTS.STATS.HP]: 20,
-            [CONSTANTS.STATS.OFFENSE]: 3,
+            [CONSTANTS.STATS.OFFENSE]: 10,
             [CONSTANTS.STATS.DEFENSE]: 10,
             [CONSTANTS.STATS.GLITCHOFFENSE]: 10,
             [CONSTANTS.STATS.GLITCHDEFENSE]: 7,
