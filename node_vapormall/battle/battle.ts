@@ -28,16 +28,16 @@ class Battle {
         this.souls = [...this.playerSouls, ...this.enemySouls];
         this.battleOver = false;
 
-        this.messageRenderer = new MessageRenderer();
+        this.messageRenderer = new MessageRenderer(this.createSkillClickHandler.bind(this));
         const playerSoul = this.playerSouls[0];
-        this.messageRenderer.renderSkills(playerSoul, this.createSkillClickHandler.bind(this));
+        this.messageRenderer.renderSkills(playerSoul);
     }
 
     static getName(battleSoul: BattleSoul): string {
         if (battleSoul instanceof PlayerSoul) {
-            return "Your " + battleSoul.soul.name;
+            return "your " + battleSoul.soul.name;
         }
-        return "The opposing " + battleSoul.soul.name;
+        return "the opposing " + battleSoul.soul.name;
     }
 
     passTurn() {
@@ -59,7 +59,7 @@ class Battle {
     checkBattleOver() {
         let player_lost:boolean = true;
         for (let i = 0; i < this.playerSouls.length; i++) {
-            if (this.playerSouls[i].soul.currentHP> 0) {
+            if (this.playerSouls[i].soul.currentHP > 0) {
                 player_lost = false;
                 break;
             }
@@ -84,8 +84,7 @@ class Battle {
 
     selectEnemySkills() {
         for (const i of this.enemySouls) {
-            i.selected_skill = i.soul.skills[0];
-            i.selected_target = [this.playerSouls[0]];
+            i.chooseMove(this.souls, this.playerSouls, this.enemySouls);
         }
     }
 
@@ -122,7 +121,7 @@ class Battle {
         return () => {
             // arrow function for `this` https://stackoverflow.com/a/73068955
             playerSoul.selected_skill = playerSoul.soul.skills[whichSkill];
-            this.messageRenderer.temporaryHideSkills();
+            this.messageRenderer.temporaryHideSkills(playerSoul);
             this.selectPlayerTarget(playerSoul);
             this.selectEnemySkills();
             this.passTurn();
@@ -164,29 +163,55 @@ class Battle {
 
     applySkillEffects(user: BattleSoul, skill: Skill, target: BattleSoul) {
         const messages: [string | Function] = [Battle.getName(user) +
-            " used " + skill.data.name];
-        messages.push(() => {
-            target.updateInfo();
-        });
+            " used " + skill.data.name + "!"];
 
         switch (skill.data.meta.category) {
             case CONSTANTS.SKILLCATEGORIES.NORMALDAMAGE:
-                if (skill.data.power !== null) {
-                    const damage_num = user.calculateStat(CONSTANTS.STATS.OFFENSE) * skill.data.power;
-                    const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.DEFENSE));
-
-                    target.soul.currentHP -= damage;
-                    messages.push(Battle.getName(target) + " lost " + damage + " HP!");
-                }
-                break;
-
             case CONSTANTS.SKILLCATEGORIES.GLITCHDAMAGE:
                 if (skill.data.power !== null) {
-                    const damage_num = user.calculateStat(CONSTANTS.STATS.GLITCHOFFENSE) * skill.data.power;
-                    const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.GLITCHDEFENSE));
+                    let damage = this.damageCalc(user, skill, target, 
+                        skill.data.meta.category === CONSTANTS.SKILLCATEGORIES.GLITCHDAMAGE
+                    );
 
-                    target.soul.currentHP -= damage;
-                    messages.push(Battle.getName(target) + " lost " + damage + " HP!");
+                    let multiplier = 1;
+                    target.soul.soul_species.types.forEach((type) => {
+                        multiplier *= this.typeMultiplier(skill.data.type, type);
+                    })
+                    damage = Math.ceil(damage * multiplier);
+
+                    messages.push(() => {
+                        target.soul.currentHP -= damage;
+                        target.updateInfo();
+                    });
+
+                    if (multiplier === 0) {
+                        messages.push("It didn't affect " + Battle.getName(target) + "...");
+                    }
+                    else {
+                        if (multiplier > 1) {
+                            messages.push("It's super effective!");
+                        }
+                        else if (multiplier < 1) {
+                            messages.push("It's not very effective...");
+                        }
+
+                        messages.push(Battle.getName(target) + " lost " + damage + " HP!");
+
+                        if (skill.data.meta.drain !== 0) {
+                            const drain = Math.floor(damage * (skill.data.meta.drain/100));
+                            messages.push(() => {
+                                user.soul.changeHP(drain);
+                                user.updateInfo();
+                            });
+
+                            if (drain > 0) {
+                                messages.push(Battle.getName(user) + " drained " + drain + " HP!");
+                            }
+                            else if (drain < 0) {
+                                messages.push(Battle.getName(user) + " lost " + (-drain) + " HP from recoil!");
+                            }
+                        }
+                    }
                 }
                 break;
 
@@ -225,6 +250,62 @@ class Battle {
         }
 
         this.messageRenderer.enqueueBlock(messages);
+    }
+
+    damageCalc(user: BattleSoul, skill: Skill, target: BattleSoul, isGlitch: boolean) {
+        if (isGlitch) {
+            const damage_num = user.calculateStat(CONSTANTS.STATS.GLITCHOFFENSE) * skill.data.power!;
+            const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.GLITCHDEFENSE));
+            return damage;
+        }
+
+        const damage_num = user.calculateStat(CONSTANTS.STATS.OFFENSE) * skill.data.power!;
+        const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.DEFENSE));
+        return damage;
+    }
+
+    typeMultiplier(attackType: CONSTANTS.TYPES, defendType: CONSTANTS.TYPES) {
+        switch (attackType) {
+            case CONSTANTS.TYPES.TYPELESS:
+                if (defendType === CONSTANTS.TYPES.ERROR) {
+                    return 0;
+                }
+                break;
+            case CONSTANTS.TYPES.SWEET:
+                if (defendType === CONSTANTS.TYPES.CORPORATE) {
+                    return 2;
+                }
+                if (defendType === CONSTANTS.TYPES.EDGE) {
+                    return 0.5;
+                }
+                break;
+            case CONSTANTS.TYPES.EDGE:
+                if (defendType === CONSTANTS.TYPES.SWEET) {
+                    return 2;
+                }
+                if (defendType === CONSTANTS.TYPES.SANGFROID) {
+                    return 0.5;
+                }
+                break;
+            case CONSTANTS.TYPES.CORPORATE:
+                if (defendType === CONSTANTS.TYPES.SANGFROID) {
+                    return 2;
+                }
+                if (defendType === CONSTANTS.TYPES.SWEET) {
+                    return 0.5;
+                }
+                break;
+            case CONSTANTS.TYPES.SANGFROID:
+                if (defendType === CONSTANTS.TYPES.EDGE) {
+                    return 2;
+                }
+                if (defendType === CONSTANTS.TYPES.CORPORATE) {
+                    return 0.5;
+                }
+                break;
+        }
+
+        return 1;
     }
 }
 

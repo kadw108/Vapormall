@@ -73,6 +73,35 @@ class EnemySoul extends BattleSoul {
         super(soul);
         this.infoDiv.classList.add("enemyInfo", "soulInfo", "blackBg");
     }
+
+    chooseMove(
+        souls: Array<BattleSoul>,
+        playerSouls: Array<PlayerSoul>,
+        enemySouls: Array<EnemySoul>
+    ) {
+        console.log(this.soul.skills);
+
+        const randomSkill = Math.floor(Math.random() * this.soul.skills.length);
+        this.selected_skill = this.soul.skills[randomSkill];
+
+        switch (this.selected_skill.data.target) {
+            case CONSTANTS.TARGETS.SELECTED:
+            case CONSTANTS.TARGETS.OPPOSING:
+                const randomTarget = Math.floor(Math.random() * playerSouls.length);
+                this.selected_target = [playerSouls[randomTarget]];
+                break;
+
+            case CONSTANTS.TARGETS.ALLIED:
+            case CONSTANTS.TARGETS.ALLY:
+            case CONSTANTS.TARGETS.SELF:
+                this.selected_target = [this];
+                break;
+
+            case CONSTANTS.TARGETS.ALL:
+            case CONSTANTS.TARGETS.NONE:
+                break;
+        }
+    } 
 }
 
 export {

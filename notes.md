@@ -59,6 +59,14 @@ Cool --- setup sweeper --- tanking, bulky offense
 Corporate --- pivot --- stall, walling, crippling?
 Sweet --- wall, cleric --- stall, support, healing
 
+edge beats sweet, sweet beats corporate, corporate beats sangfroid, sangfroid beats edge
+
+edge -> sweet -> corporate -> sangfroid -> edge
+
+	sweet
+corporate	edge
+	sangfroid
+
 Error --- Revenge killing? Gimmick strats?
 
 ---
@@ -390,3 +398,12 @@ move that does double damage if you move before target
 https://github.com/smogon/pokemon-showdown/blob/master/sim/battle-actions.ts
 
 For enemy AI behavior - https://essentialsdocs.fandom.com/wiki/Battle_AI
+
+#### todo
+
+double battle ???
+better ui for stat changes / etc
+some kind of non-battle menu
+
+switching
+status effects

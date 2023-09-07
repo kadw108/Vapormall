@@ -51,6 +51,48 @@ const SKILL_LIST : Skills = {
         },
     },
 
+    recoil: {
+        name: "Recoil",
+        description: "Restores half the damage dealt.",
+        power: 12,
+        max_pp: 15,
+        priority: 0,
+        stat_changes: [],
+        target: CONSTANTS.TARGETS.SELECTED,
+        type: CONSTANTS.TYPES.TYPELESS,
+        meta: {
+            category: CONSTANTS.SKILLCATEGORIES.NORMALDAMAGE,
+            crit_rate: 0,
+            drain: -33,
+            healing: 0,
+            max_hits: null,
+            max_turns: null,
+            min_hits: null,
+            min_turns: null,
+        },
+    },
+
+    drain: {
+        name: "Drain",
+        description: "Restores half the damage dealt.",
+        power: 4,
+        max_pp: 20,
+        priority: 0,
+        stat_changes: [],
+        target: CONSTANTS.TARGETS.SELECTED,
+        type: CONSTANTS.TYPES.TYPELESS,
+        meta: {
+            category: CONSTANTS.SKILLCATEGORIES.NORMALDAMAGE,
+            crit_rate: 0,
+            drain: 50,
+            healing: 0,
+            max_hits: null,
+            max_turns: null,
+            min_hits: null,
+            min_turns: null,
+        },
+    },
+
     dazzling_polish: {
         name: "Dazzling Polish",
         description: "Polish simulated aesthetics for enhanced beauty. Raise Offense, Glitch Offense.",

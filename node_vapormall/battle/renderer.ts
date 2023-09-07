@@ -1,15 +1,18 @@
 import { PlayerSoul } from "./battleSoul";
+import { capitalizeFirstLetter } from "../utility";
 
 enum DURATIONS {
-    BETWEENBLOCKS = 2500,
-    BETWEENLINES = 650,
+    BETWEENBLOCKS = 3100,
+    BETWEENLINES = 750,
 }
 
 class MessageRenderer {
     blocks: number;
     messageContainer: HTMLElement;
 
-    constructor() {
+    skillHandlerCreator: Function;
+
+    constructor(skillHandlerCreator: Function) {
         const messageContainer = document.getElementById("messageContainer");
         if (messageContainer === null) {
             console.error("messageContainer is null! Cannot display messages!");
@@ -18,6 +21,7 @@ class MessageRenderer {
 
         this.messageContainer = messageContainer;
         this.blocks = 0;
+        this.skillHandlerCreator = skillHandlerCreator;
     }
 
     enqueueBlock(messages: Array<string|Function>) {
@@ -30,6 +34,10 @@ class MessageRenderer {
     }
 
     displayBlock(messages: Array<string|Function>) {
+        console.log("displaying block");
+        console.log(messages);
+        console.log(this.blocks);
+
         const messageDiv = document.createElement("div");
         messageDiv.classList.add("message", "blackBg");
         this.messageContainer.append(messageDiv);
@@ -42,7 +50,7 @@ class MessageRenderer {
             if (typeof item === "string") {
                 setTimeout(() => {
                     messageDiv.append(
-                        document.createTextNode(item)
+                        document.createTextNode(capitalizeFirstLetter(item))
                     );
                     messageDiv.append(
                         document.createElement("br")
@@ -61,10 +69,10 @@ class MessageRenderer {
         setTimeout(() => {
             messageDiv.remove();
             this.blocks--;
-        }, messages.length * DURATIONS.BETWEENLINES - 100);
+        }, messages.length * DURATIONS.BETWEENLINES);
     }
 
-    renderSkills(playerSoul: PlayerSoul, handlerCreator: Function) {
+    renderSkills(playerSoul: PlayerSoul) {
         const skillButtons: Array<HTMLElement> = [];
 
         const skillDiv = document.createElement("div");
@@ -78,7 +86,7 @@ class MessageRenderer {
 
             if (skill.pp > 0) {
                 skillButton.addEventListener("click",
-                    handlerCreator(playerSoul, i),
+                    this.skillHandlerCreator(playerSoul, i),
                     false);
             }
             else {
@@ -90,12 +98,12 @@ class MessageRenderer {
         document.getElementById("bottomhalf")?.append(skillDiv);
     }
 
-    temporaryHideSkills() {
+    temporaryHideSkills(playerSoul: PlayerSoul) {
         const skillDiv = document.getElementById("skillDiv");
-        skillDiv?.classList.add("hidden");
+        skillDiv?.remove();
 
         setTimeout(() => {
-            skillDiv?.classList.remove("hidden");
+            this.renderSkills(playerSoul);
         }, DURATIONS.BETWEENBLOCKS * 2);
     }
 }

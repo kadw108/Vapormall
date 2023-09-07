@@ -50,6 +50,7 @@ class IndividualSoul {
         this.name = soul_species.name;
         this.level = level;
 
+        this.skills = [];
         this.stats = {
             [CONSTANTS.STATS.HP]: 0,
             [CONSTANTS.STATS.OFFENSE]: 0,
@@ -59,9 +60,9 @@ class IndividualSoul {
             [CONSTANTS.STATS.SPEED]: 0
         }
         this.initializeStats();
+        this.levelUpSimulate();
 
-        this.skills = [];
-        this.initializeSkills();
+        this.currentHP = this.stats[CONSTANTS.STATS.HP];
     }
 
     initializeStats() {
@@ -69,22 +70,32 @@ class IndividualSoul {
             const keyType = key as unknown as CONSTANTS.STATS;
             this.stats[keyType] = this.soul_species.stats[keyType];
         }
-        
-        // TODO level stuff
-
-        this.currentHP = this.stats[CONSTANTS.STATS.HP];
     }
 
-    initializeSkills() {
-        for (let i = 0; i < this.soul_species.skills.length; i++) {
-            const skill_wrapper = this.soul_species.skills[i];
+    levelUpSimulate() {
+        let newMoveSlot = 0;
 
-            if (skill_wrapper.learned_at <= this.level) {
-                this.skills.push(
-                  new Skill(skill_wrapper.skill_meta)
-                );
-            }
-        }
+        this.soul_species.levelUp
+            .filter((levelUpChange) => {return levelUpChange.level <= this.level})
+            .forEach((levelUpChange, i) => {
+                if (levelUpChange.statChanges !== undefined) {
+                    levelUpChange.statChanges.forEach((statChange) => {
+                        this.stats[statChange.stat] += statChange.change;
+                    });
+                }
+
+                if (levelUpChange.learnedSkills !== undefined) {
+                    levelUpChange.learnedSkills.forEach((skillData) => {
+                        this.skills[newMoveSlot] = new Skill(skillData);
+                        newMoveSlot = ++newMoveSlot % 4;
+                    });
+                }
+            });
+    }
+
+    changeHP(num: number) {
+        this.currentHP = Math.min(this.currentHP, this.currentHP + num);
+        this.currentHP = Math.max(0, this.currentHP);
     }
 }
 

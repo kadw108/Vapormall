@@ -6,9 +6,15 @@ interface Sprites {
   back: string;
 }
 
-interface SkillWrapper {
-  skill_meta: SkillData;
-  learned_at: number;
+interface LevelUpStatChange {
+  stat: CONSTANTS.STATS;
+  change: number;
+}
+
+interface LevelUpChange {
+  level: number;
+  learnedSkills?: Array<SkillData>;
+  statChanges?: Array<LevelUpStatChange>;
 }
 
 interface SoulSpecies {
@@ -17,7 +23,7 @@ interface SoulSpecies {
   stats: StatDict;
   sprites: Sprites;
   types: Array<CONSTANTS.TYPES>;
-  skills: Array<SkillWrapper>;
+  levelUp: Array<LevelUpChange>;
 }
 
 const SOUL_LIST = {
@@ -39,9 +45,41 @@ const SOUL_LIST = {
         types: [
             CONSTANTS.TYPES.ERROR
         ],
-        skills: [
-            {skill_meta: SKILL_LIST.basic_attack, learned_at: 0},
-            {skill_meta: SKILL_LIST.dazzling_polish, learned_at: 0}
+        levelUp: [
+            {
+              level: 1,
+              learnedSkills: [
+                SKILL_LIST.basic_attack,
+                SKILL_LIST.dazzling_polish,
+                SKILL_LIST.drain,
+                SKILL_LIST.recoil
+              ]
+            },
+            {
+              level: 2,
+              statChanges: [
+                {stat: CONSTANTS.STATS.SPEED, change: 6}
+              ]
+            },
+            {
+              level: 3,
+              statChanges: [
+                {stat: CONSTANTS.STATS.DEFENSE, change: 6}
+              ]
+            },
+            {
+              level: 4,
+              statChanges: [
+                {stat: CONSTANTS.STATS.HP, change: 6}
+              ]
+            },
+            {
+              level: 5,
+              statChanges: [
+                {stat: CONSTANTS.STATS.GLITCHDEFENSE, change: 3},
+                {stat: CONSTANTS.STATS.DEFENSE, change: 3},
+              ]
+            }
         ],
     }
 };
