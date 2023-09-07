@@ -1,0 +1,21 @@
+:: Room {"position":"100,300","size":"100,100"}
+\<<nobr>>
+<div id="screenBg"/>
+
+<div id="screenContents" class="absoluteAlign">
+    <div id="tophalf" class="absoluteAlign">
+    </div>
+    <div id="bottomhalf" class="absoluteAlign blackBg">
+    </div>
+</div>
+
+<<done>>
+<<script>>
+
+const ref = window.vapormall;
+
+console.log(ref);
+
+<</script>>
+<</done>>
+<</nobr>>
