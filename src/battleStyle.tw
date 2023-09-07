@@ -37,19 +37,6 @@
   text-align: right;
 }
 
-#endScreen {
-  z-index: 4;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-
-  background-color: black;
-}
-#endScreen > div {
-  text-align: center;
-  margin-top: 50%;
-}
-
 .skill-button {
   position: relative;
   outline: none;

@@ -9,7 +9,6 @@ enum DURATIONS {
 class MessageRenderer {
     blocks: number;
     messageContainer: HTMLElement;
-    timeouts: Array<NodeJS.Timeout>;
 
     skillHandlerCreator: Function;
 
@@ -22,28 +21,20 @@ class MessageRenderer {
 
         this.messageContainer = messageContainer;
         this.blocks = 0;
-        this.timeouts = [];
-
         this.skillHandlerCreator = skillHandlerCreator;
     }
 
     enqueueBlock(messages: Array<string|Function>) {
-        console.log("block enqueued");
-        console.log(messages);
-        console.log(this.blocks);
-
         const displayDelay = this.blocks * DURATIONS.BETWEENBLOCKS;
-
-        const timeout = setTimeout(() => {
+        setTimeout(() => {
             this.displayBlock(messages);
         }, displayDelay);
-        this.timeouts.push(timeout);
 
         this.blocks++;
     }
 
     displayBlock(messages: Array<string|Function>) {
-        console.log("block displaying...");
+        console.log("displaying block");
         console.log(messages);
         console.log(this.blocks);
 
@@ -57,7 +48,7 @@ class MessageRenderer {
             const delay = stringNum * DURATIONS.BETWEENLINES;
             
             if (typeof item === "string") {
-                const timeout = setTimeout(() => {
+                setTimeout(() => {
                     messageDiv.append(
                         document.createTextNode(capitalizeFirstLetter(item))
                     );
@@ -65,23 +56,20 @@ class MessageRenderer {
                         document.createElement("br")
                     );
                 }, delay);
-                this.timeouts.push(timeout);
 
                 stringNum++;
             }
             else {
-                const timeout = setTimeout(() => {
+                setTimeout(() => {
                     item();
                 }, delay);
-                this.timeouts.push(timeout);
             }
         });
 
-        const timeout = setTimeout(() => {
+        setTimeout(() => {
             messageDiv.remove();
             this.blocks--;
         }, messages.length * DURATIONS.BETWEENLINES);
-        this.timeouts.push(timeout);
     }
 
     renderSkills(playerSoul: PlayerSoul) {
@@ -114,20 +102,9 @@ class MessageRenderer {
         const skillDiv = document.getElementById("skillDiv");
         skillDiv?.remove();
 
-        const timeout = setTimeout(() => {
+        setTimeout(() => {
             this.renderSkills(playerSoul);
         }, DURATIONS.BETWEENBLOCKS * 2);
-        this.timeouts.push(timeout);
-    }
-
-    endBattle() {
-        document.getElementById("endScreen")?.classList.remove("hidden");
-    }
-
-    clearAll() {
-        this.timeouts.forEach((t) => {
-            clearTimeout(t);
-        });
     }
 }
 

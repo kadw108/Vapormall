@@ -59,7 +59,7 @@ const SKILL_LIST : Skills = {
         priority: 0,
         stat_changes: [],
         target: CONSTANTS.TARGETS.SELECTED,
-        type: CONSTANTS.TYPES.ERROR,
+        type: CONSTANTS.TYPES.TYPELESS,
         meta: {
             category: CONSTANTS.SKILLCATEGORIES.NORMALDAMAGE,
             crit_rate: 0,

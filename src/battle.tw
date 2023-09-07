@@ -3,12 +3,6 @@
 <div id="screenBg"/>
 
 <div id="screenContents" class="absoluteAlign">
-    <div id="endScreen" class="hidden">
-        <div> 
-            THE BATTLE IS OVER
-        </div>
-    </div>
-
     <div id="tophalf" class="absoluteAlign">
         <div id="messageContainer">
         </div>

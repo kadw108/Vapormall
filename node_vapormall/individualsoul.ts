@@ -94,7 +94,7 @@ class IndividualSoul {
     }
 
     changeHP(num: number) {
-        this.currentHP = Math.min(this.stats[CONSTANTS.STATS.HP], this.currentHP + num);
+        this.currentHP = Math.min(this.currentHP, this.currentHP + num);
         this.currentHP = Math.max(0, this.currentHP);
     }
 }
