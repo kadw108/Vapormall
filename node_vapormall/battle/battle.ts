@@ -49,37 +49,29 @@ class Battle {
 
        for (let i = 0; i < speed_order.length; i++) {
             this.useSkill(speed_order[i]);
-            this.checkBattleOver();
-            if (this.battleOver) {
-                return;
-            }
        }
     }
 
     checkBattleOver() {
-        let player_lost:boolean = true;
-        for (let i = 0; i < this.playerSouls.length; i++) {
-            if (this.playerSouls[i].soul.currentHP > 0) {
-                player_lost = false;
-                break;
-            }
-        }
-        if (player_lost) {
+        if (this.playerSouls.length === 0) {
             this.messageRenderer.enqueueBlock(["u lose lol"]);
             this.battleOver = true;
         }
-
-        let player_won:boolean = true;
-        for (let i = 0; i < this.enemySouls.length; i++) {
-            if (this.enemySouls[i].soul.currentHP > 0) {
-                player_won = false;
-                break;
-            }
-        }
-        if (player_won) {
+        if (this.enemySouls.length === 0) {
             this.messageRenderer.enqueueBlock(["u win!"]);
             this.battleOver = true;
         }
+
+        if (this.battleOver) {
+            this.end();
+        }
+    }
+
+    end() {
+        this.messageRenderer.enqueueBlock([
+            this.messageRenderer.endBattle,
+            this.messageRenderer.clearAll
+        ]);
     }
 
     selectEnemySkills() {
@@ -179,9 +171,10 @@ class Battle {
                     })
                     damage = Math.ceil(damage * multiplier);
 
+                    /* this.changeHP(target, -damage); */
                     messages.push(() => {
-                        target.soul.currentHP -= damage;
-                        target.updateInfo();
+                        target.soul.changeHP(-damage);
+                        target.updateInfo;
                     });
 
                     if (multiplier === 0) {
@@ -199,9 +192,10 @@ class Battle {
 
                         if (skill.data.meta.drain !== 0) {
                             const drain = Math.floor(damage * (skill.data.meta.drain/100));
+                            /* this.changeHP(user, drain); */
                             messages.push(() => {
                                 user.soul.changeHP(drain);
-                                user.updateInfo();
+                                user.updateInfo;
                             });
 
                             if (drain > 0) {
@@ -250,6 +244,31 @@ class Battle {
         }
 
         this.messageRenderer.enqueueBlock(messages);
+    }
+
+    changeHP(soul: BattleSoul, damage: number) {
+        soul.soul.changeHP(damage);
+        this.checkFaint(soul);
+    }
+
+    checkFaint(soul: BattleSoul) {
+        if (soul.soul.currentHP <= 0) { 
+
+            this.messageRenderer.enqueueBlock([
+                soul.updateInfo,
+                Battle.getName(soul) + " was destroyed!"
+            ]);
+
+            this.souls = this.souls.splice(this.souls.indexOf(soul), 1);
+            if (soul instanceof PlayerSoul) {
+                this.playerSouls = this.playerSouls.splice(this.playerSouls.indexOf(soul), 1);
+            }
+            else if (soul instanceof EnemySoul) {
+                this.enemySouls = this.enemySouls.splice(this.enemySouls.indexOf(soul), 1);
+            }
+
+            this.checkBattleOver();
+        }
     }
 
     damageCalc(user: BattleSoul, skill: Skill, target: BattleSoul, isGlitch: boolean) {
