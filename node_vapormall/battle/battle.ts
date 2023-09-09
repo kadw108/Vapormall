@@ -53,25 +53,19 @@ class Battle {
     }
 
     checkBattleOver() {
-        if (this.playerSouls.length === 0) {
-            this.messageRenderer.enqueueBlock(["u lose lol"]);
-            this.battleOver = true;
-        }
-        if (this.enemySouls.length === 0) {
-            this.messageRenderer.enqueueBlock(["u win!"]);
-            this.battleOver = true;
-        }
+        if (this.playerSouls.length === 0 || this.enemySouls.length === 0) {
+            this.messageRenderer.endMessageBlock();
 
-        if (this.battleOver) {
-            this.end();
-        }
-    }
+            if (this.playerSouls.length === 0) {
+                // TODO
+            }
 
-    end() {
-        this.messageRenderer.enqueueBlock([
-            this.messageRenderer.endBattle,
-            this.messageRenderer.clearAll
-        ]);
+            this.messageRenderer.addMessage(
+                () => {
+                    this.messageRenderer.endBattle();
+                }
+            );
+        }
     }
 
     selectEnemySkills() {
@@ -117,6 +111,7 @@ class Battle {
             this.selectPlayerTarget(playerSoul);
             this.selectEnemySkills();
             this.passTurn();
+            this.messageRenderer.displayMessages();
         }
     }
 
@@ -154,8 +149,9 @@ class Battle {
     }
 
     applySkillEffects(user: BattleSoul, skill: Skill, target: BattleSoul) {
-        const messages: [string | Function] = [Battle.getName(user) +
-            " used " + skill.data.name + "!"];
+        this.messageRenderer.addMessage(
+            Battle.getName(user) + " used " + skill.data.name + "!"
+        );
 
         switch (skill.data.meta.category) {
             case CONSTANTS.SKILLCATEGORIES.NORMALDAMAGE:
@@ -169,41 +165,53 @@ class Battle {
                     target.soul.soul_species.types.forEach((type) => {
                         multiplier *= this.typeMultiplier(skill.data.type, type);
                     })
-                    damage = Math.ceil(damage * multiplier);
-
-                    /* this.changeHP(target, -damage); */
-                    messages.push(() => {
-                        target.soul.changeHP(-damage);
-                        target.updateInfo;
-                    });
 
                     if (multiplier === 0) {
-                        messages.push("It didn't affect " + Battle.getName(target) + "...");
+                        this.messageRenderer.addMessage(
+                            "It didn't affect " + Battle.getName(target) + "..."
+                        );
                     }
                     else {
+                        damage = Math.ceil(damage * multiplier);
+
+                        this.messageRenderer.addMessage(() => {
+                            target.displayHP -= damage;
+                            target.updateInfo();
+                        });
+
                         if (multiplier > 1) {
-                            messages.push("It's super effective!");
+                            this.messageRenderer.addMessage("It's super effective!");
                         }
                         else if (multiplier < 1) {
-                            messages.push("It's not very effective...");
+                            this.messageRenderer.addMessage("It's not very effective...");
                         }
 
-                        messages.push(Battle.getName(target) + " lost " + damage + " HP!");
+                        this.messageRenderer.addMessage(
+                            Battle.getName(target) + " lost " + damage + " HP!"
+                        );
+                        target.soul.changeHP(-damage);
+                        this.checkFaint(target);
 
                         if (skill.data.meta.drain !== 0) {
                             const drain = Math.floor(damage * (skill.data.meta.drain/100));
-                            /* this.changeHP(user, drain); */
-                            messages.push(() => {
-                                user.soul.changeHP(drain);
-                                user.updateInfo;
+
+                            this.messageRenderer.addMessage(() => {
+                                user.displayHP += drain;
+                                user.updateInfo();
                             });
 
                             if (drain > 0) {
-                                messages.push(Battle.getName(user) + " drained " + drain + " HP!");
+                                this.messageRenderer.addMessage(
+                                    Battle.getName(user) + " drained " + drain + " HP!"
+                                );
                             }
                             else if (drain < 0) {
-                                messages.push(Battle.getName(user) + " lost " + (-drain) + " HP from recoil!");
+                                this.messageRenderer.addMessage(
+                                    Battle.getName(user) + " lost " + (-drain) + " HP from recoil!"
+                                );
                             }
+                            user.soul.changeHP(drain);
+                            this.checkFaint(user);
                         }
                     }
                 }
@@ -215,10 +223,14 @@ class Battle {
                         console.error("Stat change for HP not allowed!")
                     }
                     else if (target.stat_changes[statChange.stat] === 6) {
-                        messages.push(Battle.getName(target) + "'s " + statChange.stat + " couldn't go any higher!");
+                        this.messageRenderer.addMessage(
+                            Battle.getName(target) + "'s " + statChange.stat + " couldn't go any higher!"
+                        );
                     }
                     else if (target.stat_changes[statChange.stat] === -6) {
-                        messages.push(Battle.getName(target) + "'s " + statChange.stat + " couldn't go any lower!");
+                        this.messageRenderer.addMessage(
+                            Battle.getName(target) + "'s " + statChange.stat + " couldn't go any lower!"
+                        );
                     }
                     else {
                         target.stat_changes[statChange.stat] += statChange.change;
@@ -237,34 +249,32 @@ class Battle {
                             changeDesc += " " + Math.abs(statChange.change) + " stage!";
                         }
 
-                        messages.push(Battle.getName(target) + "'s " + statChange.stat + changeDesc);
+                        this.messageRenderer.addMessage(
+                            Battle.getName(target) + "'s " + statChange.stat + changeDesc
+                        );
                     }
                 });
                 break;
         }
 
-        this.messageRenderer.enqueueBlock(messages);
+        this.messageRenderer.endMessageBlock();
     }
 
-    changeHP(soul: BattleSoul, damage: number) {
-        soul.soul.changeHP(damage);
-        this.checkFaint(soul);
-    }
-
+    // make checkfaint work with prospective hp (sums) to insert before other messages + diverge if necessary
     checkFaint(soul: BattleSoul) {
         if (soul.soul.currentHP <= 0) { 
 
-            this.messageRenderer.enqueueBlock([
-                soul.updateInfo,
-                Battle.getName(soul) + " was destroyed!"
-            ]);
+            this.messageRenderer.endMessageBlock();
+            this.messageRenderer.addMessage(Battle.getName(soul) + " was destroyed!");
 
-            this.souls = this.souls.splice(this.souls.indexOf(soul), 1);
+            this.souls.splice(this.souls.indexOf(soul), 1);
             if (soul instanceof PlayerSoul) {
-                this.playerSouls = this.playerSouls.splice(this.playerSouls.indexOf(soul), 1);
+                this.playerSouls.splice(
+                    this.playerSouls.indexOf(soul as PlayerSoul), 1);
             }
             else if (soul instanceof EnemySoul) {
-                this.enemySouls = this.enemySouls.splice(this.enemySouls.indexOf(soul), 1);
+                this.enemySouls.splice(
+                    this.enemySouls.indexOf(soul as EnemySoul), 1);
             }
 
             this.checkBattleOver();

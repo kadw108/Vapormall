@@ -7,6 +7,7 @@ abstract class BattleSoul {
     selected_target: Array<BattleSoul> | null;
 
     infoDiv: HTMLElement;
+    displayHP: number;
     hpText: HTMLElement;
 
     stat_changes: StatDict;
@@ -20,6 +21,8 @@ abstract class BattleSoul {
         const nameText = document.createTextNode(this.soul.name);
         this.infoDiv.append(nameText);
         this.infoDiv.append(document.createElement("br"));
+
+        this.displayHP = this.soul.currentHP;
         this.hpText = document.createElement("small");
         this.hpText.append(
             document.createTextNode(this.getHPString())
@@ -42,7 +45,7 @@ abstract class BattleSoul {
     }
 
     getHPString() {
-        return "HP: " + this.soul.currentHP + "/" + this.soul.stats[CONSTANTS.STATS.HP];
+        return "HP: " + this.displayHP + "/" + this.soul.stats[CONSTANTS.STATS.HP];
     }
 
     calculateStat(stat: CONSTANTS.STATS) {

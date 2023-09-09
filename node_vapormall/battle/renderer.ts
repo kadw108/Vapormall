@@ -7,6 +7,11 @@ enum DURATIONS {
 }
 
 class MessageRenderer {
+
+    static readonly ENDBLOCK_STRING: string = "ENDBLOCK";
+
+    messages: Array<string|Function>;
+
     blocks: number;
     messageContainer: HTMLElement;
     timeouts: Array<NodeJS.Timeout>;
@@ -20,6 +25,8 @@ class MessageRenderer {
             return;
         }
 
+        this.messages = [];
+
         this.messageContainer = messageContainer;
         this.blocks = 0;
         this.timeouts = [];
@@ -27,11 +34,28 @@ class MessageRenderer {
         this.skillHandlerCreator = skillHandlerCreator;
     }
 
-    enqueueBlock(messages: Array<string|Function>) {
-        console.log("block enqueued");
-        console.log(messages);
-        console.log(this.blocks);
+    addMessage(message: string|Function) {
+        this.messages.push(message);
+    }
 
+    endMessageBlock() {
+        this.messages.push(MessageRenderer.ENDBLOCK_STRING);
+    }
+
+    displayMessages() {
+        let startIndex = 0;
+        this.messages.forEach((message, i) => {
+            if (message === MessageRenderer.ENDBLOCK_STRING) {
+               this.enqueueBlock(this.messages.slice(startIndex, i));
+               startIndex = i + 1;
+            }
+        });
+        this.enqueueBlock(this.messages.slice(startIndex, this.messages.length));
+
+        this.messages = [];
+    }
+
+    private enqueueBlock(messages: Array<string|Function>) {
         const displayDelay = this.blocks * DURATIONS.BETWEENBLOCKS;
 
         const timeout = setTimeout(() => {
@@ -42,11 +66,7 @@ class MessageRenderer {
         this.blocks++;
     }
 
-    displayBlock(messages: Array<string|Function>) {
-        console.log("block displaying...");
-        console.log(messages);
-        console.log(this.blocks);
-
+    private displayBlock(messages: Array<string|Function>) {
         const messageDiv = document.createElement("div");
         messageDiv.classList.add("message", "blackBg");
         this.messageContainer.append(messageDiv);
@@ -124,11 +144,13 @@ class MessageRenderer {
         document.getElementById("endScreen")?.classList.remove("hidden");
     }
 
+    /*
     clearAll() {
         this.timeouts.forEach((t) => {
             clearTimeout(t);
         });
     }
+    */
 }
 
 export {
