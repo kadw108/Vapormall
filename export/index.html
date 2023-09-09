@@ -521,6 +521,8 @@ importScripts("vapormall.js");</script><tw-tag name="TODO" color="red"></tw-tag>
     &lt;div id=&quot;endScreen&quot; class=&quot;hidden&quot;&gt;
         &lt;div&gt; 
             THE BATTLE IS OVER
+
+            &lt;button id=&quot;next&quot;&gt;Next&lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 
@@ -535,6 +537,12 @@ importScripts("vapormall.js");</script><tw-tag name="TODO" color="red"></tw-tag>
 &lt;&lt;done&gt;&gt;
 &lt;&lt;script&gt;&gt;
 
+document.getElementById(&quot;next&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+    Engine.play(&quot;Room&quot;);
+});
+
+/* --- */
+
 const ref = window.vapormall;
 
 const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
@@ -543,6 +551,8 @@ const enemy1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
 const test_battle = new ref.Battle(
     [player1], [enemy1]
 );
+
+ref.TESTPLAYER = player1;
 
 &lt;&lt;/script&gt;&gt;
 &lt;&lt;/done&gt;&gt;

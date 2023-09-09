@@ -1,6 +1,6 @@
-import {Skill, IndividualSoul} from "../individualsoul";
-import {StatChange} from "../skills";
-import {CONSTANTS} from "../constants";
+import {Skill, IndividualSoul} from "../individualSoul";
+import {StatChange} from "../data/skills";
+import {CONSTANTS} from "../data/constants";
 import {BattleSoul, PlayerSoul, EnemySoul} from "./battleSoul";
 import { MessageRenderer } from "./renderer";
 

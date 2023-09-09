@@ -1,5 +1,5 @@
-import {Skill, IndividualSoul } from "../individualsoul";
-import {StatDict, CONSTANTS } from "../constants";
+import {Skill, IndividualSoul } from "../individualSoul";
+import {StatDict, CONSTANTS } from "../data/constants";
 
 abstract class BattleSoul {
     soul: IndividualSoul;

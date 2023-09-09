@@ -1,6 +1,6 @@
-import {SkillData, SKILL_LIST} from "./skills";
-import {SoulSpecies, SOUL_LIST} from "./soul";
-import {CONSTANTS, StatDict} from "./constants";
+import {SkillData, SKILL_LIST} from "./data/skills";
+import {SoulSpecies, SOUL_LIST} from "./data/soul";
+import {CONSTANTS, StatDict} from "./data/constants";
 
 class Skill{
     data: SkillData;

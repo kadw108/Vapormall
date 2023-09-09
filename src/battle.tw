@@ -6,6 +6,8 @@
     <div id="endScreen" class="hidden">
         <div> 
             THE BATTLE IS OVER
+
+            <button id="next">Next</button>
         </div>
     </div>
 
@@ -20,6 +22,12 @@
 <<done>>
 <<script>>
 
+document.getElementById("next").addEventListener("click", () => {
+    Engine.play("Room");
+});
+
+/* --- */
+
 const ref = window.vapormall;
 
 const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
@@ -28,6 +36,8 @@ const enemy1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
 const test_battle = new ref.Battle(
     [player1], [enemy1]
 );
+
+ref.TESTPLAYER = player1;
 
 <</script>>
 <</done>>
