@@ -1,4 +1,5 @@
-import {Skill, IndividualSoul} from "../individualSoul";
+import {IndividualSoul} from "../individualSoul";
+import {Skill} from "../skill";
 import {StatChange} from "../data/skills";
 import {CONSTANTS} from "../data/constants";
 import {BattleSoul, PlayerSoul, EnemySoul} from "./battleSoul";
@@ -260,7 +261,6 @@ class Battle {
         this.messageRenderer.endMessageBlock();
     }
 
-    // make checkfaint work with prospective hp (sums) to insert before other messages + diverge if necessary
     checkFaint(soul: BattleSoul) {
         if (soul.soul.currentHP <= 0) { 
 

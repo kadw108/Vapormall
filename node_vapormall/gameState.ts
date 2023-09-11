@@ -3,7 +3,21 @@ import {StatChange} from "./data/skills";
 import {CONSTANTS} from "./data/constants";
 
 class GameState {
-    static partySouls: Array<IndividualSoul> = [];
+    partySouls: Array<IndividualSoul>;
+
+    constructor() {
+        this.partySouls = [];
+    }
+
+    addSoul(individualSoul: IndividualSoul) {
+        this.partySouls.push(individualSoul);
+    }
+
+    removeSoul(individualSoul: IndividualSoul) {
+        this.partySouls.splice(
+            this.partySouls.indexOf(individualSoul), 1
+        )
+    }
 }
 
 export {

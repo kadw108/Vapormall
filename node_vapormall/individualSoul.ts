@@ -1,39 +1,6 @@
-import {SkillData, SKILL_LIST} from "./data/skills";
+import {Skill} from "./skill";
 import {SoulSpecies, SOUL_LIST} from "./data/soul";
 import {CONSTANTS, StatDict} from "./data/constants";
-
-class Skill{
-    data: SkillData;
-    pp: number;
-
-    constructor(skill_data: SkillData) {
-        this.data = skill_data;
-        this.pp = skill_data.max_pp;
-    }
-
-    renderSkillButton(): HTMLButtonElement {
-        const skillButton = document.createElement("button");
-        skillButton.classList.add("skill-button");
-
-        const nameText = document.createTextNode(this.data.name);
-        skillButton.append(nameText);
-        skillButton.append(document.createElement("br"));
-
-        const typeText = document.createElement("small");
-        typeText.append(
-            document.createTextNode(this.data.type + " ")
-        );
-        skillButton.append(typeText);
-
-        const ppText = document.createElement("small");
-        ppText.append(
-            document.createTextNode(this.pp + "/" + this.data.max_pp)
-        );
-        skillButton.append(ppText);
-
-        return skillButton;
-    }
-}
 
 class IndividualSoul {
     soul_species: SoulSpecies;
@@ -97,9 +64,12 @@ class IndividualSoul {
         this.currentHP = Math.min(this.stats[CONSTANTS.STATS.HP], this.currentHP + num);
         this.currentHP = Math.max(0, this.currentHP);
     }
+
+    changeName(newName: string) {
+        this.name = newName;
+    }
 }
 
 export {
-    Skill,
     IndividualSoul
 };

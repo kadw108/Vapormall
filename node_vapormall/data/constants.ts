@@ -9,9 +9,9 @@ export namespace CONSTANTS {
   }
 
   export enum SKILLCATEGORIES {
-    NORMALDAMAGE,
-    GLITCHDAMAGE,
-    STATUS
+    NORMALDAMAGE = "normal damage",
+    GLITCHDAMAGE = "glitch damage",
+    STATUS = "status"
   }
 
   export enum TYPES {

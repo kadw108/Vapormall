@@ -149,19 +149,40 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
   margin-top: 50%;
 }
 
-.skill-button {
-  position: relative;
+.skill-wrapper {
+  display: inline-block;
+  width: 23%;
+  margin: 0.5%;
+}
+
+.skill-div {
   outline: none;
   text-align: center;
   text-decoration: none;
   text-shadow: 0 1px 0 rgba(255,255,255,.4);
   border-radius: 5px;
-  margin: 3px;
   box-shadow: 0 1px 2px rgba(0,0,0,.2),inset 0 -1px 2px #fff;
 
   color: #fff;
   border: solid 1px #aaa;
   background: #000;
+}
+
+.skill-tip {
+  position: absolute;
+  z-index: 3;
+  line-height: 100%;
+  padding: 4px;
+
+  width: 40%;
+
+  display: none;
+}
+
+.skill-button {
+  position: relative;
+  margin: 3px;
+  width: 100%;
 }
 
 .skill-typeless {
@@ -410,6 +431,11 @@ a:hover {
 div {
   box-sizing: border-box;
 }
+
+hr {
+  height: 0px;
+  margin: 3px 0;
+}
 /* twine-user-stylesheet #5: "TagStyles" */
 .menu #bg {
   filter: blur(0px);
@@ -544,15 +570,13 @@ document.getElementById(&quot;next&quot;).addEventListener(&quot;click&quot;, ()
 /* --- */
 
 const ref = window.vapormall;
+ref.state = new ref.GameState();
 
 const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
-const enemy1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
+player1.changeName(&quot;cool dude&quot;);
+ref.state.addSoul(player1);
 
-const test_battle = new ref.Battle(
-    [player1], [enemy1]
-);
-
-ref.TESTPLAYER = player1;
+ref.Manager.startBattle(ref.state);
 
 &lt;&lt;/script&gt;&gt;
 &lt;&lt;/done&gt;&gt;

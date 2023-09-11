@@ -1,4 +1,5 @@
 import { PlayerSoul } from "./battleSoul";
+import { Skill } from "../skill";
 import { capitalizeFirstLetter } from "../utility";
 
 enum DURATIONS {
@@ -7,7 +8,6 @@ enum DURATIONS {
 }
 
 class MessageRenderer {
-
     static readonly ENDBLOCK_STRING: string = "ENDBLOCK";
 
     messages: Array<string|Function>;
@@ -107,32 +107,51 @@ class MessageRenderer {
     renderSkills(playerSoul: PlayerSoul) {
         const skillButtons: Array<HTMLElement> = [];
 
-        const skillDiv = document.createElement("div");
-        skillDiv.id = "skillDiv";
+        const skillContainer = document.createElement("div");
+        skillContainer.id = "skillContainer";
+
+        const prompt = document.createElement("p");
+        prompt.textContent = "AGGRESSION PROTOCOL INITIATED.";
+        skillContainer.append(prompt);
 
         playerSoul.soul.skills.forEach((skill, i) => {
-            const skillButton = skill.renderSkillButton();
-
-            const style_class = "skill-" + skill.data.type;
-            skillButton.classList.add(style_class);
-
-            if (skill.pp > 0) {
-                skillButton.addEventListener("click",
-                    this.skillHandlerCreator(playerSoul, i),
-                    false);
-            }
-            else {
-                skillButton.classList.add("noClick");
-            }
-
-            skillDiv?.append(skillButton);
+            const skillWrapper = this.makeSkillWrapper(playerSoul, skill, i);
+            skillContainer?.append(skillWrapper);
         });
-        document.getElementById("bottomhalf")?.append(skillDiv);
+        document.getElementById("bottomhalf")?.append(skillContainer);
+    }
+
+    makeSkillWrapper(playerSoul: PlayerSoul, skill: Skill, i: number) {
+        const skillButton = skill.getSkillButton();
+
+        if (skill.pp > 0) {
+            skillButton.addEventListener("click",
+                this.skillHandlerCreator(playerSoul, i),
+                false);
+        }
+        else {
+            skillButton.classList.add("noClick");
+        }
+
+        const skillTip = skill.getSkillTip();
+
+        skillButton.onmouseover = function(){
+            skillTip.style.display = "block";
+        }
+        skillButton.onmouseout = function(){
+            skillTip.style.display = "none";
+        }
+
+        const skillWrapper = document.createElement("div");
+        skillWrapper.classList.add("skill-wrapper");
+        skillWrapper.append(skillButton);
+        skillWrapper.append(skillTip);
+        return skillWrapper;
     }
 
     temporaryHideSkills(playerSoul: PlayerSoul) {
-        const skillDiv = document.getElementById("skillDiv");
-        skillDiv?.remove();
+        const skillContainer = document.getElementById("skillContainer");
+        skillContainer?.remove();
 
         const timeout = setTimeout(() => {
             this.renderSkills(playerSoul);
