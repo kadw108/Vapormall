@@ -20,9 +20,9 @@ class IndividualSoul {
         this.skills = [];
         this.stats = {
             [CONSTANTS.STATS.HP]: 0,
-            [CONSTANTS.STATS.OFFENSE]: 0,
+            [CONSTANTS.STATS.ATTACK]: 0,
             [CONSTANTS.STATS.DEFENSE]: 0,
-            [CONSTANTS.STATS.GLITCHOFFENSE]: 0,
+            [CONSTANTS.STATS.GLITCHATTACK]: 0,
             [CONSTANTS.STATS.GLITCHDEFENSE]: 0,
             [CONSTANTS.STATS.SPEED]: 0
         }

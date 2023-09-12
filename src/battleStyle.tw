@@ -1,9 +1,22 @@
 :: BattleStyle [stylesheet]
 
 .soulInfo {
-  width: fit-content;
+  width: 15%;
   padding: 3px;
   position: absolute;
+}
+
+.soul-tip {
+  width: 500%;
+}
+
+.hoverDiv {
+  position: absolute;
+  z-index: 3;
+  line-height: 100%;
+  padding: 4px;
+
+  display: none;
 }
 
 .enemyInfo {
@@ -70,14 +83,7 @@
 }
 
 .skill-tip {
-  position: absolute;
-  z-index: 3;
-  line-height: 100%;
-  padding: 4px;
-
   width: 40%;
-
-  display: none;
 }
 
 .skill-button {

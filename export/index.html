@@ -100,9 +100,22 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 	</div>
 	<!-- UUID://8873CEA1-472E-4CB6-8E90-B8B69CCCA877// --><tw-storydata name="VAPORMALL" startnode="1" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="8873CEA1-472E-4CB6-8E90-B8B69CCCA877" zoom="0.6" format="SugarCube" format-version="2.36.1" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* twine-user-stylesheet #1: "BattleStyle" */
 .soulInfo {
-  width: fit-content;
+  width: 15%;
   padding: 3px;
   position: absolute;
+}
+
+.soul-tip {
+  width: 500%;
+}
+
+.hoverDiv {
+  position: absolute;
+  z-index: 3;
+  line-height: 100%;
+  padding: 4px;
+
+  display: none;
 }
 
 .enemyInfo {
@@ -169,14 +182,7 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 }
 
 .skill-tip {
-  position: absolute;
-  z-index: 3;
-  line-height: 100%;
-  padding: 4px;
-
   width: 40%;
-
-  display: none;
 }
 
 .skill-button {
@@ -572,9 +578,13 @@ document.getElementById(&quot;next&quot;).addEventListener(&quot;click&quot;, ()
 const ref = window.vapormall;
 ref.state = new ref.GameState();
 
-const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
+const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
 player1.changeName(&quot;cool dude&quot;);
 ref.state.addSoul(player1);
+
+const player2 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
+player2.changeName(&quot;death&quot;);
+ref.state.addSoul(player2);
 
 ref.Manager.startBattle(ref.state);
 

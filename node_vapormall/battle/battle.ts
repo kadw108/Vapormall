@@ -283,12 +283,12 @@ class Battle {
 
     damageCalc(user: BattleSoul, skill: Skill, target: BattleSoul, isGlitch: boolean) {
         if (isGlitch) {
-            const damage_num = user.calculateStat(CONSTANTS.STATS.GLITCHOFFENSE) * skill.data.power!;
+            const damage_num = user.calculateStat(CONSTANTS.STATS.GLITCHATTACK) * skill.data.power!;
             const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.GLITCHDEFENSE));
             return damage;
         }
 
-        const damage_num = user.calculateStat(CONSTANTS.STATS.OFFENSE) * skill.data.power!;
+        const damage_num = user.calculateStat(CONSTANTS.STATS.ATTACK) * skill.data.power!;
         const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.DEFENSE));
         return damage;
     }

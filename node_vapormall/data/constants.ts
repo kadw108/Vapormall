@@ -1,9 +1,9 @@
 export namespace CONSTANTS {
   export enum STATS {
     HP = "HP",
-    OFFENSE = "offense",
+    ATTACK = "attack",
     DEFENSE = "defense",
-    GLITCHOFFENSE = "glitch offense",
+    GLITCHATTACK = "glitch attack",
     GLITCHDEFENSE = "glitch defense",
     SPEED = "speed"
   }

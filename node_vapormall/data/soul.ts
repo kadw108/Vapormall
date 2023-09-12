@@ -13,8 +13,8 @@ interface LevelUpStatChange {
 
 interface LevelUpChange {
   level: number;
-  learnedSkills?: Array<SkillData>;
   statChanges?: Array<LevelUpStatChange>;
+  learnedSkills?: Array<SkillData>;
 }
 
 interface SoulSpecies {
@@ -32,9 +32,9 @@ const SOUL_LIST = {
         description: "Churning glut of incoherence.",
         stats: {
             [CONSTANTS.STATS.HP]: 20,
-            [CONSTANTS.STATS.OFFENSE]: 10,
+            [CONSTANTS.STATS.ATTACK]: 10,
             [CONSTANTS.STATS.DEFENSE]: 10,
-            [CONSTANTS.STATS.GLITCHOFFENSE]: 10,
+            [CONSTANTS.STATS.GLITCHATTACK]: 10,
             [CONSTANTS.STATS.GLITCHDEFENSE]: 7,
             [CONSTANTS.STATS.SPEED]: 8
         },
@@ -50,8 +50,6 @@ const SOUL_LIST = {
               level: 1,
               learnedSkills: [
                 SKILL_LIST.basic_attack,
-                SKILL_LIST.dazzling_polish,
-                SKILL_LIST.drain,
                 SKILL_LIST.recoil
               ]
             },
@@ -59,6 +57,9 @@ const SOUL_LIST = {
               level: 2,
               statChanges: [
                 {stat: CONSTANTS.STATS.SPEED, change: 6}
+              ],
+              learnedSkills: [
+                SKILL_LIST.dazzling_polish
               ]
             },
             {
@@ -71,6 +72,9 @@ const SOUL_LIST = {
               level: 4,
               statChanges: [
                 {stat: CONSTANTS.STATS.HP, change: 6}
+              ],
+              learnedSkills: [
+                SKILL_LIST.drain
               ]
             },
             {

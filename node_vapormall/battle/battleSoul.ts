@@ -1,4 +1,5 @@
-import {Skill, IndividualSoul } from "../individualSoul";
+import {Skill} from "../skill";
+import {IndividualSoul } from "../individualSoul";
 import {StatDict, CONSTANTS } from "../data/constants";
 
 abstract class BattleSoul {
@@ -17,27 +18,116 @@ abstract class BattleSoul {
         this.selected_skill = null;
         this.selected_target = null;
 
-        this.infoDiv = document.createElement("div");
-        const nameText = document.createTextNode(this.soul.name);
-        this.infoDiv.append(nameText);
-        this.infoDiv.append(document.createElement("br"));
+        this.stat_changes = {
+            [CONSTANTS.STATS.HP]: 0, // not allowed to change hp
+            [CONSTANTS.STATS.ATTACK]: 0,
+            [CONSTANTS.STATS.DEFENSE]: 0,
+            [CONSTANTS.STATS.GLITCHATTACK]: 0,
+            [CONSTANTS.STATS.GLITCHDEFENSE]: 0,
+            [CONSTANTS.STATS.SPEED]: 0,
+        }
 
         this.displayHP = this.soul.currentHP;
         this.hpText = document.createElement("small");
         this.hpText.append(
             document.createTextNode(this.getHPString())
         );
-        this.infoDiv.append(this.hpText);
-        document.getElementById("tophalf")?.append(this.infoDiv);
 
-        this.stat_changes = {
-            [CONSTANTS.STATS.HP]: -1, // not allowed to change hp
-            [CONSTANTS.STATS.OFFENSE]: 0,
-            [CONSTANTS.STATS.DEFENSE]: 0,
-            [CONSTANTS.STATS.GLITCHOFFENSE]: 0,
-            [CONSTANTS.STATS.GLITCHDEFENSE]: 0,
-            [CONSTANTS.STATS.SPEED]: 0,
+        this.infoDiv = this.genInfoContainer();
+        document.getElementById("tophalf")?.append(this.infoDiv);
+    }
+
+    genInfoContainer() {
+        const infoDiv = this.genInfoDiv();
+        const detailedInfoDiv = this.genDetailedInfo();
+
+        const infoContainer = document.createElement("div");
+        infoContainer.append(infoDiv);
+        infoContainer.append(detailedInfoDiv);
+
+        infoDiv.onmouseover = function(){
+            detailedInfoDiv.style.display = "block";
         }
+        infoDiv.onmouseout = function(){
+            detailedInfoDiv.style.display = "none";
+        }
+
+        return infoContainer;
+    }
+
+    genInfoDiv() {
+        const infoDiv = document.createElement("div");
+
+        const nameText = document.createTextNode(this.soul.name);
+        infoDiv.append(nameText);
+
+        infoDiv.append(document.createElement("br"));
+
+        infoDiv.append(this.hpText);
+
+        return infoDiv;
+    }
+
+    genDetailedInfo() {
+        const infoDiv = document.createElement("div");
+        infoDiv.classList.add("soul-tip", "skill-div", "hoverDiv");
+
+        const nameText = document.createTextNode(this.soul.name);
+        infoDiv.append(
+            nameText,
+            document.createElement("br")
+        );
+
+        const typeContainer = document.createElement("small");
+        this.soul.soul_species.types.forEach((type, i) => {
+            typeContainer.innerText += type + "/";
+        });
+        infoDiv.append(typeContainer);
+
+        infoDiv.append(
+            document.createElement("hr")
+        );
+
+        const statContainer = document.createElement("small");
+        for (let key in this.soul.stats) {
+            const keyType = key as unknown as CONSTANTS.STATS;
+            statContainer.innerText +=
+                key + " " +
+                this.soul.stats[keyType] + " / ";
+        }
+        infoDiv.append(statContainer);
+
+        let has_modifiers = false;
+        for (let key in this.soul.stats) {
+            const keyType = key as unknown as CONSTANTS.STATS;
+            if (this.stat_changes[keyType] !== 0) {
+                has_modifiers = true;
+            }
+        }
+
+        if (has_modifiers) {
+
+            const statModifiers = document.createElement("small");
+            statModifiers.append(
+                document.createElement("br"),
+                document.createElement("br"),
+                document.createTextNode("(After stat modifiers:)"),
+                document.createElement("br")
+            );
+            infoDiv.append(statModifiers);
+
+            const statContainerModified = document.createElement("small");
+            for (let key in this.soul.stats) {
+                const keyType = key as unknown as CONSTANTS.STATS;
+                statContainerModified.innerText +=
+                    key + " " +
+                    this.calculateStat(keyType) +
+                    " / ";
+            }
+            infoDiv.append(statContainerModified);
+        }
+
+        return infoDiv;
     }
 
     updateInfo() {
@@ -49,6 +139,10 @@ abstract class BattleSoul {
     }
 
     calculateStat(stat: CONSTANTS.STATS) {
+        if (stat === CONSTANTS.STATS.HP) {
+            return this.soul.stats[stat];
+        }
+
         const base = this.soul.stats[stat];
 
         let modifier;

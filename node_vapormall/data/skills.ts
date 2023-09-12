@@ -102,12 +102,12 @@ const SKILL_LIST : Skills = {
         stat_changes: [
             {
                 change: 1,
-                stat: CONSTANTS.STATS.OFFENSE,
+                stat: CONSTANTS.STATS.ATTACK,
                 target: CONSTANTS.TARGETS.SELF
             },
             {
                 change: 1,
-                stat: CONSTANTS.STATS.GLITCHOFFENSE,
+                stat: CONSTANTS.STATS.GLITCHATTACK,
                 target: CONSTANTS.TARGETS.SELF
             },
         ],

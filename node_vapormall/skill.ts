@@ -38,7 +38,7 @@ class Skill{
 
     getSkillTip(): HTMLDivElement {
         const skillTip = document.createElement("div");
-        skillTip.classList.add("skill-tip", "skill-div");
+        skillTip.classList.add("skill-tip", "skill-div", "hoverDiv");
 
         const nameText = document.createTextNode(this.data.name);
         skillTip.append(nameText);
