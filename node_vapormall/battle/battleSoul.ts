@@ -78,24 +78,9 @@ abstract class BattleSoul {
     }
 
     genDetailedInfo() {
-        const infoDiv = document.createElement("div");
-        infoDiv.classList.add("soul-tip", "outlineDiv", "hoverDiv");
-
-        const nameText = document.createTextNode(this.soul.name);
-        infoDiv.append(
-            nameText,
-            document.createElement("br")
-        );
-
-        const typeContainer = document.createElement("small");
-        this.soul.soul_species.types.forEach((type, i) => {
-            typeContainer.innerText += type + "/";
-        });
-        infoDiv.append(typeContainer);
-
-        infoDiv.append(
-            document.createElement("hr")
-        );
+        const infoDiv = this.soul.genDetailedInfo();
+        infoDiv.classList.remove("bottomhalf-tip");
+        infoDiv.classList.add("tophalf-tip");
 
         this.statInfo = this.genStatInfo();
         infoDiv.append(

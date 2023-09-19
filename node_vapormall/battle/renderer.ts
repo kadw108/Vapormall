@@ -124,7 +124,8 @@ class MessageRenderer {
     }
 
     makeSkillWrapper(playerSoul: PlayerSoul, skill: Skill, i: number) {
-        const skillButton = skill.getSkillButton();
+        const skillWrapper = skill.getSkillContainer();
+        const skillButton = skillWrapper.getElementsByTagName("button")[0];
 
         if (skill.pp > 0) {
             skillButton.addEventListener("click",
@@ -134,20 +135,6 @@ class MessageRenderer {
         else {
             skillButton.classList.add("noClick");
         }
-
-        const skillTip = skill.getSkillTip();
-
-        skillButton.onmouseover = function(){
-            skillTip.style.display = "block";
-        }
-        skillButton.onmouseout = function(){
-            skillTip.style.display = "none";
-        }
-
-        const skillWrapper = document.createElement("div");
-        skillWrapper.classList.add("skill-wrapper");
-        skillWrapper.append(skillButton);
-        skillWrapper.append(skillTip);
         return skillWrapper;
     }
 
@@ -171,22 +158,23 @@ class MessageRenderer {
     }
 
     renderSwitch(playerParty: Array<IndividualSoul>) {
-        const skillContainer = document.createElement("div");
-        skillContainer.id = "skillContainer";
+        const switchContainer = document.createElement("div");
+        switchContainer.id = "switchContainer";
 
         const prompt = document.createElement("p");
         prompt.textContent = "SWITCH ACTIVE PROCESS?";
-        skillContainer.append(prompt);
+        switchContainer.append(prompt);
 
         playerParty.forEach((playerSoul, i) => {
             const switchWrapper = this.makeSwitchWrapper(playerSoul, i);
-            skillContainer?.append(switchWrapper);
+            switchContainer?.append(switchWrapper);
         });
-        document.getElementById("bottomContainer")?.append(skillContainer);
+        document.getElementById("bottomContainer")?.append(switchContainer);
     }
 
     makeSwitchWrapper(playerSoul: IndividualSoul, switchIn: number) {
-        const switchButton = playerSoul.getSwitchButton();
+        const switchContainer = playerSoul.getSwitchContainer();
+        const switchButton = switchContainer.getElementsByTagName("button")[0];
 
         if (playerSoul.currentHP > 0) {
             switchButton.addEventListener("click",
@@ -197,10 +185,7 @@ class MessageRenderer {
             switchButton.classList.add("noClick");
         }
 
-        const switchWrapper = document.createElement("div");
-        switchWrapper.classList.add("skill-wrapper");
-        switchWrapper.append(switchButton);
-        return switchWrapper;
+        return switchContainer;
     }
 
     endBattle() {

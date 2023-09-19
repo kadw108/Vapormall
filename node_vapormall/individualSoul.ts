@@ -69,6 +69,25 @@ class IndividualSoul {
         this.name = newName;
     }
 
+    getSwitchContainer() {
+        const switchButton = this.getSwitchButton();
+        const detailedInfoDiv = this.genDetailedInfo();
+
+        const switchContainer = document.createElement("div");
+        switchContainer.classList.add("choice-wrapper");
+        switchContainer.append(switchButton);
+        switchContainer.append(detailedInfoDiv);
+
+        switchButton.onmouseover = function(){
+            detailedInfoDiv.style.display = "block";
+        }
+        switchButton.onmouseout = function(){
+            detailedInfoDiv.style.display = "none";
+        }
+
+        return switchContainer;
+    }
+
     getSwitchButton() {
         const switchButton = document.createElement("button");
         switchButton.classList.add("outlineDiv");
@@ -78,6 +97,29 @@ class IndividualSoul {
         switchButton.append(document.createElement("br"));
 
         return switchButton;
+    }
+
+    genDetailedInfo() {
+        const infoDiv = document.createElement("div");
+        infoDiv.classList.add("bottomhalf-tip", "outlineDiv", "hoverDiv");
+
+        const nameText = document.createTextNode(this.name);
+        infoDiv.append(
+            nameText,
+            document.createElement("br")
+        );
+
+        const typeContainer = document.createElement("small");
+        this.soul_species.types.forEach((type, i) => {
+            typeContainer.innerText += type + "/";
+        });
+        infoDiv.append(typeContainer);
+
+        infoDiv.append(
+            document.createElement("hr")
+        );
+
+        return infoDiv;
     }
 }
 

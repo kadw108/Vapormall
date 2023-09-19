@@ -20,13 +20,13 @@ class BattleCalculator {
             case CONSTANTS.SKILLCATEGORIES.NORMALDAMAGE:
             case CONSTANTS.SKILLCATEGORIES.GLITCHDAMAGE:
                 if (skill.data.power !== null) {
-                    let damage = this.battle.damageCalc(user, skill, target, 
+                    let damage = this.damageCalc(user, skill, target, 
                         skill.data.meta.category === CONSTANTS.SKILLCATEGORIES.GLITCHDAMAGE
                     );
 
                     let multiplier = 1;
                     target.soul.soul_species.types.forEach((type) => {
-                        multiplier *= this.battle.typeMultiplier(skill.data.type, type);
+                        multiplier *= this.typeMultiplier(skill.data.type, type);
                     })
 
                     if (multiplier === 0) {
@@ -53,7 +53,7 @@ class BattleCalculator {
                             Battle.getName(target) + " lost " + damage + " HP!"
                         );
                         target.soul.changeHP(-damage);
-                        this.battle.checkFaint(target);
+                        this.checkFaint(target);
 
                         if (skill.data.meta.drain !== 0) {
                             const drain = Math.floor(damage * (skill.data.meta.drain/100));
@@ -74,7 +74,7 @@ class BattleCalculator {
                                 );
                             }
                             user.soul.changeHP(drain);
-                            this.battle.checkFaint(user);
+                            this.checkFaint(user);
                         }
                     }
                 }
@@ -125,6 +125,84 @@ class BattleCalculator {
 
         this.battle.messageRenderer.endMessageBlock();
     }
+
+    damageCalc(user: BattleSoul, skill: Skill, target: BattleSoul, isGlitch: boolean) {
+        if (isGlitch) {
+            const damage_num = user.calculateStat(CONSTANTS.STATS.GLITCHATTACK) * skill.data.power!;
+            const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.GLITCHDEFENSE));
+            return damage;
+        }
+
+        const damage_num = user.calculateStat(CONSTANTS.STATS.ATTACK) * skill.data.power!;
+        const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.DEFENSE));
+        return damage;
+    }
+
+    typeMultiplier(attackType: CONSTANTS.TYPES, defendType: CONSTANTS.TYPES) {
+        switch (attackType) {
+            case CONSTANTS.TYPES.TYPELESS:
+                if (defendType === CONSTANTS.TYPES.ERROR) {
+                    return 0;
+                }
+                break;
+            case CONSTANTS.TYPES.SWEET:
+                if (defendType === CONSTANTS.TYPES.CORPORATE) {
+                    return 2;
+                }
+                if (defendType === CONSTANTS.TYPES.EDGE) {
+                    return 0.5;
+                }
+                break;
+            case CONSTANTS.TYPES.EDGE:
+                if (defendType === CONSTANTS.TYPES.SWEET) {
+                    return 2;
+                }
+                if (defendType === CONSTANTS.TYPES.SANGFROID) {
+                    return 0.5;
+                }
+                break;
+            case CONSTANTS.TYPES.CORPORATE:
+                if (defendType === CONSTANTS.TYPES.SANGFROID) {
+                    return 2;
+                }
+                if (defendType === CONSTANTS.TYPES.SWEET) {
+                    return 0.5;
+                }
+                break;
+            case CONSTANTS.TYPES.SANGFROID:
+                if (defendType === CONSTANTS.TYPES.EDGE) {
+                    return 2;
+                }
+                if (defendType === CONSTANTS.TYPES.CORPORATE) {
+                    return 0.5;
+                }
+                break;
+        }
+
+        return 1;
+    }
+
+    checkFaint(soul: BattleSoul) {
+        if (soul.soul.currentHP <= 0) { 
+
+            this.battle.messageRenderer.endMessageBlock();
+            this.battle.messageRenderer.addMessage(Battle.getName(soul) + " was destroyed!");
+
+            this.battle.souls.filter((s) => {s.soul.name !== soul.soul.name});
+            if (soul instanceof PlayerSoul) {
+                this.battle.playerSouls.splice(
+                    this.battle.playerSouls.indexOf(soul as PlayerSoul), 1);
+            }
+            else if (soul instanceof EnemySoul) {
+                this.battle.enemySouls.splice(
+                    this.battle.enemySouls.indexOf(soul as EnemySoul), 1);
+            }
+
+            this.battle.checkBattleOver();
+        }
+    }
+
+
 }
 
 export {

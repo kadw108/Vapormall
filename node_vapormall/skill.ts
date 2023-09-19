@@ -1,4 +1,3 @@
-import {CONSTANTS, StatDict} from "./data/constants";
 import {SkillData, SKILL_LIST} from "./data/skills";
 
 class Skill{
@@ -10,7 +9,7 @@ class Skill{
         this.pp = skill_data.max_pp;
     }
 
-    getSkillButton(): HTMLButtonElement {
+    private getSkillButton(): HTMLButtonElement {
         const skillButton = document.createElement("button");
         skillButton.classList.add("skill-button", "outlineDiv");
 
@@ -36,9 +35,9 @@ class Skill{
         return skillButton;
     }
 
-    getSkillTip(): HTMLDivElement {
+    private getSkillTip(): HTMLDivElement {
         const skillTip = document.createElement("div");
-        skillTip.classList.add("skill-tip", "outlineDiv", "hoverDiv");
+        skillTip.classList.add("bottomhalf-tip", "outlineDiv", "hoverDiv");
 
         const nameText = document.createTextNode(this.data.name);
         skillTip.append(nameText);
@@ -79,6 +78,25 @@ class Skill{
         skillTip.append(description);
 
         return skillTip;
+    }
+
+    getSkillContainer() {
+        const skillButton = this.getSkillButton();
+        const skillTip = this.getSkillTip();
+
+        skillButton.onmouseover = function(){
+            skillTip.style.display = "block";
+        }
+        skillButton.onmouseout = function(){
+            skillTip.style.display = "none";
+        }
+
+        const skillWrapper = document.createElement("div");
+        skillWrapper.classList.add("choice-wrapper");
+        skillWrapper.append(skillButton);
+        skillWrapper.append(skillTip);
+
+        return skillWrapper;
     }
 }
 

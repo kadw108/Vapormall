@@ -35,7 +35,7 @@
   margin-top: 50%;
 }
 
-/* Small Outlined Divs */
+/* General Styles */
 
 .outlineDiv {
   outline: none;
@@ -50,6 +50,11 @@
   background: #000;
 }
 
+.choice-wrapper {
+  display: inline-block;
+  margin: 0.5%;
+}
+
 /* Soul/Skill Info */
 
 .soulInfo {
@@ -58,8 +63,12 @@
   position: absolute;
 }
 
-.soul-tip {
+.tophalf-tip {
   width: 500%;
+}
+
+.bottomhalf-tip {
+  width: 40%;
 }
 
 .hoverDiv {
@@ -81,16 +90,6 @@
 }
 
 /* --- Skill Buttons */
-
-.skill-wrapper {
-  display: inline-block;
-  width: 23%;
-  margin: 0.5%;
-}
-
-.skill-tip {
-  width: 40%;
-}
 
 .skill-button {
   position: relative;
