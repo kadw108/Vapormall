@@ -1,6 +1,8 @@
 import { PlayerSoul } from "./battleSoul";
 import { Skill } from "../skill";
 import { capitalizeFirstLetter } from "../utility";
+import { GameState } from "../gameState";
+import { IndividualSoul } from "../individualSoul";
 
 enum DURATIONS {
     BETWEENBLOCKS = 3100,
@@ -17,8 +19,9 @@ class MessageRenderer {
     timeouts: Array<NodeJS.Timeout>;
 
     skillHandlerCreator: Function;
+    switchHandlerCreator: Function;
 
-    constructor(skillHandlerCreator: Function) {
+    constructor(skillHandlerCreator: Function, switchHandlerCreator: Function) {
         const messageContainer = document.getElementById("messageContainer");
         if (messageContainer === null) {
             console.error("messageContainer is null! Cannot display messages!");
@@ -32,6 +35,7 @@ class MessageRenderer {
         this.timeouts = [];
 
         this.skillHandlerCreator = skillHandlerCreator;
+        this.switchHandlerCreator = switchHandlerCreator;
     }
 
     addMessage(message: string|Function) {
@@ -105,8 +109,6 @@ class MessageRenderer {
     }
 
     renderSkills(playerSoul: PlayerSoul) {
-        const skillButtons: Array<HTMLElement> = [];
-
         const skillContainer = document.createElement("div");
         skillContainer.id = "skillContainer";
 
@@ -118,7 +120,7 @@ class MessageRenderer {
             const skillWrapper = this.makeSkillWrapper(playerSoul, skill, i);
             skillContainer?.append(skillWrapper);
         });
-        document.getElementById("bottomhalf")?.append(skillContainer);
+        document.getElementById("bottomContainer")?.append(skillContainer);
     }
 
     makeSkillWrapper(playerSoul: PlayerSoul, skill: Skill, i: number) {
@@ -149,14 +151,56 @@ class MessageRenderer {
         return skillWrapper;
     }
 
-    temporaryHideSkills(playerSoul: PlayerSoul) {
-        const skillContainer = document.getElementById("skillContainer");
-        skillContainer?.remove();
+    hideActions() {
+        const bottomContainer = document.getElementById("bottomContainer");
+        bottomContainer?.remove();
+    }
 
+    queueShowActions(playerSoul: PlayerSoul, playerParty: Array<IndividualSoul>) {
         const timeout = setTimeout(() => {
+
+            const bottomContainer = document.createElement("div");
+            bottomContainer.id = "bottomContainer";
+            document.getElementById("bottomhalf")?.append(bottomContainer);
+
             this.renderSkills(playerSoul);
+            this.renderSwitch(playerParty);
+
         }, DURATIONS.BETWEENBLOCKS * 2);
         this.timeouts.push(timeout);
+    }
+
+    renderSwitch(playerParty: Array<IndividualSoul>) {
+        const skillContainer = document.createElement("div");
+        skillContainer.id = "skillContainer";
+
+        const prompt = document.createElement("p");
+        prompt.textContent = "SWITCH ACTIVE PROCESS?";
+        skillContainer.append(prompt);
+
+        playerParty.forEach((playerSoul, i) => {
+            const switchWrapper = this.makeSwitchWrapper(playerSoul, i);
+            skillContainer?.append(switchWrapper);
+        });
+        document.getElementById("bottomContainer")?.append(skillContainer);
+    }
+
+    makeSwitchWrapper(playerSoul: IndividualSoul, switchIn: number) {
+        const switchButton = playerSoul.getSwitchButton();
+
+        if (playerSoul.currentHP > 0) {
+            switchButton.addEventListener("click",
+                this.switchHandlerCreator(0, switchIn),
+                false);
+        }
+        else {
+            switchButton.classList.add("noClick");
+        }
+
+        const switchWrapper = document.createElement("div");
+        switchWrapper.classList.add("skill-wrapper");
+        switchWrapper.append(switchButton);
+        return switchWrapper;
     }
 
     endBattle() {

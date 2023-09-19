@@ -12,7 +12,7 @@ class Skill{
 
     getSkillButton(): HTMLButtonElement {
         const skillButton = document.createElement("button");
-        skillButton.classList.add("skill-button", "skill-div");
+        skillButton.classList.add("skill-button", "outlineDiv");
 
         const style_class = "skill-" + this.data.type;
         skillButton.classList.add(style_class);
@@ -38,7 +38,7 @@ class Skill{
 
     getSkillTip(): HTMLDivElement {
         const skillTip = document.createElement("div");
-        skillTip.classList.add("skill-tip", "skill-div", "hoverDiv");
+        skillTip.classList.add("skill-tip", "outlineDiv", "hoverDiv");
 
         const nameText = document.createTextNode(this.data.name);
         skillTip.append(nameText);
@@ -46,7 +46,7 @@ class Skill{
 
         const typeText = document.createElement("small");
         typeText.append(
-            document.createTextNode(this.data.type + " ")
+            document.createTextNode(this.data.type + " | ")
         );
         skillTip.append(typeText);
 

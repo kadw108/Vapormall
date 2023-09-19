@@ -1,33 +1,5 @@
 :: BattleStyle [stylesheet]
 
-.soulInfo {
-  width: 15%;
-  padding: 3px;
-  position: absolute;
-}
-
-.soul-tip {
-  width: 500%;
-}
-
-.hoverDiv {
-  position: absolute;
-  z-index: 3;
-  line-height: 100%;
-  padding: 4px;
-
-  display: none;
-}
-
-.enemyInfo {
-  right: 0;
-}
-
-.playerInfo {
-  bottom: 0px;
-  margin-bottom: 5px;
-}
-
 #messageContainer {
   display: flex;
   justify-content: flex-end;
@@ -63,13 +35,9 @@
   margin-top: 50%;
 }
 
-.skill-wrapper {
-  display: inline-block;
-  width: 23%;
-  margin: 0.5%;
-}
+/* Small Outlined Divs */
 
-.skill-div {
+.outlineDiv {
   outline: none;
   text-align: center;
   text-decoration: none;
@@ -80,6 +48,44 @@
   color: #fff;
   border: solid 1px #aaa;
   background: #000;
+}
+
+/* Soul/Skill Info */
+
+.soulInfo {
+  width: 15%;
+  padding: 3px;
+  position: absolute;
+}
+
+.soul-tip {
+  width: 500%;
+}
+
+.hoverDiv {
+  position: absolute;
+  z-index: 3;
+  line-height: 100%;
+  padding: 4px;
+
+  display: none;
+}
+
+.enemyInfo {
+  right: 0;
+}
+
+.playerInfo {
+  bottom: 0px;
+  margin-bottom: 5px;
+}
+
+/* --- Skill Buttons */
+
+.skill-wrapper {
+  display: inline-block;
+  width: 23%;
+  margin: 0.5%;
 }
 
 .skill-tip {

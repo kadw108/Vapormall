@@ -1,16 +1,17 @@
-import {Skill, IndividualSoul} from "./individualSoul";
+import {IndividualSoul} from "./individualSoul";
+import {Skill} from "./skill";
 import {GameState} from "./gameState";
 import {CONSTANTS} from "./data/constants";
 import {SOUL_LIST} from "./data/soul";
 import {Battle} from "./battle/battle";
 
 class Manager {
-    static startBattle(gameState: GameState) {
-        const player1 = gameState.partySouls[0];
+    static startBattle() {
+        const players = GameState.getPartySouls();
         const enemy1 = Manager.generateEnemy();
        
         return new Battle(
-            [player1], [enemy1]
+            players, [enemy1]
         );
     }
 

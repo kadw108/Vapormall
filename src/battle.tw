@@ -16,6 +16,7 @@
         </div>
     </div>
     <div id="bottomhalf" class="absoluteAlign blackBg">
+        <div id="bottomContainer"></div>
     </div>
 </div>
 
@@ -33,13 +34,13 @@ ref.state = new ref.GameState();
 
 const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
 player1.changeName("cool dude");
-ref.state.addSoul(player1);
+ref.GameState.addSoul(player1);
 
 const player2 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
 player2.changeName("death");
-ref.state.addSoul(player2);
+ref.GameState.addSoul(player2);
 
-ref.Manager.startBattle(ref.state);
+ref.Manager.startBattle();
 
 <</script>>
 <</done>>

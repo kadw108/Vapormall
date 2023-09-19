@@ -99,34 +99,6 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
 	<!-- UUID://8873CEA1-472E-4CB6-8E90-B8B69CCCA877// --><tw-storydata name="VAPORMALL" startnode="1" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="8873CEA1-472E-4CB6-8E90-B8B69CCCA877" zoom="0.6" format="SugarCube" format-version="2.36.1" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* twine-user-stylesheet #1: "BattleStyle" */
-.soulInfo {
-  width: 15%;
-  padding: 3px;
-  position: absolute;
-}
-
-.soul-tip {
-  width: 500%;
-}
-
-.hoverDiv {
-  position: absolute;
-  z-index: 3;
-  line-height: 100%;
-  padding: 4px;
-
-  display: none;
-}
-
-.enemyInfo {
-  right: 0;
-}
-
-.playerInfo {
-  bottom: 0px;
-  margin-bottom: 5px;
-}
-
 #messageContainer {
   display: flex;
   justify-content: flex-end;
@@ -162,13 +134,9 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
   margin-top: 50%;
 }
 
-.skill-wrapper {
-  display: inline-block;
-  width: 23%;
-  margin: 0.5%;
-}
+/* Small Outlined Divs */
 
-.skill-div {
+.outlineDiv {
   outline: none;
   text-align: center;
   text-decoration: none;
@@ -179,6 +147,44 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
   color: #fff;
   border: solid 1px #aaa;
   background: #000;
+}
+
+/* Soul/Skill Info */
+
+.soulInfo {
+  width: 15%;
+  padding: 3px;
+  position: absolute;
+}
+
+.soul-tip {
+  width: 500%;
+}
+
+.hoverDiv {
+  position: absolute;
+  z-index: 3;
+  line-height: 100%;
+  padding: 4px;
+
+  display: none;
+}
+
+.enemyInfo {
+  right: 0;
+}
+
+.playerInfo {
+  bottom: 0px;
+  margin-bottom: 5px;
+}
+
+/* --- Skill Buttons */
+
+.skill-wrapper {
+  display: inline-block;
+  width: 23%;
+  margin: 0.5%;
 }
 
 .skill-tip {
@@ -563,6 +569,7 @@ importScripts("vapormall.js");</script><tw-tag name="TODO" color="red"></tw-tag>
         &lt;/div&gt;
     &lt;/div&gt;
     &lt;div id=&quot;bottomhalf&quot; class=&quot;absoluteAlign blackBg&quot;&gt;
+        &lt;div id=&quot;bottomContainer&quot;&gt;&lt;/div&gt;
     &lt;/div&gt;
 &lt;/div&gt;
 
@@ -580,13 +587,13 @@ ref.state = new ref.GameState();
 
 const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
 player1.changeName(&quot;cool dude&quot;);
-ref.state.addSoul(player1);
+ref.GameState.addSoul(player1);
 
 const player2 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
 player2.changeName(&quot;death&quot;);
-ref.state.addSoul(player2);
+ref.GameState.addSoul(player2);
 
-ref.Manager.startBattle(ref.state);
+ref.Manager.startBattle();
 
 &lt;&lt;/script&gt;&gt;
 &lt;&lt;/done&gt;&gt;

@@ -68,6 +68,17 @@ class IndividualSoul {
     changeName(newName: string) {
         this.name = newName;
     }
+
+    getSwitchButton() {
+        const switchButton = document.createElement("button");
+        switchButton.classList.add("outlineDiv");
+
+        const nameText = document.createTextNode(this.name);
+        switchButton.append(nameText);
+        switchButton.append(document.createElement("br"));
+
+        return switchButton;
+    }
 }
 
 export {

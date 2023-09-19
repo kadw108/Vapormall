@@ -11,27 +11,26 @@ class Battle {
     souls: Array<PlayerSoul | EnemySoul>;
     battleOver: boolean;
 
+    playerParty: Array<IndividualSoul>;
+    enemyParty: Array<IndividualSoul>;
+
     messageRenderer: MessageRenderer;
+    calcuator: Calculator;
 
     constructor(playerSouls: Array<IndividualSoul>, enemySouls: Array<IndividualSoul>) {
-        this.playerSouls = playerSouls.map(
-            function (i) {
-                return new PlayerSoul(i);
-            }
-        );
+        this.playerParty = playerSouls;
+        this.enemyParty = enemySouls;
 
-        this.enemySouls = enemySouls.map(
-            function (i) {
-                return new EnemySoul(i);
-            }
-        );
+        this.playerSouls = [new PlayerSoul(this.playerParty[0])];
+        this.enemySouls = [new EnemySoul(this.enemyParty[0])];
 
         this.souls = [...this.playerSouls, ...this.enemySouls];
         this.battleOver = false;
 
-        this.messageRenderer = new MessageRenderer(this.createSkillClickHandler.bind(this));
+        this.messageRenderer = new MessageRenderer(this.createSkillClickHandler.bind(this), this.createSwitchClickHandler.bind(this));
         const playerSoul = this.playerSouls[0];
         this.messageRenderer.renderSkills(playerSoul);
+        this.messageRenderer.renderSwitch(this.playerParty);
     }
 
     static getName(battleSoul: BattleSoul): string {
@@ -103,19 +102,6 @@ class Battle {
             }
     }
 
-    createSkillClickHandler(playerSoul: PlayerSoul, whichSkill: number) {
-        // from https://stackoverflow.com/questions/8941183/pass-multiple-arguments-along-with-an-event-object-to-an-event-handler
-        return () => {
-            // arrow function for `this` https://stackoverflow.com/a/73068955
-            playerSoul.selected_skill = playerSoul.soul.skills[whichSkill];
-            this.messageRenderer.temporaryHideSkills(playerSoul);
-            this.selectPlayerTarget(playerSoul);
-            this.selectEnemySkills();
-            this.passTurn();
-            this.messageRenderer.displayMessages();
-        }
-    }
-
     useSkill(user: BattleSoul) {
         const skill = user.selected_skill;
         if (skill === null) {
@@ -177,7 +163,7 @@ class Battle {
 
                         this.messageRenderer.addMessage(() => {
                             target.displayHP -= damage;
-                            target.updateInfo();
+                            target.updateHP();
                         });
 
                         if (multiplier > 1) {
@@ -198,7 +184,7 @@ class Battle {
 
                             this.messageRenderer.addMessage(() => {
                                 user.displayHP += drain;
-                                user.updateInfo();
+                                user.updateHP();
                             });
 
                             if (drain > 0) {
@@ -250,6 +236,9 @@ class Battle {
                             changeDesc += " " + Math.abs(statChange.change) + " stage!";
                         }
 
+                        this.messageRenderer.addMessage(() => {
+                            target.updateStats();
+                        });
                         this.messageRenderer.addMessage(
                             Battle.getName(target) + "'s " + statChange.stat + changeDesc
                         );
@@ -267,7 +256,7 @@ class Battle {
             this.messageRenderer.endMessageBlock();
             this.messageRenderer.addMessage(Battle.getName(soul) + " was destroyed!");
 
-            this.souls.splice(this.souls.indexOf(soul), 1);
+            this.souls.filter((s) => {s.soul.name !== soul.soul.name});
             if (soul instanceof PlayerSoul) {
                 this.playerSouls.splice(
                     this.playerSouls.indexOf(soul as PlayerSoul), 1);
@@ -335,6 +324,50 @@ class Battle {
         }
 
         return 1;
+    }
+
+    switchSoul(switchOut: number, switchIn: number): PlayerSoul {
+        const leaving = this.playerSouls[switchOut];
+        const entering = new PlayerSoul(this.playerParty[switchIn]);
+
+        /* this.messageRenderer.temporaryHideSkills(entering); */
+
+        leaving.switchOut();
+        this.playerSouls[switchOut] = entering;
+        this.messageRenderer.addMessage("Switching out " + Battle.getName(leaving) + " for " + entering.soul.name);
+
+        return entering;
+    }
+
+    createSkillClickHandler(playerSoul: PlayerSoul, whichSkill: number) {
+        // from https://stackoverflow.com/questions/8941183/pass-multiple-arguments-along-with-an-event-object-to-an-event-handler
+        return () => {
+            // arrow function for `this` https://stackoverflow.com/a/73068955
+            playerSoul.selected_skill = playerSoul.soul.skills[whichSkill];
+            this.messageRenderer.hideActions();
+            this.selectPlayerTarget(playerSoul);
+            this.selectEnemySkills();
+            this.passTurn();
+            this.messageRenderer.queueShowActions(playerSoul, this.playerParty);
+
+            this.messageRenderer.displayMessages();
+        }
+    }
+
+    createSwitchClickHandler(switchOut: number, switchIn: number) {
+        // from https://stackoverflow.com/questions/8941183/pass-multiple-arguments-along-with-an-event-object-to-an-event-handler
+        return () => {
+            // arrow function for `this` https://stackoverflow.com/a/73068955
+            this.messageRenderer.hideActions();
+
+            const switchInPlayerSoul = this.switchSoul(switchOut, switchIn);
+
+            this.selectEnemySkills();
+            this.passTurn();
+            this.messageRenderer.queueShowActions(switchInPlayerSoul, this.playerParty);
+
+            this.messageRenderer.displayMessages();
+        }
     }
 }
 

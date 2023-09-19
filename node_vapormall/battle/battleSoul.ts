@@ -7,11 +7,16 @@ abstract class BattleSoul {
     selected_skill: Skill | null;
     selected_target: Array<BattleSoul> | null;
 
-    infoDiv: HTMLElement;
+    infoContainer: HTMLElement;
+    detailedInfoDiv: HTMLElement;
+
     displayHP: number;
     hpText: HTMLElement;
+    statInfo: HTMLElement;
 
     stat_changes: StatDict;
+
+    index: number;
 
     constructor(soul: IndividualSoul) {
         this.soul = soul;
@@ -33,8 +38,10 @@ abstract class BattleSoul {
             document.createTextNode(this.getHPString())
         );
 
-        this.infoDiv = this.genInfoContainer();
-        document.getElementById("tophalf")?.append(this.infoDiv);
+        this.infoContainer = this.genInfoContainer();
+        document.getElementById("tophalf")?.append(this.infoContainer);
+
+        this.index = 0;
     }
 
     genInfoContainer() {
@@ -51,6 +58,8 @@ abstract class BattleSoul {
         infoDiv.onmouseout = function(){
             detailedInfoDiv.style.display = "none";
         }
+
+        this.detailedInfoDiv = detailedInfoDiv;
 
         return infoContainer;
     }
@@ -70,7 +79,7 @@ abstract class BattleSoul {
 
     genDetailedInfo() {
         const infoDiv = document.createElement("div");
-        infoDiv.classList.add("soul-tip", "skill-div", "hoverDiv");
+        infoDiv.classList.add("soul-tip", "outlineDiv", "hoverDiv");
 
         const nameText = document.createTextNode(this.soul.name);
         infoDiv.append(
@@ -88,25 +97,31 @@ abstract class BattleSoul {
             document.createElement("hr")
         );
 
-        const statContainer = document.createElement("small");
-        for (let key in this.soul.stats) {
-            const keyType = key as unknown as CONSTANTS.STATS;
-            statContainer.innerText +=
-                key + " " +
-                this.soul.stats[keyType] + " / ";
-        }
-        infoDiv.append(statContainer);
+        this.statInfo = this.genStatInfo();
+        infoDiv.append(
+            this.statInfo
+        );
 
-        let has_modifiers = false;
+        return infoDiv;
+    }
+
+    hasModifiers(): boolean {
         for (let key in this.soul.stats) {
             const keyType = key as unknown as CONSTANTS.STATS;
             if (this.stat_changes[keyType] !== 0) {
-                has_modifiers = true;
+                return true;
             }
         }
+        return false;
+    }
 
-        if (has_modifiers) {
+    private genStatInfo() {
+        const statGroup = document.createElement("div");
+        statGroup.append(
+            this.genStatText(false)
+        );
 
+        if (this.hasModifiers()) {
             const statModifiers = document.createElement("small");
             statModifiers.append(
                 document.createElement("br"),
@@ -114,24 +129,43 @@ abstract class BattleSoul {
                 document.createTextNode("(After stat modifiers:)"),
                 document.createElement("br")
             );
-            infoDiv.append(statModifiers);
 
-            const statContainerModified = document.createElement("small");
-            for (let key in this.soul.stats) {
-                const keyType = key as unknown as CONSTANTS.STATS;
-                statContainerModified.innerText +=
-                    key + " " +
-                    this.calculateStat(keyType) +
-                    " / ";
-            }
-            infoDiv.append(statContainerModified);
+            statGroup.append(statModifiers);
+            statGroup.append(
+                this.genStatText(true)
+            )
         }
 
-        return infoDiv;
+        return statGroup;
     }
 
-    updateInfo() {
+    genStatText(modified: boolean) {
+        const statContainer = document.createElement("small");
+        for (let key in this.soul.stats) {
+            if (key != "HP") {
+                const keyType = key as unknown as CONSTANTS.STATS;
+                statContainer.innerText += key + " ";
+
+                if (modified) {
+                    statContainer.innerText += this.calculateStat(keyType);
+                }
+                else {
+                    statContainer.innerText += this.soul.stats[keyType];
+                }
+                statContainer.innerText += " / ";
+            }
+        }
+        return statContainer;
+    }
+
+    updateHP() {
         this.hpText.innerHTML = this.getHPString();
+    }
+
+    updateStats() {
+        this.statInfo.remove();
+        this.statInfo = this.genStatInfo();
+        this.detailedInfoDiv.append(this.statInfo);
     }
 
     getHPString() {
@@ -155,20 +189,23 @@ abstract class BattleSoul {
 
         return Math.max(Math.floor(base * modifier), 1);
     }
+
+    switchOut() {
+        this.infoContainer.remove();
+    }
 }
 
 class PlayerSoul extends BattleSoul {
     constructor(soul: IndividualSoul) {
         super(soul);
-        this.infoDiv.classList.add("playerInfo", "soulInfo", "blackBg");
+        this.infoContainer.classList.add("playerInfo", "soulInfo", "blackBg");
     }
-
 }
 
 class EnemySoul extends BattleSoul {
     constructor(soul: IndividualSoul) {
         super(soul);
-        this.infoDiv.classList.add("enemyInfo", "soulInfo", "blackBg");
+        this.infoContainer.classList.add("enemyInfo", "soulInfo", "blackBg");
     }
 
     chooseMove(
