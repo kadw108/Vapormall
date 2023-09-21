@@ -119,7 +119,24 @@ class IndividualSoul {
             document.createElement("hr")
         );
 
+        infoDiv.append(
+            this.genStatText(this.stats)
+        );
+
         return infoDiv;
+    }
+
+    genStatText(dict: StatDict) {
+        const statContainer = document.createElement("small");
+        for (let key in this.stats) {
+            if (key != "HP") {
+                const keyType = key as unknown as CONSTANTS.STATS;
+                statContainer.innerText += key + " ";
+                statContainer.innerText += dict[keyType];
+                statContainer.innerText += " / ";
+            }
+        }
+        return statContainer;
     }
 }
 

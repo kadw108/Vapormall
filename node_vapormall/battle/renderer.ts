@@ -143,7 +143,7 @@ class MessageRenderer {
         bottomContainer?.remove();
     }
 
-    queueShowActions(playerSoul: PlayerSoul, playerParty: Array<IndividualSoul>) {
+    queueShowActions(playerSoul: PlayerSoul, playerParty: Array<IndividualSoul>, playerSouls: Array<PlayerSoul>) {
         const timeout = setTimeout(() => {
 
             const bottomContainer = document.createElement("div");
@@ -151,13 +151,13 @@ class MessageRenderer {
             document.getElementById("bottomhalf")?.append(bottomContainer);
 
             this.renderSkills(playerSoul);
-            this.renderSwitch(playerParty);
+            this.renderSwitch(playerParty, playerSouls);
 
         }, DURATIONS.BETWEENBLOCKS * 2);
         this.timeouts.push(timeout);
     }
 
-    renderSwitch(playerParty: Array<IndividualSoul>) {
+    renderSwitch(playerParty: Array<IndividualSoul>, playerSouls: Array<PlayerSoul>) {
         const switchContainer = document.createElement("div");
         switchContainer.id = "switchContainer";
 
@@ -166,17 +166,24 @@ class MessageRenderer {
         switchContainer.append(prompt);
 
         playerParty.forEach((playerSoul, i) => {
-            const switchWrapper = this.makeSwitchWrapper(playerSoul, i);
+            const switchWrapper = this.makeSwitchWrapper(playerSoul, i, playerSouls);
             switchContainer?.append(switchWrapper);
         });
         document.getElementById("bottomContainer")?.append(switchContainer);
     }
 
-    makeSwitchWrapper(playerSoul: IndividualSoul, switchIn: number) {
+    makeSwitchWrapper(playerSoul: IndividualSoul, switchIn: number, playerSouls: Array<PlayerSoul>) {
         const switchContainer = playerSoul.getSwitchContainer();
         const switchButton = switchContainer.getElementsByTagName("button")[0];
 
-        if (playerSoul.currentHP > 0) {
+        let offField = true;
+        playerSouls.forEach((s) => {
+            if (s.soul === playerSoul) {
+                offField = false;
+            }
+        })
+
+        if (playerSoul.currentHP > 0 && offField) {
             switchButton.addEventListener("click",
                 this.switchHandlerCreator(0, switchIn),
                 false);

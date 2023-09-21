@@ -33,7 +33,7 @@ class Battle {
         this.messageRenderer = new MessageRenderer(this.createSkillClickHandler.bind(this), this.createSwitchClickHandler.bind(this));
         const playerSoul = this.playerSouls[0];
         this.messageRenderer.renderSkills(playerSoul);
-        this.messageRenderer.renderSwitch(this.playerParty);
+        this.messageRenderer.renderSwitch(this.playerParty, this.playerSouls);
     }
 
     static getName(battleSoul: BattleSoul): string {
@@ -160,7 +160,7 @@ class Battle {
 
             this.selectEnemySkills();
             this.passTurn();
-            this.messageRenderer.queueShowActions(playerSoul, this.playerParty);
+            this.messageRenderer.queueShowActions(playerSoul, this.playerParty, this.playerSouls);
             this.messageRenderer.displayMessages();
         }
     }
@@ -175,7 +175,7 @@ class Battle {
 
             this.selectEnemySkills();
             this.passTurn();
-            this.messageRenderer.queueShowActions(switchInPlayerSoul, this.playerParty);
+            this.messageRenderer.queueShowActions(switchInPlayerSoul, this.playerParty, this.playerSouls);
             this.messageRenderer.displayMessages();
         }
     }

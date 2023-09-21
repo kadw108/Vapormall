@@ -12,7 +12,7 @@ abstract class BattleSoul {
 
     displayHP: number;
     hpText: HTMLElement;
-    statInfo: HTMLElement;
+    modifiedStatInfoBox: HTMLElement;
 
     stat_changes: StatDict;
 
@@ -82,9 +82,9 @@ abstract class BattleSoul {
         infoDiv.classList.remove("bottomhalf-tip");
         infoDiv.classList.add("tophalf-tip");
 
-        this.statInfo = this.genStatInfo();
+        this.modifiedStatInfoBox = this.modifiedStatInfo();
         infoDiv.append(
-            this.statInfo
+            this.modifiedStatInfoBox
         );
 
         return infoDiv;
@@ -100,11 +100,8 @@ abstract class BattleSoul {
         return false;
     }
 
-    private genStatInfo() {
+    private modifiedStatInfo() {
         const statGroup = document.createElement("div");
-        statGroup.append(
-            this.genStatText(false)
-        );
 
         if (this.hasModifiers()) {
             const statModifiers = document.createElement("small");
@@ -117,40 +114,33 @@ abstract class BattleSoul {
 
             statGroup.append(statModifiers);
             statGroup.append(
-                this.genStatText(true)
+                this.soul.genStatText(this.modifiedStatDict())
             )
         }
 
         return statGroup;
     }
 
-    genStatText(modified: boolean) {
-        const statContainer = document.createElement("small");
-        for (let key in this.soul.stats) {
-            if (key != "HP") {
-                const keyType = key as unknown as CONSTANTS.STATS;
-                statContainer.innerText += key + " ";
-
-                if (modified) {
-                    statContainer.innerText += this.calculateStat(keyType);
-                }
-                else {
-                    statContainer.innerText += this.soul.stats[keyType];
-                }
-                statContainer.innerText += " / ";
-            }
-        }
-        return statContainer;
+    modifiedStatDict(): StatDict {
+        return {
+            [CONSTANTS.STATS.HP]: this.soul.currentHP,
+            [CONSTANTS.STATS.ATTACK]: this.calculateStat(CONSTANTS.STATS.ATTACK),
+            [CONSTANTS.STATS.DEFENSE]: this.calculateStat(CONSTANTS.STATS.DEFENSE),
+            [CONSTANTS.STATS.GLITCHATTACK]: this.calculateStat(CONSTANTS.STATS.GLITCHATTACK),
+            [CONSTANTS.STATS.GLITCHDEFENSE]: this.calculateStat(CONSTANTS.STATS.GLITCHDEFENSE),
+            [CONSTANTS.STATS.SPEED]: this.calculateStat(CONSTANTS.STATS.SPEED)
+        };
     }
+
 
     updateHP() {
         this.hpText.innerHTML = this.getHPString();
     }
 
     updateStats() {
-        this.statInfo.remove();
-        this.statInfo = this.genStatInfo();
-        this.detailedInfoDiv.append(this.statInfo);
+        this.modifiedStatInfoBox.remove();
+        this.modifiedStatInfoBox = this.modifiedStatInfo();
+        this.detailedInfoDiv.append(this.modifiedStatInfoBox);
     }
 
     getHPString() {
