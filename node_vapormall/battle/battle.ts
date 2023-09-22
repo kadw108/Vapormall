@@ -1,4 +1,4 @@
-import {IndividualSoul} from "../individualSoul";
+import {IndividualSoul, OwnedSoul} from "../individualSoul";
 import {Skill} from "../skill";
 import {StatChange} from "../data/skills";
 import {CONSTANTS} from "../data/constants";
@@ -13,13 +13,13 @@ class Battle {
     souls: Array<PlayerSoul | EnemySoul>;
     battleOver: boolean;
 
-    playerParty: Array<IndividualSoul>;
+    playerParty: Array<OwnedSoul>;
     enemyParty: Array<IndividualSoul>;
 
     messageRenderer: MessageRenderer;
     battleCalculator: BattleCalculator;
 
-    constructor(playerSouls: Array<IndividualSoul>, enemySouls: Array<IndividualSoul>) {
+    constructor(playerSouls: Array<OwnedSoul>, enemySouls: Array<IndividualSoul>) {
         this.playerParty = playerSouls;
         this.enemyParty = enemySouls;
 

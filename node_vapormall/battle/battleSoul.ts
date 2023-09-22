@@ -1,5 +1,5 @@
 import {Skill} from "../skill";
-import {IndividualSoul } from "../individualSoul";
+import {IndividualSoul, OwnedSoul} from "../individualSoul";
 import {StatDict, CONSTANTS } from "../data/constants";
 
 abstract class BattleSoul {
@@ -171,7 +171,7 @@ abstract class BattleSoul {
 }
 
 class PlayerSoul extends BattleSoul {
-    constructor(soul: IndividualSoul) {
+    constructor(soul: OwnedSoul) {
         super(soul);
         this.infoContainer.classList.add("playerInfo", "soulInfo", "blackBg");
     }

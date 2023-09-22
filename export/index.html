@@ -591,11 +591,16 @@ ref.state = new ref.GameState();
 
 const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
 player1.changeName(&quot;cool dude&quot;);
-ref.GameState.addSoul(player1);
+const player1_real = ref.OwnedSoul.createOwnedSoul(player1);
+ref.GameState.addSoul(player1_real);
 
+console.log(player1_real);
+
+/*
 const player2 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
 player2.changeName(&quot;death&quot;);
 ref.GameState.addSoul(player2);
+*/
 
 ref.Manager.startBattle();
 

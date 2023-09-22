@@ -3,7 +3,7 @@ import {SKILL_LIST} from "./data/skills";
 import {SOUL_LIST} from "./data/soul";
 
 import {Battle} from "./battle/battle";
-import {IndividualSoul} from "./individualSoul";
+import {IndividualSoul, OwnedSoul} from "./individualSoul";
 import {Skill} from "./skill";
 
 import {GameState} from "./gameState";
@@ -15,6 +15,7 @@ export {
   SOUL_LIST,
   Battle,
   IndividualSoul,
+  OwnedSoul,
   Skill,
   GameState,
   Manager

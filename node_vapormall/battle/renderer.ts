@@ -2,7 +2,7 @@ import { PlayerSoul } from "./battleSoul";
 import { Skill } from "../skill";
 import { capitalizeFirstLetter } from "../utility";
 import { GameState } from "../gameState";
-import { IndividualSoul } from "../individualSoul";
+import { IndividualSoul, OwnedSoul } from "../individualSoul";
 
 enum DURATIONS {
     BETWEENBLOCKS = 3100,
@@ -143,7 +143,7 @@ class MessageRenderer {
         bottomContainer?.remove();
     }
 
-    queueShowActions(playerSoul: PlayerSoul, playerParty: Array<IndividualSoul>, playerSouls: Array<PlayerSoul>) {
+    queueShowActions(playerSoul: PlayerSoul, playerParty: Array<OwnedSoul>, playerSouls: Array<PlayerSoul>) {
         const timeout = setTimeout(() => {
 
             const bottomContainer = document.createElement("div");
@@ -157,7 +157,7 @@ class MessageRenderer {
         this.timeouts.push(timeout);
     }
 
-    renderSwitch(playerParty: Array<IndividualSoul>, playerSouls: Array<PlayerSoul>) {
+    renderSwitch(playerParty: Array<OwnedSoul>, playerSouls: Array<PlayerSoul>) {
         const switchContainer = document.createElement("div");
         switchContainer.id = "switchContainer";
 
@@ -172,7 +172,7 @@ class MessageRenderer {
         document.getElementById("bottomContainer")?.append(switchContainer);
     }
 
-    makeSwitchWrapper(playerSoul: IndividualSoul, switchIn: number, playerSouls: Array<PlayerSoul>) {
+    makeSwitchWrapper(playerSoul: OwnedSoul, switchIn: number, playerSouls: Array<PlayerSoul>) {
         const switchContainer = playerSoul.getSwitchContainer();
         const switchButton = switchContainer.getElementsByTagName("button")[0];
 

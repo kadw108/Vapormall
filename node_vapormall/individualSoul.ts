@@ -2,6 +2,9 @@ import {Skill} from "./skill";
 import {SoulSpecies, SOUL_LIST} from "./data/soul";
 import {CONSTANTS, StatDict} from "./data/constants";
 
+/*
+Individual soul of a particular species
+*/
 class IndividualSoul {
     soul_species: SoulSpecies;
     name: string;
@@ -69,36 +72,6 @@ class IndividualSoul {
         this.name = newName;
     }
 
-    getSwitchContainer() {
-        const switchButton = this.getSwitchButton();
-        const detailedInfoDiv = this.genDetailedInfo();
-
-        const switchContainer = document.createElement("div");
-        switchContainer.classList.add("choice-wrapper");
-        switchContainer.append(switchButton);
-        switchContainer.append(detailedInfoDiv);
-
-        switchButton.onmouseover = function(){
-            detailedInfoDiv.style.display = "block";
-        }
-        switchButton.onmouseout = function(){
-            detailedInfoDiv.style.display = "none";
-        }
-
-        return switchContainer;
-    }
-
-    getSwitchButton() {
-        const switchButton = document.createElement("button");
-        switchButton.classList.add("outlineDiv");
-
-        const nameText = document.createTextNode(this.name);
-        switchButton.append(nameText);
-        switchButton.append(document.createElement("br"));
-
-        return switchButton;
-    }
-
     genDetailedInfo() {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("bottomhalf-tip", "outlineDiv", "hoverDiv");
@@ -140,6 +113,56 @@ class IndividualSoul {
     }
 }
 
+/*
+Individual soul owned/captured by the player
+(distinct from PlayerSoul which represents an owned soul on the combat field)
+(can be souls in player's party but not on the field during a battle)
+*/
+class OwnedSoul extends IndividualSoul {
+    constructor(soul_species: SoulSpecies, level: number) {
+        super(soul_species, level);
+    }
+
+    // https://stackoverflow.com/questions/45502366/best-practice-way-of-converting-from-one-type-to-another-in-typescript
+    // doesn't work, whatever, manual mapping is the way
+    public static createOwnedSoul(individualSoul: IndividualSoul): OwnedSoul {
+        const newSoul = new OwnedSoul(individualSoul.soul_species, individualSoul.level);
+        const returnSoul = Object.assign(newSoul, individualSoul);
+        return returnSoul;
+    }
+
+    getSwitchContainer() {
+        const switchButton = this.getSwitchButton();
+        const detailedInfoDiv = this.genDetailedInfo();
+
+        const switchContainer = document.createElement("div");
+        switchContainer.classList.add("choice-wrapper");
+        switchContainer.append(switchButton);
+        switchContainer.append(detailedInfoDiv);
+
+        switchButton.onmouseover = function(){
+            detailedInfoDiv.style.display = "block";
+        }
+        switchButton.onmouseout = function(){
+            detailedInfoDiv.style.display = "none";
+        }
+
+        return switchContainer;
+    }
+
+    getSwitchButton() {
+        const switchButton = document.createElement("button");
+        switchButton.classList.add("outlineDiv");
+
+        const nameText = document.createTextNode(this.name);
+        switchButton.append(nameText);
+        switchButton.append(document.createElement("br"));
+
+        return switchButton;
+    }
+}
+
 export {
-    IndividualSoul
+    IndividualSoul,
+    OwnedSoul
 };

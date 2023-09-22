@@ -1,4 +1,4 @@
-import {IndividualSoul} from "./individualSoul";
+import {IndividualSoul, OwnedSoul} from "./individualSoul";
 import {Skill} from "./skill";
 import {GameState} from "./gameState";
 import {CONSTANTS} from "./data/constants";
