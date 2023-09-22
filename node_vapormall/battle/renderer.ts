@@ -1,8 +1,8 @@
-import { PlayerSoul } from "./battleSoul";
+import { FieldedPlayerSoul } from "./battleSoul";
 import { Skill } from "../skill";
 import { capitalizeFirstLetter } from "../utility";
 import { GameState } from "../gameState";
-import { IndividualSoul, OwnedSoul } from "../individualSoul";
+import { IndividualSoul, PlayerSoul } from "../individualSoul";
 
 enum DURATIONS {
     BETWEENBLOCKS = 3100,
@@ -108,7 +108,7 @@ class MessageRenderer {
         this.timeouts.push(timeout);
     }
 
-    renderSkills(playerSoul: PlayerSoul) {
+    renderSkills(playerSoul: FieldedPlayerSoul) {
         const skillContainer = document.createElement("div");
         skillContainer.id = "skillContainer";
 
@@ -123,7 +123,7 @@ class MessageRenderer {
         document.getElementById("bottomContainer")?.append(skillContainer);
     }
 
-    makeSkillWrapper(playerSoul: PlayerSoul, skill: Skill, i: number) {
+    makeSkillWrapper(playerSoul: FieldedPlayerSoul, skill: Skill, i: number) {
         const skillWrapper = skill.getSkillContainer();
         const skillButton = skillWrapper.getElementsByTagName("button")[0];
 
@@ -143,7 +143,7 @@ class MessageRenderer {
         bottomContainer?.remove();
     }
 
-    queueShowActions(playerSoul: PlayerSoul, playerParty: Array<OwnedSoul>, playerSouls: Array<PlayerSoul>) {
+    queueShowActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul>) {
         const timeout = setTimeout(() => {
 
             const bottomContainer = document.createElement("div");
@@ -157,7 +157,7 @@ class MessageRenderer {
         this.timeouts.push(timeout);
     }
 
-    renderSwitch(playerParty: Array<OwnedSoul>, playerSouls: Array<PlayerSoul>) {
+    renderSwitch(playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul>) {
         const switchContainer = document.createElement("div");
         switchContainer.id = "switchContainer";
 
@@ -172,7 +172,7 @@ class MessageRenderer {
         document.getElementById("bottomContainer")?.append(switchContainer);
     }
 
-    makeSwitchWrapper(playerSoul: OwnedSoul, switchIn: number, playerSouls: Array<PlayerSoul>) {
+    makeSwitchWrapper(playerSoul: PlayerSoul, switchIn: number, playerSouls: Array<FieldedPlayerSoul>) {
         const switchContainer = playerSoul.getSwitchContainer();
         const switchButton = switchContainer.getElementsByTagName("button")[0];
 

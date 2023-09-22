@@ -1,19 +1,19 @@
-import {OwnedSoul} from "./individualSoul";
+import {PlayerSoul} from "./individualSoul";
 import {StatChange} from "./data/skills";
 import {CONSTANTS} from "./data/constants";
 
 class GameState {
-    private static partySouls: Array<OwnedSoul> = [];
+    private static partySouls: Array<PlayerSoul> = [];
 
     static getPartySouls() {
         return GameState.partySouls;
     }
 
-    static addSoul(ownedSoul: OwnedSoul) {
+    static addSoul(ownedSoul: PlayerSoul) {
         GameState.partySouls.push(ownedSoul);
     }
 
-    static removeSoul(ownedSoul: OwnedSoul) {
+    static removeSoul(ownedSoul: PlayerSoul) {
         GameState.partySouls.splice(
             this.partySouls.indexOf(ownedSoul), 1
         )

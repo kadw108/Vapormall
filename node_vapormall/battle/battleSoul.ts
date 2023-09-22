@@ -1,5 +1,5 @@
 import {Skill} from "../skill";
-import {IndividualSoul, OwnedSoul} from "../individualSoul";
+import {IndividualSoul, PlayerSoul} from "../individualSoul";
 import {StatDict, CONSTANTS } from "../data/constants";
 
 abstract class BattleSoul {
@@ -170,8 +170,8 @@ abstract class BattleSoul {
     }
 }
 
-class PlayerSoul extends BattleSoul {
-    constructor(soul: OwnedSoul) {
+class FieldedPlayerSoul extends BattleSoul {
+    constructor(soul: PlayerSoul) {
         super(soul);
         this.infoContainer.classList.add("playerInfo", "soulInfo", "blackBg");
     }
@@ -185,7 +185,7 @@ class EnemySoul extends BattleSoul {
 
     chooseMove(
         souls: Array<BattleSoul>,
-        playerSouls: Array<PlayerSoul>,
+        playerSouls: Array<FieldedPlayerSoul>,
         enemySouls: Array<EnemySoul>
     ) {
         console.log(this.soul.skills);
@@ -215,6 +215,6 @@ class EnemySoul extends BattleSoul {
 
 export {
     BattleSoul,
-    PlayerSoul,
+    FieldedPlayerSoul,
     EnemySoul
 }

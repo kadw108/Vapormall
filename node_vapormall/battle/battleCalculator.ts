@@ -2,7 +2,7 @@ import {Battle} from "./battle";
 import {Skill} from "../skill";
 import {StatChange} from "../data/skills";
 import {CONSTANTS} from "../data/constants";
-import {BattleSoul, PlayerSoul, EnemySoul} from "./battleSoul";
+import {BattleSoul, FieldedPlayerSoul, EnemySoul} from "./battleSoul";
 
 class BattleCalculator {
     battle: Battle;
@@ -189,9 +189,9 @@ class BattleCalculator {
             this.battle.messageRenderer.addMessage(Battle.getName(soul) + " was destroyed!");
 
             this.battle.souls.filter((s) => {s.soul.name !== soul.soul.name});
-            if (soul instanceof PlayerSoul) {
+            if (soul instanceof FieldedPlayerSoul) {
                 this.battle.playerSouls.splice(
-                    this.battle.playerSouls.indexOf(soul as PlayerSoul), 1);
+                    this.battle.playerSouls.indexOf(soul as FieldedPlayerSoul), 1);
             }
             else if (soul instanceof EnemySoul) {
                 this.battle.enemySouls.splice(

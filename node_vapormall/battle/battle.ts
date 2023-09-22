@@ -1,29 +1,29 @@
-import {IndividualSoul, OwnedSoul} from "../individualSoul";
+import {IndividualSoul, PlayerSoul} from "../individualSoul";
 import {Skill} from "../skill";
 import {StatChange} from "../data/skills";
 import {CONSTANTS} from "../data/constants";
 
-import {BattleSoul, PlayerSoul, EnemySoul} from "./battleSoul";
+import {BattleSoul, FieldedPlayerSoul, EnemySoul} from "./battleSoul";
 import { MessageRenderer } from "./renderer";
 import { BattleCalculator } from "./battleCalculator";
 
 class Battle {
-    playerSouls: Array<PlayerSoul>;
+    playerSouls: Array<FieldedPlayerSoul>;
     enemySouls: Array<EnemySoul>;
-    souls: Array<PlayerSoul | EnemySoul>;
+    souls: Array<FieldedPlayerSoul | EnemySoul>;
     battleOver: boolean;
 
-    playerParty: Array<OwnedSoul>;
+    playerParty: Array<PlayerSoul>;
     enemyParty: Array<IndividualSoul>;
 
     messageRenderer: MessageRenderer;
     battleCalculator: BattleCalculator;
 
-    constructor(playerSouls: Array<OwnedSoul>, enemySouls: Array<IndividualSoul>) {
+    constructor(playerSouls: Array<PlayerSoul>, enemySouls: Array<IndividualSoul>) {
         this.playerParty = playerSouls;
         this.enemyParty = enemySouls;
 
-        this.playerSouls = [new PlayerSoul(this.playerParty[0])];
+        this.playerSouls = [new FieldedPlayerSoul(this.playerParty[0])];
         this.enemySouls = [new EnemySoul(this.enemyParty[0])];
 
         this.souls = [...this.playerSouls, ...this.enemySouls];
@@ -37,7 +37,7 @@ class Battle {
     }
 
     static getName(battleSoul: BattleSoul): string {
-        if (battleSoul instanceof PlayerSoul) {
+        if (battleSoul instanceof FieldedPlayerSoul) {
             return "your " + battleSoul.soul.name;
         }
         return "the opposing " + battleSoul.soul.name;
@@ -77,7 +77,7 @@ class Battle {
         }
     }
 
-    selectPlayerTarget(playerSoul: PlayerSoul) {
+    selectPlayerTarget(playerSoul: FieldedPlayerSoul) {
         if (playerSoul.selected_skill === null) {
             console.error("SELECTING TARGET FOR NULL PLAYER SKILL");
             return;
@@ -138,9 +138,9 @@ class Battle {
         }
     }
 
-    switchSoul(switchOut: number, switchIn: number): PlayerSoul {
+    switchSoul(switchOut: number, switchIn: number): FieldedPlayerSoul {
         const leaving = this.playerSouls[switchOut];
-        const entering = new PlayerSoul(this.playerParty[switchIn]);
+        const entering = new FieldedPlayerSoul(this.playerParty[switchIn]);
 
         leaving.switchOut();
         this.playerSouls[switchOut] = entering;
@@ -149,7 +149,7 @@ class Battle {
         return entering;
     }
 
-    createSkillClickHandler(playerSoul: PlayerSoul, whichSkill: number) {
+    createSkillClickHandler(playerSoul: FieldedPlayerSoul, whichSkill: number) {
         // from https://stackoverflow.com/questions/8941183/pass-multiple-arguments-along-with-an-event-object-to-an-event-handler
         return () => {
             // arrow function for `this` https://stackoverflow.com/a/73068955
@@ -171,11 +171,11 @@ class Battle {
             // arrow function for `this` https://stackoverflow.com/a/73068955
             this.messageRenderer.hideActions();
 
-            const switchInPlayerSoul = this.switchSoul(switchOut, switchIn);
+            const switchInFieldedPlayerSoul = this.switchSoul(switchOut, switchIn);
 
             this.selectEnemySkills();
             this.passTurn();
-            this.messageRenderer.queueShowActions(switchInPlayerSoul, this.playerParty, this.playerSouls);
+            this.messageRenderer.queueShowActions(switchInFieldedPlayerSoul, this.playerParty, this.playerSouls);
             this.messageRenderer.displayMessages();
         }
     }

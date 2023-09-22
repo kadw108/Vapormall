@@ -34,7 +34,7 @@ ref.state = new ref.GameState();
 
 const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
 player1.changeName("cool dude");
-const player1_real = ref.OwnedSoul.createOwnedSoul(player1);
+const player1_real = ref.PlayerSoul.createPlayerSoul(player1);
 ref.GameState.addSoul(player1_real);
 
 console.log(player1_real);

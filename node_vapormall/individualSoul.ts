@@ -115,18 +115,18 @@ class IndividualSoul {
 
 /*
 Individual soul owned/captured by the player
-(distinct from PlayerSoul which represents an owned soul on the combat field)
+(distinct from FieldedPlayerSoul which represents a player soul on the combat field)
 (can be souls in player's party but not on the field during a battle)
 */
-class OwnedSoul extends IndividualSoul {
+class PlayerSoul extends IndividualSoul {
     constructor(soul_species: SoulSpecies, level: number) {
         super(soul_species, level);
     }
 
     // https://stackoverflow.com/questions/45502366/best-practice-way-of-converting-from-one-type-to-another-in-typescript
     // doesn't work, whatever, manual mapping is the way
-    public static createOwnedSoul(individualSoul: IndividualSoul): OwnedSoul {
-        const newSoul = new OwnedSoul(individualSoul.soul_species, individualSoul.level);
+    public static createPlayerSoul(individualSoul: IndividualSoul): PlayerSoul {
+        const newSoul = new PlayerSoul(individualSoul.soul_species, individualSoul.level);
         const returnSoul = Object.assign(newSoul, individualSoul);
         return returnSoul;
     }
@@ -164,5 +164,5 @@ class OwnedSoul extends IndividualSoul {
 
 export {
     IndividualSoul,
-    OwnedSoul
+    PlayerSoul
 };
