@@ -9,6 +9,8 @@ import {Skill} from "./skill";
 import {GameState} from "./gameState";
 import {Manager} from "./manager";
 
+import {Map} from "./map/room";
+
 export {
   CONSTANTS,
   SKILL_LIST,
@@ -18,5 +20,6 @@ export {
   PlayerSoul,
   Skill,
   GameState,
-  Manager
+  Manager,
+  Map
 }

@@ -1,0 +1,355 @@
+Animalmyn themed roguelike
+
+"an infinity of glitchy advertisements, sentient product mascots, marketplace software gone insane from age and degradation"
+
+"animalmyn, a game where you played as people who have been uploaded to a digital mall squabbling around as feral emoji creatures and earning enough funds/energy to evolve your form
+it was a deranged and morbid evolution simulator type thing, with characters that had similar agency to the player, just like the critters in RW" - Darthzz
+
+### Refs
+- Format/layout: https://st33d.itch.io/kobold-dungeon-tester
+	- Might also be worth checking out? https://st33d.itch.io/kobold-crawl
+	- Note to self: review these 2 games
+- 30x30 games
+- Path of Adventure?
+- Kerkerkruip?
+- combat system - Rites of a Mailmare, Pokemon? Mardek???
+- https://old.reddit.com/r/roguelikedev/comments/fcfxvw/textbased_roguelikes/
+- https://www.gamedeveloper.com/pc/analysis-the-eight-rules-of-roguelike-design
+	- really good specific guidelines on item id minigaming
+- https://sinisterdesign.net/12-ways-to-improve-turn-based-rpg-combat-systems/
+	- combat system stuff, maybe worth a look?
+
+### Gameplay
+Each room has 1+ challenges, including potential enemy fights
+Roguelike style gameplay
+Consisting of moving from/to/between levels? Like TGGW, Cogmind, etc
+Definitely maximalist, like all good roguelikes - put random shit in here
+
+### Areas
+Start small - 1 area, virtual pet themed (?)
+You are a virtual pet advertiser, with attacks themed off virtual pets
+enemies themed off virtual pets/deranged virtual pets
+ugh fuck that, bad idea, if we do have a virtual pet section it should be ai themed since that's a lot more expansive in theme and you can have all the poor deranged ais looking for companionship
+
+Alternative theme ideas (virtual pets are too vague and too specific, at once)
+- medicine? think tv medicine ads
+- food?
+- toys/games? shitty mobile app aesthetic
+	- alternatively, focus on real toys (or VR versions of real toys, which are basically real toys) - fidget spinners, rubiks cubes, cheap plastic figurines etc
+- clothes? nah, too physical
+- cosmetics - appearance / digital appearance? think... the prettier your avatar is, the more business you'll attract, so all the avatars want to become pretty, and they do that for stealing beautification programs from each other and hacking ways to look better, special effects, fake clothing (think overpriced cosmetics you have to pay real dollars for)
+	- I like this one
+	- could tie into a general - you need to build yourself up by stealing memories and fragments of stuff floating around the digital ether, gathering/stealing parts of other people - turning yourself into a real person and not just the shell of a bygone consciousness
+	- aesthetic: overpriced game cosmetics
+
+goal: escape alive
+basically, accumulate enough credits to escape/evolve and enter the more elite/sophisticated/fund-limited (gated community) areas/floors/suites. As you do the world gets increasingly deranged and shit
+
+### Combat
+turn-based, no real time elements because those are stupid
+
+combat/violence analysis:
+like in undertale there's a way to spare every enemy because violence is never necessary
+
+Potential combat mechanics
+type effectiveness
+status effects
+abilities
+
+maybe mardek-like / paper mario charm system for moves? with different categories of moves? module stuff?
+
+I also really like TGGW's item based progression, Brogue kinda has that too, so maybe...
+cursed / blessed items (equivalent) should definitely exist
+everything starts off unidentified, add that element of randomness!
+no item fragility because that's dumb
+all your skills/moves you get in combat come from the items you have
+however, you can upgrade items to get more powerful skills/moves/etc, like pokemon leveling up and evolving or something (using money? or some other currency?)
+maybe like cogmind the only thing 'leveling up' does is give you more inventory/equipment slots? that'd be fun...
+
+#### Types
+
+type effectiveness potential types?
+- sweet, business, edge, --- sweet good against business, business good against edge, edge good against sweet
+	- sweet (color) = candy, cartoons, colorful kids things, sparkles and glitter
+	- edge (black) = edgy, knives blood swears violence
+	- business (grey) = classy, sophisticated, modern world, think faceless financial institutions, corporationcore
+	- I honestly like this over all other alternatives - maybe think of a type switching/type stacking system like https://omori.fandom.com/wiki/EMOTIONS ?
+- alt: pokemon contest categories - Cool/Sang-froid, Cute/Grace, Beauty, Tough/Robustesse, Clever/Intelligence/Sophistication
+	- cool opposed to clever and cute
+	- cute opposed to cool and tough
+	- clever opposed to beautiful and cool
+	- tough opposed to cute and beautiful
+	- beautiful opposed to tough and clever
+	- maybe you could roll cute/beautiful into 1?
+		- thus: cute/beauty, tough, clever/urbane, cool
+			- sweet <- sordid <- sangfroid <- shareholder <- sweet
+			- cute <- cruel <- cool <- corporate <- cute
+			- sweet <- edge <- sangfroid <- corporate <- sweet
+	- names:
+		- beauty (cute/sweet)
+		- corporate (clever/urbane/cosmopolitan/business/sophisticated/serious/corporate/shareholder)
+		- sangfroid (cool/sangfroid)
+		- edge (savage/cruel/tough/edge/sordid)
+		- sets: cute/cool/cruel/corporate, sweet/sangfroid/sordid/shareholder, sweet/sangfroid/edge/corporate
+- glitch and normal? --- glitch immune to normal and weak to glitch (ghost type analogue), normal is normal
+- And a normal/neutral type with no type effectiveness
+
+type notes/examples
+- off has smoke/metal/plastic/meat, with enemy-specific type effectiveness, and 'sugar' which isn't in the gameplay
+- sound, light?, crystal/glass?, nature?, --- HorrorVale uses Bone, Flesh, Blood, Nature, Ectoplasm, Electricity and Sugar.
+
+maybe a double-battle like system where you have two modules/programs/items active at once, each with its own set of capabilities, and you can switch them in/out for the other modules/programs/items on the bench if you want? ehhh that's complicated though, stick to the 1v1 thing for now
+
+---
+option 1
+progression through catching programs (fights can be opportunities)
+
+start:
+5 inventory slots - # of items in actual inventory
+2 party slots - how many programs you have 'equipped' (# of pokemon you have)
+1 field slot - how many programs you can have on the field at once (max 3 or 4?)
+
+programs are your version of equipment/pokemon, they occupy party slots
+
+like pokemon, you can switch out the program on the field for one of the other programs in your party, but it takes a turn
+
+and there's some item you can use to capture programs and add them to your party? (no pc though - if you already have [party slot #] programs you'll need to release one)
+probably instead of 'capture program' terminology, you'll be stealing other souls' programs (so you're adding to yourself, not building a team)
+and for a bit of fun, other souls' programs can be corrupted and you can't see them before you add them, so that's the 'cursed item' analogue
+
+should progression be mainly through finding programs in the wild or stealing them off? should there ever be battles where you can't steal a program? hmm...
+- daemon --- you can steal any program off anyone, battles where you can't steal are rare and you can steal after owner's dead, you'll never get a program without stealing though you can get other items
+- rogue emerald --- classic pokemon wild/trainer division (some battles you can steal, some battles are stronger/more complex and you can't steal, you'll almost never get a program without stealing though normal items are plenty
+- tggw --- 
+- cogmind ---
+
+---
+option 2
+progression through finding items (no innate advantage to fighting)
+
+like brogue basically
+I don't like this it is lame and boring, stealth/evasion is good in brogue because brogue actually has a map and this game will not
+
+---
+
+BALANCING STATS
+- https://forums.rpgmakerweb.com/index.php?threads/how-should-i-balance-stats-and-damage-formulas-when-im-aiming-for-a-small-numbers-game.120101/
+	- The simplest ways to determine balance is just to decide two things: How many hits does it take to kill each character? How many hits does it take to kill each enemy?
+	- Don't worry about the numbers too much since you can always tweak them later.
+
+Want to favor small numbers over large ones since they're easier to grasp.
+
+characters = enemies, so in this case: 4 (2 if super effective, 8 if not very effective) --- the familiars/pokemon rule
+although for familiars with weak attacks it can be 6 (3 super effective, 12? not very effective) --- so somewhere between there
+
+familiars has attack stat, defense stat, hp stat, speed stat, and simple formulas (attack=0 by default, damage is mainly move-based)
+pokemon has atk/spatk, def/spdef, hp, speed, move "power", and dumb damage calcs
+
+ugh, for now, just do it how familiars does it, base the stats off that too, can change later
+
+familiars also doesn't do calculated per-level stat increases like pokemon, instead familiars gain discrete pre-determined stat boosts/move upgrades when they reach a level
+familiars also has no exp system, defeating any familiar of any level raises your level (but we're doing item-based leveling up so that doesn't matter)
+
+anyway, all familiars have 15 hp by default, so start with that
+and speed is like usually 2 or 3 or something, let's just do... 2 speed by default
+
+ALSO EVERYTHING HITS BY DEFAULT BC FUCK ACCURACY
+
+familiars and pokemon both have the max 4 attacks thing, um, let's do 'start with 2/3 attacks' (I like 3)
+
+### Items/Attacks
+
+should have an abstract kinda theme... remember that one SB/SV quest you read ages ago, with a sentient 'everyman American' as the protagonist, with everyman American powers? that
+pactverse style magic but vaporwave themed?
+maybe each item/charm/attack (calling them programs for now, which need memory slots/slots (notches)) - is themed after 1 spell, but its applications will reflect all its various uses
+
+deranged glitch pet thing - deploy it and it does damage to something over time, but needs to rest before it can be used again ?
+
+face generator (?) - random side effect, like ?? from familiars
+
+categories of products:
+- List of Walmart departments: grocery, clothes/accessories, furniture/appliances, garden, electronics, vehicle, kids, pets, toys, sports?, beauty, pharmacy, office/school, art, celebrations
+- List of Amazon departments: electronics, art, vehicle, kids, beauty, fashion, household, pet, sports, toys/games
+
+Things you can buy with microtransactions:
+- Fortnite (V-Bucks): outfits, cosmetic gliders, cosmetic harvesting tools, emotes, in-game awards, battle pass ("For the most part, the Battle Pass is free, but if you don’t stay active enough, you’ll need to buy the Battle Pass, which costs around 950 V-Bucks." ???)
+- Roblox (see https://www.roblox.com/catalog?Category=1&salesTypeFilter=1) - seems to be entirely cosmetics
+
+---
+
+maybe items=functions (Assimilate(), Recover(), etc), pokemon=processes
+
+Assimilate() --- how you hijack a process and make it your own (turn it into a pyramid?)
+
+### Characters/Enemies/Processes
+
+different flavors of terminally online?
+"I spent too much time on the internet"
+
+AREA 1 - remember, videogame cosmetic themed!!
+
+- Corporate --- array of suited men like a paper chain
+- corporate --- sentient office applicances selling their respective applicances
+	- stapler, printer, pen, hole puncher, laminator, fax machine, morse code
+- corporate --- amalgamation of office workers, horror style
+- corporate - corporate memphis analogue
+
+- Sweet/Sangfroid? --- superhero duo (magical boy + magical girl), fighting spam
+- sweet/edge --- EVISCERATETHISGIRL.COM expy
+- sweet --- magical girl expy
+- sweet --- cute plushie, or a bunch of them
+- sweet --- sundress, warm summer day aesthetic
+- sweet - sells accessories like ribbons, colorful hairties, cheap plastic jewelry
+- sweet - sentient cluster of sparkle gifs
+
+edge
+- blood splattered cartoon punk
+- creepypasta? think, scp level stuff
+	- sirenhead trevor henderson??
+- bad tv with blood and shit on it, fucked up electronics ad
+- axe murder patrick bateman raskolnikov
+
+- sangfroid - sports clothes, sports aesthetic?
+	- professional football uniform
+	- professional hockey uniform
+- professions? list: chef, heat lamp, fireworks
+
+- normal --- adware, just a cluster of ad-stuffed spam
+- normal --- virus, tiny bit of corrupted data
+
+Glitch
+- like memoryheads - all names and attacks unreadable/censored
+
+#### LIST
+
+undertale's ruins has 7 monsters ?
+in rogue emerald each area has 6 encounters
+in pokemon the starting areas have like 3 or 4 idk
+familiars has 15 familiars (more were added later but they're not on the wiki)
+10 should be a good starting number... 3 weaker, 2 stronger, 5 in between
+6 neutral, 4 not?
+can add more later. and move existing ones around
+
+Adware (neutral) --- 
+weak starting opponent
+atk 0, def 0, hp 10, speed 2
+actions
+Deal!!! neutral, 3-4 damage
+Inundates the target with spam.
+Limited! Time! Only!!!, neutral, raises speed by 1
+A sense of urgency impels ADWARE to action.
+
+VIRUS (neutral)
+
+Cosmetics Lottery (normal)
+gacha themed
+
+Digital Beauty Mask (normal?)
+When you're beautiful, your life will finally be worth living. Everyone will adore you. 
+
+Emoji/Face Set 12 (normal)
+paid emoji set ??? or stickers, etc
+
+Emote Danceset (normal)
+
+Morova (TM) Signature Luxury Miniskirt (randomly generate specifics?) (sweet)
+Warm Summer Day
+
+Business Suit (corporate)
+
+Ultracool Flame Skin (sangfroid)
+skip?
+
+Paladin of Light Skin (sangfroid?)
+For Justice
+Shining Retribution
+
+Gloomy Cloud Cosmetic (edge)
+Rain On My Parade
+
+Glittering Rainbow Cosmetic (sweet)
+kawaiiiii <3
+kawaii overload <3 <3
+OuO
+OuO ^u^ OuO
+dazzling light ~
+dazzling blinding light ~
+
+oh yeah another question, how often are you gonna level up/get scrolls of enchantment equiv
+in Brogue they're rare, in familiars and pokemon very common, in daemon very rare but daemon is less about upgrading and more catching new/stronger mons as you go
+uhhhhh idk ....
+related question, how evolving/learning new moves works, christ this is complicated
+
+---
+
+mock battle:
+
+A process manifests!
+ADWARE
+see https://blog.hubspot.com/blog/tabid/6307/bid/30684/the-ultimate-list-of-email-spam-trigger-words.aspx
+Cluster of spam images flashing incessantly. Babble without end. It's seeping into you, . Your  core recoils instinctively. Grating.
+
+BEST DEALS!!!!!!!
+40 power, 
+
+sending out questing tendrils to gauge your consumer potential.
+
+---
+
+move to later:
+
+Jazz Vinyl (look up specifics) (sangfroid)
+Smooth Dulcet Tones
+Limited Edition 2LP Like You've Never Heard Before
+Authentic Vinyl
+Perfect For Elevator Music
+
+### Currency
+there's a currency
+fuckit just make it dollars ? Or give it some lame ass mobile game currency name, or a lame ass cryptocurrency name
+- V-Bucks, Chroma Credits
+- AnimaDollars, AnimaCoin, VBux, GlitterCoins, Credits, SafeCoin, etc
+- I like credits, tokens
+
+### Map
+Thinking of each floor being some grid of rooms, and map generation involves drawing random connections between those rooms (find an algo for it or something)
+With 1+ exits per floor, an exit doesn't necessarily increase/decrease depth but eventually it will
+Also, each exit you find makes time pass? Definitely add some kind of 'change/decay/evolve' over time thing
+
+### Stats
+Health/Integrity
+Money
+
+Instead of calling it money call it 'account balance' or 'credit balance' or something (I like credit balance)
+
+I'd use USD but that would require cents, so no. 
+
+There should be some kind of pressure, something that makes you keep going, like Brogue's food clock
+Maybe an efficiency score? Measure of how good you are at generating money, if it goes down too far you get auto-terminated. Thus money doubles as nutrition.
+Ehh efficiency is too complicated, just do nutrition lite - you have to pay a periodic tithe of money to the megacorp that owns/created you, and if you don't have enough you're auto-terminated (darwinian evolution!)
+
+Anyway, I like the idea of having other stats that also affect your stuff, idk what though
+Vim / Vigor / Pulchritude
+physicality / parsimony / eccentricity / entropy / kurtosis
+On the other hand, it might be a lot? So ditch until later
+
+You could do something Rain World-esque where regularly a system sweep/flood happens and you need to shelter? Save/checkpoint system???
+
+There should be some concept of a 'rest', or time passing - I like TGGW style resting, with limits to stop you from using it too often (you lose credits every time you do?)
+
+#### Room / Encounter Ideas
+
+The bread and butter!
+Should be random and fucked up, anything goes as long as it's in theme, think 2 (hubol)
+
+Thinking of tasks - there should be some boring ass way to grind vanilla credits which doesn't totally work (you can't rely on it totally or you'll die)
+Maybe you can do it, but as the world decays it will lead to your inevitable death, so you gotta keep evolving to survive
+I like this idea - you start off advertising to the trickle of commerce that still exists and then have to escape etc
+
+#### names
+
+I need a section for this cause I can't decide shit
+
+items: functions, modules, exploits, trojans, code injection?, objects, fuckit just call them items for now
+pokemon: processes
+pokemon moves: functions/process functions, skills, actions, abilities (actions)

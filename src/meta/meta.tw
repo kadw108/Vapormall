@@ -6,7 +6,7 @@ VAPORMALL
     "ifid": "8873CEA1-472E-4CB6-8E90-B8B69CCCA877",
     "format": "SugarCube",
     "format-version": "2.36.1",
-    "start": "Battle",
+    "start": "Room",
     "tag-colors": {
         "TODO": "red"
     },

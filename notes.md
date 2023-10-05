@@ -407,3 +407,38 @@ some kind of non-battle menu
 
 switching
 status effects
+
+## MISC
+
+how to do the map:
+remember there will be multiple levels in the final version and they may not connect to each other
+you'd have to remove rooms as well as adding them...
+
+1 - do it in pure javascript, the entire 'exploring a room' passage covers every single possible room you could be in.
+(all rooms = 1 passage)
+
+upside: total control, don't have to screw with sugarcube settings
+downside: have to roll your own, can't use sugarcube features
+
+2 - do it in the sugarcube way -- as 'sugarcuby' as possible
+(1 room = 1 passage)
+
+upside: taking advantage of sugarcube
+downside: will be a PITA to integrate
+
+3 - have several premade 'template' passages that link to each other (?)
+(1 room = 1 passage)
+
+upside: uses sugarcube
+downside: how will this work? too complicated
+you'd have to put together pre-existing passages, with some possibly slightly random aspects -
+you can tweak it - but making the map would be a PITA
+you'd have to write the map/room code in the actual .tw passages
+
+4 - use a library like react or vue or something
+(all rooms = 1 passage)
+
+upside: much easier to integrate cause I already have npm working, 
+downside: adds complexity down the line (possibly unnecessary complexity?), not sure if integration will work
+
+probably going with 4
