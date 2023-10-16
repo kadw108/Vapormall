@@ -1,4 +1,4 @@
-import { RoomNameGenerator } from "./roomNameGenerator";
+import { RoomInfo } from "./roomNameGenerator";
 import { popIndex } from "../utility";
 
 class Map {
@@ -12,7 +12,7 @@ class Map {
 	generateFloor() {
 		const tempRoomList = [];
 		// const numOfRooms = Math.floor(Math.random() * 50);
-		const numOfRooms = 50;
+		const numOfRooms = 10;
 		for (let i = 0; i < numOfRooms; i++) {
 			const newRoom = new Room();
 			tempRoomList.push(newRoom);
@@ -26,7 +26,6 @@ class Map {
 		while (tempRoomList.length > 0) {
 			const randomRoomIndex = Math.floor(Math.random() * tempRoomList.length);
 			const randomRoom: Room = tempRoomList[randomRoomIndex];
-			console.log("randomRoom", randomRoom);
 
 			if (! this.adjacencyList.includes(randomRoom)) {
 				const connection = new Connection([currentRoom, randomRoom]);
@@ -41,7 +40,6 @@ class Map {
 			currentRoom = randomRoom;
 		}
 
-		this.addRandomEdges(10);
 		this.printFloor();
 	}
 
@@ -68,18 +66,20 @@ class Map {
 
 	printFloor() {
 		for (const r of this.adjacencyList) {
-			console.log(r.name + " (" + r.getConnectedRooms() + ")");
+			console.log(r.info.name + " (" + r.getConnectedRooms() + ")");
 		}
 	}
 }
 
 class Room {
     connections: Array<Connection>;
-    name: string;
+	info: RoomInfo;
 
     constructor() {
 		this.connections = [];
-		this.name = RoomNameGenerator.roomName();
+		this.info = new RoomInfo();
+		console.log("info");
+		console.log(this.info);
     }
 
 	isConnectedTo(otherRoom: Room) {
@@ -95,7 +95,7 @@ class Room {
 		const connectedRooms = [];
 		for (const connection of this.connections) {
 			const otherRoom: Room = connection.nodes.filter(x => !(x === this))[0];
-			connectedRooms.push(otherRoom.name);
+			connectedRooms.push(otherRoom.info.name);
 		}
 		return connectedRooms;
 	}

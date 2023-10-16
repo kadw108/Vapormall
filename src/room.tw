@@ -16,6 +16,8 @@ const ref = window.vapormall;
 
 console.log(ref);
 
+const map = new window.vapormall.Map();
+
 <</script>>
 <</done>>
 <</nobr>>

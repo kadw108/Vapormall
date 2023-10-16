@@ -441,4 +441,6 @@ you'd have to write the map/room code in the actual .tw passages
 upside: much easier to integrate cause I already have npm working, 
 downside: adds complexity down the line (possibly unnecessary complexity?), not sure if integration will work
 
+konva and zoomist.js look good displaywise
+
 probably going with 4
