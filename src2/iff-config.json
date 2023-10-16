@@ -1,0 +1,15 @@
+{
+    "story": {
+        "title": "Vapormall: Iffinity Edition",
+        "author": {
+            "name": "KADW"
+        },
+        "version": "1.0.0"
+    },
+    "scripts": {
+        "story": "meta/vapormall.js"
+    },
+    "styles": {
+        "story": "meta/styles/stylesheet.css"
+    }
+}

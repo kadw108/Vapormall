@@ -1,6 +1,5 @@
-:: Battle {"position":"100,200","size":"100,100"}
-\<<nobr>>
-<div id="screenBg"/>
+<snippet name="Battle" styles="battleStyle.css">
+<div id="screenBg"></div>
 
 <div id="screenContents" class="absoluteAlign">
     <div id="endScreen" class="hidden">
@@ -20,9 +19,8 @@
     </div>
 </div>
 
-<<done>>
-<<script>>
-
+/*
+<%
 document.getElementById("next").addEventListener("click", () => {
     Engine.play("Room");
 });
@@ -47,6 +45,6 @@ ref.GameState.addSoul(player2);
 
 ref.Manager.startBattle();
 
-<</script>>
-<</done>>
-<</nobr>>
+%>
+*/
+</snippet>
