@@ -20,3 +20,16 @@ export function capitalizeAllWords(string: string) {
         .map((x) => {return capitalizeFirstLetter(x)})
         .join(" ");
 }
+
+export function randomInterval(length: number) {
+    const start = Math.floor(Math.random() * length);
+    const array = [];
+
+    let i = start;
+    for (let j = 0; j < length; j++) {
+        array.push(i);
+        i = (i + 1) % length;
+    }
+
+    return array;
+}

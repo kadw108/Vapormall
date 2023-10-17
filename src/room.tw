@@ -17,6 +17,8 @@ const ref = window.vapormall;
 console.log(ref);
 
 const map = new window.vapormall.Map();
+map.printFloor();
+map.printMap();
 
 <</script>>
 <</done>>
