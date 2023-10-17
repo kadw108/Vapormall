@@ -9,7 +9,7 @@ import {Skill} from "./skill";
 import {GameState} from "./gameState";
 import {Manager} from "./manager";
 
-import {Map} from "./map/room";
+import {MallMap} from "./map/mallmap";
 
 export {
   CONSTANTS,
@@ -21,5 +21,5 @@ export {
   Skill,
   GameState,
   Manager,
-  Map
+  MallMap
 }

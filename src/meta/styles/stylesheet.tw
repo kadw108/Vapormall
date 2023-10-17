@@ -95,6 +95,7 @@ GENERAL STYLE
   margin: auto;
 
   padding: 10px;
+  font-size: 0.85em;
 }
 
 /*
@@ -169,4 +170,12 @@ div {
 hr {
   height: 0px;
   margin: 3px 0;
+}
+
+button {
+  background-color: #000000;
+  border-radius: 10px;
+}
+button:hover {
+  background-color: #005588;
 }

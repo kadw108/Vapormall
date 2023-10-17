@@ -1,0 +1,30 @@
+:: Room {"position":"100,300","size":"100,100"}
+\<<nobr>>
+<div id="screenBg"/>
+
+<div id="screenContents" class="absoluteAlign">
+    <div id="tophalf" class="absoluteAlign">
+        <div id="status" class="blackBg2">Shirt Suite 2342</div>
+    </div>
+    <div id="bottomhalf" class="absoluteAlign blackBg">
+        <div id="bottomContent" class="blackBg2">
+            The quick brown fox jumps over the lazy dog.<br/><br/>
+            Exits: north to ASDF, south to dASFDSF.
+        </div>
+        <div id="menu" class="blackBg2">
+            <button id="inventory">Inventory</button>
+            <button id="map">Map</button>
+            <button id="party">Party</button>
+        </div>
+    </div>
+</div>
+
+<<done>>
+<<script>>
+
+const ref = window.vapormall;
+const map = new window.vapormall.MallMap();
+
+<</script>>
+<</done>>
+<</nobr>>
