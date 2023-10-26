@@ -508,7 +508,7 @@ button:hover {
   overflow: visible;
 }
 /* twine-user-stylesheet #6: "RoomStyle" */
-#status {
+#roomName {
     width: fit-content;
     height: 7%;
     padding: 0 5px 0 5px;
@@ -671,7 +671,7 @@ State.variables.time = 1440;
 
 &lt;div id=&quot;screenContents&quot; class=&quot;absoluteAlign&quot;&gt;
     &lt;div id=&quot;tophalf&quot; class=&quot;absoluteAlign&quot;&gt;
-        &lt;div id=&quot;status&quot; class=&quot;blackBg2&quot;&gt;Shirt Suite 2342&lt;/div&gt;
+        &lt;div id=&quot;roomName&quot; class=&quot;blackBg2&quot;&gt;Shirt Suite 2342&lt;/div&gt;
     &lt;/div&gt;
     &lt;div id=&quot;bottomhalf&quot; class=&quot;absoluteAlign blackBg&quot;&gt;
         &lt;div id=&quot;bottomContent&quot; class=&quot;blackBg2&quot;&gt;
@@ -690,7 +690,7 @@ State.variables.time = 1440;
 &lt;&lt;script&gt;&gt;
 
 const ref = window.vapormall;
-const map = new window.vapormall.MallMap();
+ref.GameState.generateFloor();
 
 &lt;&lt;/script&gt;&gt;
 &lt;&lt;/done&gt;&gt;

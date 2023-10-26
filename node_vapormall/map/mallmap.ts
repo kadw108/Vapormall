@@ -1,5 +1,6 @@
 import {Room, Connection} from "./room";
 import { popIndex } from "../utility";
+import { GameState } from "../gameState";
 
 class MallMap {
     adjacencyList: Array<Room>;
@@ -44,6 +45,7 @@ class MallMap {
 		this.printMap();
 	}
 
+	/*
 	addRandomEdges(numEdges: number) {
 		// https://stackoverflow.com/questions/43241174/javascript-generating-all-combinations-of-elements-in-a-single-array-in-pairs
 		const allPossibleEdges: Array<Array<Room>> = this.adjacencyList.flatMap(
@@ -64,6 +66,7 @@ class MallMap {
 			}
 		}
 	}
+	*/
 
 	printFloor() {
 		for (const r of this.adjacencyList) {

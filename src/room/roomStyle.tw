@@ -1,6 +1,6 @@
 :: RoomStyle [stylesheet]
 
-#status {
+#roomName {
     width: fit-content;
     height: 7%;
     padding: 0 5px 0 5px;

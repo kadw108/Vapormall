@@ -32,6 +32,17 @@ export namespace CONSTANTS {
     SELF,
     NONE
   }
+
+  interface Direction {
+    name: string,
+    number: number
+  }
+  export const DIRECTIONS: Array<Direction> = [
+    {"name": "north", "number": 0},
+    {"name": "east", "number": 1},
+    {"name": "south", "number": 2},
+    {"name": "west", "number": 3},
+  ];
 }
 
 export type StatDict = { [key in CONSTANTS.STATS] : number };
