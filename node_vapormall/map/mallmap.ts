@@ -1,12 +1,15 @@
 import {Room, Connection} from "./room";
 import { popIndex } from "../utility";
 import { GameState } from "../gameState";
+import { CONSTANTS } from "../data/constants"
 
 class MallMap {
     adjacencyList: Array<Room>;
 	mapArray: Array<Array<Room>>;
 	mapLength: number;
 	centerCoord: [number, number];
+
+    currentLocation: [number, number];
 
 	constructor() {
 		this.adjacencyList = [];
@@ -19,6 +22,13 @@ class MallMap {
 		this.centerCoord = [center, center];
 
 		this.generateFloor();
+		this.currentLocation = this.centerCoord;
+
+		this.renderRoom(this.currentRoom());
+	}
+
+	currentRoom(): Room {
+		return this.mapArray[this.currentLocation[1]][this.currentLocation[0]];
 	}
 
 	generateFloor() {
@@ -95,6 +105,52 @@ class MallMap {
 		}
 
 		console.log(returnStr);
+	}
+
+	move(dir: string) {
+		switch (dir) {
+			case "north":
+				this.currentLocation = [this.currentLocation[0], this.currentLocation[1] - 1];
+				break;
+
+			case "east":
+				this.currentLocation = [this.currentLocation[0] + 1, this.currentLocation[1]];
+				break;
+
+			case "south":
+				this.currentLocation = [this.currentLocation[0], this.currentLocation[1] + 1];
+				break;
+
+			case "west":
+				this.currentLocation = [this.currentLocation[0] - 1, this.currentLocation[1]];
+				break;
+		}
+
+		this.renderRoom(this.currentRoom());
+	}
+
+	renderRoom(room: Room) {
+		const nameDiv = document.getElementById("roomName");
+		if (nameDiv !== null) {
+			nameDiv.innerText = room.info.name;
+		}
+
+		const bottomContent = document.getElementById("bottomContent");
+		if (bottomContent !== null) {
+			bottomContent.innerHTML = room.info.html();
+		}
+
+		const exits = document.querySelectorAll('.exitLink');
+		exits.forEach((e, key) => {
+			const element = e as HTMLElement;
+
+			element.onclick = function(this: MallMap) {
+				const dir = element.getAttribute("direction");
+				if (dir !== null) {
+					this.move(dir);
+				}
+			}.bind(this);
+		})
 	}
 }
 

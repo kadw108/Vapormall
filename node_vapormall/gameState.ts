@@ -3,9 +3,7 @@ import {MallMap} from "./map/mallmap";
 
 class GameState {
     private static partySouls: Array<PlayerSoul> = [];
-
     private static currentFloor: MallMap;
-    private static coordinates: [number, number];
 
     static getPartySouls() {
         return GameState.partySouls;
@@ -23,9 +21,6 @@ class GameState {
 
     static generateFloor() {
         this.currentFloor = new MallMap();
-        this.coordinates = this.currentFloor.centerCoord;
-
-        this.currentFloor.mapArray[this.coordinates[0]][this.coordinates[1]].renderRoom();
     }
 }
 

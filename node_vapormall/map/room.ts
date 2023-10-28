@@ -103,18 +103,6 @@ class Room {
 		}
 		return connectedRooms;
 	}
-
-	renderRoom() {
-		const nameDiv = document.getElementById("roomName");
-		if (nameDiv !== null) {
-			nameDiv.innerText = this.info.name;
-		}
-
-		const bottomContent = document.getElementById("bottomContent");
-		if (bottomContent !== null) {
-			bottomContent.innerHTML = this.info.html();
-		}
-	}
 }
 
 // all connections are 2-way
@@ -168,7 +156,11 @@ class RoomInfo {
 			const c = this.room.connections[i];
 			if (c !== null) {
 				exits += CONSTANTS.DIRECTIONS[i].name + " to ";
+
+				exits += "<a class='exitLink' direction='" + CONSTANTS.DIRECTIONS[i].name + "'>";
 				exits += c.otherRoom(this.room).info.name;
+				exits += "</a>";
+
 				exits += " | ";
 			}
 		}

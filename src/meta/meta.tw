@@ -23,7 +23,7 @@ VAPORMALL
 :: StoryInit {"position":"275,0","size":"100,100"}
 
 /* For preloading assets*/
-<link rel="prefetch" href="assets/final.png">
+<link rel="prefetch" href="assets/vapormall.js">
 
 /* Initialize variables */
 <<script>>
