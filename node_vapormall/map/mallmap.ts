@@ -156,7 +156,8 @@ class MallMap {
 		battles.forEach((e, key) => {
 			const element = e as HTMLElement;
 			element.onclick = function() {
-
+				/* story.showSnippet("Battle");*/
+				console.log(story);
 			}
 		})
 	}
