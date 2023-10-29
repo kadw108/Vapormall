@@ -61,13 +61,13 @@
 /* Soul/Skill Info */
 
 .soulInfo {
-  width: 15%;
+  width: 20%;
   padding: 3px;
   position: absolute;
 }
 
 .tophalf-tip {
-  width: 500%;
+  width: 400%;
 }
 
 .bottomhalf-tip {

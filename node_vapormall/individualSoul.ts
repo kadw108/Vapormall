@@ -76,7 +76,11 @@ class IndividualSoul {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("bottomhalf-tip", "outlineDiv", "hoverDiv");
 
-        const nameText = document.createTextNode(this.name);
+        const nameText = document.createElement("span");
+        nameText.innerText = this.name;
+        if (this.name !== this.soul_species.name) {
+            nameText.innerText += " (" + this.soul_species.name + ")";
+        }
         infoDiv.append(
             nameText,
             document.createElement("br")

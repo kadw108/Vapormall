@@ -69,7 +69,11 @@ abstract class BattleSoul {
 
         const nameText = document.createTextNode(this.soul.name);
         infoDiv.append(nameText);
+        infoDiv.append(document.createElement("br"));
 
+        const levelText = document.createElement("small");
+        levelText.innerText = "Lv " + this.soul.level;
+        infoDiv.append(levelText);
         infoDiv.append(document.createElement("br"));
 
         infoDiv.append(this.hpText);
