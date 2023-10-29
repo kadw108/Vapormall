@@ -10,6 +10,11 @@
         "story": "meta/vapormall.js"
     },
     "styles": {
-        "story": "meta/styles/stylesheet.css"
+        "story": [
+            "meta/styles/stylesheet.css",
+            "meta/styles/fonts.css",
+            "meta/styles/otherstyles.css",
+            "meta/styles/tagstyles.css"
+        ]
     }
 }

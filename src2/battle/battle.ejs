@@ -1,0 +1,54 @@
+<snippet name="Battle" styles="./battle/battleStyle.css">
+
+<div id="contents">
+    <div id="bg"></div>
+    <div id="passages"><div class="passage">
+        <div id="screenBg"></div>
+
+        <div id="screenContents" class="absoluteAlign">
+            <div id="endScreen" class="hidden">
+                <div> 
+                    THE BATTLE IS OVER
+
+                    <button id="next">Next</button>
+                </div>
+            </div>
+
+            <div id="tophalf" class="absoluteAlign">
+                <div id="messageContainer">
+                </div>
+            </div>
+            <div id="bottomhalf" class="absoluteAlign blackBg">
+                <div id="bottomContainer"></div>
+            </div>
+        </div>
+    </div></div>
+</div>
+
+<%
+document.getElementById("next").addEventListener("click", () => {
+    Engine.play("Room");
+});
+
+/* --- */
+
+const ref = window.vapormall;
+ref.state = new ref.GameState();
+
+const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
+player1.changeName("cool dude");
+const player1_real = ref.PlayerSoul.createPlayerSoul(player1);
+ref.GameState.addSoul(player1_real);
+
+console.log(player1_real);
+
+/*
+const player2 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
+player2.changeName("death");
+ref.GameState.addSoul(player2);
+*/
+
+ref.Manager.startBattle();
+
+%>
+</snippet>

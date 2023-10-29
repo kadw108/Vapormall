@@ -1,90 +1,89 @@
-import { RoomInfo } from "./roomNameGenerator";
-import { popIndex } from "../utility";
+import { RoomGen } from "./roomNameGenerator";
+import { randomInterval, capitalizeFirstLetter, indefinite_article, randIndex } from "../utility";
+import { CONSTANTS } from "../data/constants";
 
-class Map {
-    adjacencyList: Array<Room>;
-
-	constructor() {
-		this.adjacencyList = [];
-		this.generateFloor();
-	}
-
-	generateFloor() {
-		const tempRoomList = [];
-		// const numOfRooms = Math.floor(Math.random() * 50);
-		const numOfRooms = 10;
-		for (let i = 0; i < numOfRooms; i++) {
-			const newRoom = new Room();
-			tempRoomList.push(newRoom);
-		}
-
-		const startingRoom = new Room();
-		this.adjacencyList.push(startingRoom);
-
-		// https://stackoverflow.com/questions/2041517/random-simple-connected-graph-generation-with-given-sparseness
-		let currentRoom = startingRoom;
-		while (tempRoomList.length > 0) {
-			const randomRoomIndex = Math.floor(Math.random() * tempRoomList.length);
-			const randomRoom: Room = tempRoomList[randomRoomIndex];
-
-			if (! this.adjacencyList.includes(randomRoom)) {
-				const connection = new Connection([currentRoom, randomRoom]);
-
-				currentRoom.connections.push(connection);
-				randomRoom.connections.push(connection);
-
-				popIndex(tempRoomList, randomRoomIndex);
-				this.adjacencyList.push(randomRoom);
-			}
-
-			currentRoom = randomRoom;
-		}
-
-		this.printFloor();
-	}
-
-	addRandomEdges(numEdges: number) {
-		// https://stackoverflow.com/questions/43241174/javascript-generating-all-combinations-of-elements-in-a-single-array-in-pairs
-		const allPossibleEdges: Array<Array<Room>> = this.adjacencyList.flatMap(
-			(room, i) => this.adjacencyList.slice(i+1).map( w => [room, w])
-		);
-
-		// add connections
-		while (numEdges > 0 && allPossibleEdges.length > 0) {
-			const randomEdgeIndex = Math.random() * allPossibleEdges.length;
-			const randomEdge = popIndex(allPossibleEdges, randomEdgeIndex);
-
-			if (! randomEdge[0].isConnectedTo(randomEdge[1])) {
-				const connection = new Connection(randomEdge);
-				randomEdge[0].connections.push(connection);
-				randomEdge[1].connections.push(connection);
-
-				numEdges--;
-			}
-		}
-	}
-
-	printFloor() {
-		for (const r of this.adjacencyList) {
-			console.log(r.info.name + " (" + r.getConnectedRooms() + ")");
-		}
-	}
-}
+export type ConnectionDict = [Connection | null, Connection | null, Connection | null, Connection | null];
 
 class Room {
-    connections: Array<Connection>;
+    connections: ConnectionDict;
+	coord: [number, number];
 	info: RoomInfo;
 
-    constructor() {
-		this.connections = [];
-		this.info = new RoomInfo();
-		console.log("info");
-		console.log(this.info);
+    constructor(coordinates: [number, number]) {
+		this.connections = [null, null, null, null]
+		this.coord = coordinates;
+		this.info = new RoomInfo(this);
     }
+
+	hasSpace(): boolean {
+		return this.connections.filter(
+			x => (x === null)
+		).length > 0;
+	}
+
+	// returns success value if connection succeeded.
+	// if returns false, means all connections have filled up already.
+	// assumes this room has coordinates (is in map) and other room doesn't
+	connectToRoom(otherRoom: Room, mapArray: Array<Array<Room>>): boolean {
+		if (!this.hasSpace()) {
+			return false;
+		}
+
+		// iterate from 0 to (connections.length - 1), starting at random number in that range
+		for (const i of randomInterval(this.connections.length)) {
+
+			/*
+			for (let key in this.connections) {
+				const keyType = key as unknown as CONSTANTS.DIRECTIONS;
+				if (this.connections[keyType] !== 0) {
+					return true;
+				}
+			} */
+
+			if (this.connections[i] === null) {
+				const connection = new Connection([this, otherRoom]);
+
+				let newCoord: [number, number] = [-1, -1];
+				if (CONSTANTS.DIRECTIONS[i].name === "north") {
+					newCoord = [this.coord[0], this.coord[1] - 1];
+					otherRoom.connections[2] = connection;
+				}
+				else if (CONSTANTS.DIRECTIONS[i].name === "east") { 
+					newCoord = [this.coord[0] + 1, this.coord[1]];
+					otherRoom.connections[3] = connection;
+				}
+				else if (CONSTANTS.DIRECTIONS[i].name === "south") {
+					newCoord = [this.coord[0], this.coord[1] + 1];
+					otherRoom.connections[0] = connection;
+				}
+				else if (CONSTANTS.DIRECTIONS[i].name === "west") {
+					newCoord = [this.coord[0] - 1, this.coord[1]];
+					otherRoom.connections[1] = connection;
+				}
+
+				// coordinate of other room might already be taken on the map
+				// or might be out of map bounds
+				if ((newCoord[0] >= mapArray.length) ||
+					(newCoord[0] < 0) ||
+					(newCoord[1] >= mapArray.length) ||
+					(newCoord[1] < 0) ||
+					(mapArray[newCoord[1]][newCoord[0]] !== undefined)
+					) {
+					otherRoom.connections = [null, null, null, null];
+					break;
+				}
+
+				this.connections[i] = connection;
+				otherRoom.coord = newCoord;
+				return true;
+			}
+		}
+		return false;
+	}
 
 	isConnectedTo(otherRoom: Room) {
 		for (const connection of this.connections) {
-			if (connection.nodes.includes(otherRoom)) {
+			if (connection !== null && connection.nodes.includes(otherRoom)) {
 				return true;
 			}
 		}
@@ -94,16 +93,17 @@ class Room {
 	getConnectedRooms() {
 		const connectedRooms = [];
 		for (const connection of this.connections) {
-			const otherRoom: Room = connection.nodes.filter(x => !(x === this))[0];
-			connectedRooms.push(otherRoom.info.name);
+			if (connection !== null) {
+				const otherRoom: Room = connection.nodes.filter(x => !(x === this))[0];
+				connectedRooms.push(otherRoom.info.name);
+			}
+			else {
+				connectedRooms.push("null")
+			}
 		}
 		return connectedRooms;
 	}
 }
-
-export {
-    Room
-};
 
 // all connections are 2-way
 class Connection {
@@ -117,8 +117,113 @@ class Connection {
 		this.enterText = "You leave one place and enter another.";
 		this.name = "Door #" + Math.floor(Math.random() * 1000);
     }
+
+	otherRoom(room: Room) {
+		if (this.nodes[0] === room) {
+			return this.nodes[1];
+		}
+		return this.nodes[0];
+	}
+}
+
+import { ROOMS } from "../data/room_data";
+import { randItem } from "../utility";
+import { IndividualSoul } from "../individualSoul";
+import { SOUL_LIST } from "../data/soul";
+
+class RoomInfo {
+	room: Room;
+
+	name: string;
+	description: string;
+	
+	encounters: Array<Array<IndividualSoul>>;
+
+	constructor(room: Room) {
+		this.room = room;
+
+        const randNoun = randItem(ROOMS.CLOTHING);
+		
+        this.name = randNoun.word + " " + randItem(ROOMS.PLACES);
+        this.name = RoomGen.addNumber(this.name);
+        this.name = RoomGen.format(this.name);
+
+        this.description = randItem(randNoun.descriptions);
+
+		this.encounters = [];
+		this.generateEncounters();
+    }
+
+	html(): string {
+		const title = "<h3>" + this.name + "</h3>";
+
+		const description = "<p>" + this.description + "</p>";
+
+		let exit_encounters = "";
+		if (this.encounters.length === 0) {
+			exit_encounters = "<p>Exits: ";
+			for (let i = 0; i < this.room.connections.length; i++) {
+				const c = this.room.connections[i];
+				if (c !== null) {
+					exit_encounters += CONSTANTS.DIRECTIONS[i].name + " to ";
+
+					exit_encounters += "<a class='exitLink' direction='" + CONSTANTS.DIRECTIONS[i].name + "'>";
+					exit_encounters += c.otherRoom(this.room).info.name;
+					exit_encounters += "</a>";
+
+					exit_encounters += " | ";
+				}
+			}
+			exit_encounters += "</p>";
+		}
+		else {
+			let encounter_index = randIndex(this.encounters);
+			let encounter = this.encounters[encounter_index];
+
+			exit_encounters = "<p>"
+			exit_encounters += "<a class='battleLink' encounterIndex=" + encounter_index + ">";
+			if (encounter!.length === 1) {
+				exit_encounters += "You see " + indefinite_article(encounter![0].name) + " " + encounter![0].name + "!";
+			}
+			else if (encounter!.length >= 1) {
+				exit_encounters += "You see: ";
+				for (let i = 0; i < encounter!.length; i++) {
+					exit_encounters += indefinite_article(encounter![i].name) + " " + encounter![i].name;
+
+					if (i === encounter!.length - 2) {
+						exit_encounters += ", and "
+					}
+					else if (i < encounter!.length - 1) {
+						exit_encounters += ", "
+					}
+				}
+				exit_encounters += "!";
+			}
+			else {
+				console.error("Room contains encounter with 0 enemies!");
+			}
+			exit_encounters += "</a></p>";
+		}
+
+
+		return title + description + exit_encounters;
+	}
+
+	generateEncounters() {
+		const encounterArray = [];
+		for (let i = 0; i < Math.random() * 5 + 1; i++) {
+			const enemy1 = new IndividualSoul(SOUL_LIST.Adware, 1);
+			encounterArray.push(enemy1);
+
+			if (Math.random() < 0.6) {
+				break;
+			}
+		}
+		this.encounters.push(encounterArray);
+	}
 }
 
 export {
-	Map
+    Room,
+	Connection
 };

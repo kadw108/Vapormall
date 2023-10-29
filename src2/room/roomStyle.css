@@ -1,0 +1,40 @@
+#roomName {
+    width: fit-content;
+    height: 7%;
+    padding: 0 5px 0 5px;
+    font-size: 85%;
+    color: white;
+}
+
+#menu {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 85%;
+
+    /* to center absolute div horizontally 
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    */
+}
+
+/* transparent black bg with solid black border */
+.blackBg2 {
+    background-color: rgba(0, 0, 0, 0.6);
+
+    border-radius: 5px;
+    border: 2px solid black;
+}
+
+/* transparent black bg with patterned animated border */
+.blackBg3 {
+    background-color: rgba(0, 0, 0, 0.6);
+
+    border: 1px solid black;
+    border-image-source: url("assets/pattern2.gif");
+    border-image-slice: 50;
+    border-image-repeat: round;
+}
