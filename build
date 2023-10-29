@@ -1,9 +1,9 @@
 cd node_vapormall
-npx esbuild index.js --bundle --minify --outfile=../src2/meta/vapormall.js --global-name=vapormall
+npx esbuild index.js --bundle --minify --outfile=../src/meta/vapormall.js --global-name=vapormall
 
 # make vapormall globally accessible
 # from https://stackoverflow.com/questions/64806255/how-to-expose-a-class-to-the-global-scope-with-esbuild
-echo "window.vapormall = vapormall;" >> ../src2/meta/vapormall.js
+echo "window.vapormall = vapormall;" >> ../src/meta/vapormall.js
 
-cd ../src2
-npx ifc -o export/index.html
+cd ../src
+npx ifc -o ../export/index.html

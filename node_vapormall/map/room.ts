@@ -159,54 +159,57 @@ class RoomInfo {
 
 		const description = "<p>" + this.description + "</p>";
 
-		let exit_encounters = "";
-		if (this.encounters.length === 0) {
-			exit_encounters = "<p>Exits: ";
+		let exits = "";
+		let encounters = "";
+
+			exits = "<p>Exits: ";
 			for (let i = 0; i < this.room.connections.length; i++) {
 				const c = this.room.connections[i];
 				if (c !== null) {
-					exit_encounters += CONSTANTS.DIRECTIONS[i].name + " to ";
+					exits += CONSTANTS.DIRECTIONS[i].name + " to ";
 
-					exit_encounters += "<a class='exitLink' direction='" + CONSTANTS.DIRECTIONS[i].name + "'>";
-					exit_encounters += c.otherRoom(this.room).info.name;
-					exit_encounters += "</a>";
+					exits += "<a class='exitLink' direction='" + CONSTANTS.DIRECTIONS[i].name + "'>";
+					exits += c.otherRoom(this.room).info.name;
+					exits += "</a>";
 
-					exit_encounters += " | ";
+					exits += " | ";
 				}
 			}
-			exit_encounters += "</p>";
+			exits += "</p>";
+
+		if (this.encounters.length === 0) {
 		}
 		else {
 			let encounter_index = randIndex(this.encounters);
 			let encounter = this.encounters[encounter_index];
 
-			exit_encounters = "<p>"
-			exit_encounters += "<a class='battleLink' encounterIndex=" + encounter_index + ">";
+			encounters = "<p>"
+			encounters += "<a class='battleLink' encounterIndex=" + encounter_index + ">";
 			if (encounter!.length === 1) {
-				exit_encounters += "You see " + indefinite_article(encounter![0].name) + " " + encounter![0].name + "!";
+				encounters += "You see " + indefinite_article(encounter![0].name) + " " + encounter![0].name + "!";
 			}
 			else if (encounter!.length >= 1) {
-				exit_encounters += "You see: ";
+				encounters += "You see: ";
 				for (let i = 0; i < encounter!.length; i++) {
-					exit_encounters += indefinite_article(encounter![i].name) + " " + encounter![i].name;
+					encounters += indefinite_article(encounter![i].name) + " " + encounter![i].name;
 
 					if (i === encounter!.length - 2) {
-						exit_encounters += ", and "
+						encounters += ", and "
 					}
 					else if (i < encounter!.length - 1) {
-						exit_encounters += ", "
+						encounters += ", "
 					}
 				}
-				exit_encounters += "!";
+				encounters += "!";
 			}
 			else {
 				console.error("Room contains encounter with 0 enemies!");
 			}
-			exit_encounters += "</a></p>";
+			encounters += "</a></p>";
 		}
 
 
-		return title + description + exit_encounters;
+		return title + description + exits + encounters;
 	}
 
 	generateEncounters() {

@@ -104,10 +104,20 @@ class IndividualSoul {
         for (let key in this.stats) {
             if (key != "HP") {
                 const keyType = key as unknown as CONSTANTS.STATS;
-                statContainer.innerText += key + " ";
-                statContainer.innerText += dict[keyType];
-                statContainer.innerText += " / ";
+                statContainer.append(document.createTextNode(key + " "));
+
+                const statSpan = document.createElement("span");
+                if (dict[keyType] < this.stats[keyType]) {
+                    statSpan.classList.add("red-text");
+                }
+                else if (dict[keyType] > this.stats[keyType]) {
+                    statSpan.classList.add("green-text");
+                }
+                statSpan.innerText = "" + dict[keyType];
+                statContainer.append(statSpan);
+                statContainer.append(document.createTextNode(" / "));
             }
+            console.log(statContainer);
         }
         return statContainer;
     }

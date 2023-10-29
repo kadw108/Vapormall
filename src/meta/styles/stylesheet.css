@@ -122,6 +122,15 @@ CUSTOM STYLES
   color: #aaaaaa;
 }
 
+.red-text {
+  color: #ff0000;
+  text-decoration: underline;
+}
+.green-text {
+  color: #00ff00;
+  text-decoration: underline;
+}
+
 .smalltext {
   color: #777777;
   font-size: 0.8em;
@@ -158,6 +167,7 @@ a {
 a:hover {
   text-decoration: inherit;
   color: #339988;
+  cursor: pointer;
 }
 
 div {

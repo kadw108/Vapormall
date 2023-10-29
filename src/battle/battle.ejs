@@ -1,4 +1,4 @@
-<snippet name="Battle" styles="./battle/battleStyle.css">
+<snippet name="Battle" start styles="./battle/battleStyle.css">
 
 <div id="contents">
     <div id="bg"></div>
@@ -26,29 +26,33 @@
 </div>
 
 <%
+/*
 document.getElementById("next").addEventListener("click", () => {
     Engine.play("Room");
 });
+*/
 
 /* --- */
 
-const ref = window.vapormall;
-ref.state = new ref.GameState();
+$(function () {
+    const ref = window.vapormall;
+    ref.state = new ref.GameState();
 
-const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
-player1.changeName("cool dude");
-const player1_real = ref.PlayerSoul.createPlayerSoul(player1);
-ref.GameState.addSoul(player1_real);
+    const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
+    player1.changeName("cool dude");
+    const player1_real = ref.PlayerSoul.createPlayerSoul(player1);
+    ref.GameState.addSoul(player1_real);
 
-console.log(player1_real);
+    console.log(player1_real);
 
-/*
-const player2 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
-player2.changeName("death");
-ref.GameState.addSoul(player2);
-*/
+    /*
+    const player2 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
+    player2.changeName("death");
+    ref.GameState.addSoul(player2);
+    */
 
-ref.Manager.startBattle();
+    ref.Manager.startBattle();
+});
 
 %>
 </snippet>
