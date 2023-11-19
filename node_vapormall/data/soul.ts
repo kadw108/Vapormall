@@ -31,7 +31,7 @@ const SOUL_LIST = {
         name: "ADWARE",
         description: "Churning glut of incoherence.",
         stats: {
-            [CONSTANTS.STATS.HP]: 20,
+            [CONSTANTS.STATS.HP]: 15,
             [CONSTANTS.STATS.ATTACK]: 10,
             [CONSTANTS.STATS.DEFENSE]: 10,
             [CONSTANTS.STATS.GLITCHATTACK]: 10,
@@ -71,7 +71,7 @@ const SOUL_LIST = {
             {
               level: 4,
               statChanges: [
-                {stat: CONSTANTS.STATS.HP, change: 6}
+                {stat: CONSTANTS.STATS.HP, change: 15}
               ],
               learnedSkills: [
                 SKILL_LIST.drain
