@@ -6,17 +6,18 @@ import {SOUL_LIST} from "./data/soul";
 import {Battle} from "./battle/battle";
 
 class Manager {
-    static startBattle() {
+    static startBattle(): Battle|null {
         const players = GameState.getPartySouls();
-        const enemy1 = Manager.generateEnemy();
+        const enemy1 = GameState.currentEnemy;
+
+        if (enemy1 === null) {
+            console.error("Battle with no enemy!");
+            return null;
+        }
        
         return new Battle(
             players, [enemy1]
         );
-    }
-
-    static generateEnemy() {
-        return new IndividualSoul(SOUL_LIST.Adware, 1);
     }
 }
 

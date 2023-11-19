@@ -134,6 +134,7 @@ import { ROOMS } from "../data/room_data";
 import { randItem } from "../utility";
 import { IndividualSoul } from "../individualSoul";
 import { SOUL_LIST } from "../data/soul";
+import { randomInt } from "crypto";
 
 class RoomInfo {
 	room: Room;
@@ -218,8 +219,8 @@ class RoomInfo {
 
 	generateEncounters() {
 		const encounterArray = [];
-		for (let i = 0; i < Math.random() * 5 + 1; i++) {
-			const enemy1 = new IndividualSoul(SOUL_LIST.Adware, 1);
+		for (let i = 0; i < 1; i++) {
+			const enemy1 = new IndividualSoul(SOUL_LIST.Adware, Math.ceil(Math.random() * 4));
 			encounterArray.push(enemy1);
 
 			if (Math.random() < 0.6) {
