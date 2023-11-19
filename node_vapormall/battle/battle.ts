@@ -6,6 +6,7 @@ import {CONSTANTS} from "../data/constants";
 import {BattleSoul, FieldedPlayerSoul, EnemySoul} from "./battleSoul";
 import { MessageRenderer } from "./renderer";
 import { BattleCalculator } from "./battleCalculator";
+import { GameState } from "../gameState";
 
 class Battle {
     playerSouls: Array<FieldedPlayerSoul>;
@@ -57,10 +58,24 @@ class Battle {
 
     checkBattleOver() {
         if (this.playerSouls.length === 0 || this.enemySouls.length === 0) {
-            this.messageRenderer.endMessageBlock();
+            // this.messageRenderer.endMessageBlock();
+            // commented out since it adds unnecessary pause
 
             if (this.playerSouls.length === 0) {
                 // TODO
+            }
+            else {
+               const nextButton = document.getElementById("next");
+               if (nextButton === null) {
+                    console.error("next button not available!");
+               }
+               else {
+                nextButton.addEventListener("click",
+                        () => {
+                            this.victory()
+                        },
+                        false);
+               }
             }
 
             this.messageRenderer.addMessage(
@@ -69,6 +84,13 @@ class Battle {
                 }
             );
         }
+    }
+
+    victory() {
+        // clear encounter
+        GameState.currentFloor.currentRoom().info.encounter = [];
+        const result = story.showSnippet("Room", false);
+        console.log("battle end! " + result);
     }
 
     selectEnemySkills() {
@@ -90,8 +112,6 @@ class Battle {
                 break;
             case CONSTANTS.TARGETS.ALLIED:
                 playerSoul.selected_target = this.playerSouls;
-                break;
-            case CONSTANTS.TARGETS.ALLY:
                 break;
             case CONSTANTS.TARGETS.ALL:
                 playerSoul.selected_target = this.souls;
@@ -160,7 +180,11 @@ class Battle {
 
             this.selectEnemySkills();
             this.passTurn();
-            this.messageRenderer.queueShowActions(playerSoul, this.playerParty, this.playerSouls);
+            this.messageRenderer.addMessage(
+                () => {
+                    this.messageRenderer.showActions(playerSoul, this.playerParty, this.playerSouls);
+                }
+            );
             this.messageRenderer.displayMessages();
         }
     }
@@ -175,7 +199,11 @@ class Battle {
 
             this.selectEnemySkills();
             this.passTurn();
-            this.messageRenderer.queueShowActions(switchInFieldedPlayerSoul, this.playerParty, this.playerSouls);
+            this.messageRenderer.addMessage(
+                () => {
+                    this.messageRenderer.showActions(switchInFieldedPlayerSoul, this.playerParty, this.playerSouls);
+                }
+            );
             this.messageRenderer.displayMessages();
         }
     }

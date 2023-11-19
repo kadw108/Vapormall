@@ -1,0 +1,52 @@
+<snippet name="Start" start>
+
+<div id="contents">
+    <div id="bg"></div>
+    <div id="passages"><div class="passage">
+        <div id="screenBg"></div>
+
+        <div id="screenContents" class="absoluteAlign">
+            <div id="tophalf" class="absoluteAlign">
+            </div>
+            <div id="bottomhalf" class="absoluteAlign blackBg">
+                <button id="start-game">Start Game</button>
+            </div>
+        </div>
+    </div></div>
+</div>
+
+<%
+$(function () {
+    const startGameFunction = () => {
+        const ref = window.vapormall;
+        ref.GameState.generateFloor();
+
+        const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
+        player1.changeName("cool dude");
+        const player1_real = ref.PlayerSoul.createPlayerSoul(player1);
+        ref.GameState.addSoul(player1_real);
+
+        /*
+        const player2 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
+        player2.changeName("death");
+        ref.GameState.addSoul(player2);
+        */
+
+        story.showSnippet("Room", false);
+    };
+
+    const startButton = document.getElementById("start-game");
+    if (startButton === null) {
+        console.error("start button not available!");
+    }
+    else {
+    startButton.addEventListener("click",
+            () => {
+                startGameFunction()
+            },
+            false);
+    }
+});
+%>
+
+</snippet>

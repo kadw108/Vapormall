@@ -7,12 +7,10 @@
 
         <div id="screenContents" class="absoluteAlign">
             <div id="tophalf" class="absoluteAlign">
-                <div id="roomName" class="blackBg2">Shirt Suite 2342</div>
+                <div id="roomName" class="blackBg2"></div>
             </div>
             <div id="bottomhalf" class="absoluteAlign blackBg">
                 <div id="bottomContent" class="blackBg2">
-                    The quick brown fox jumps over the lazy dog.<br/><br/>
-                    Exits: north to ASDF, south to dASFDSF.
                 </div>
                 <div id="menu" class="blackBg2">
                     <button id="inventory">Inventory</button>
@@ -27,7 +25,7 @@
 <%
 $(function () {
     const ref = window.vapormall;
-    ref.GameState.generateFloor();
+    ref.GameState.currentFloor.renderRoom();
 });
 %>
 

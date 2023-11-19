@@ -1,5 +1,5 @@
 import { RoomGen } from "./roomNameGenerator";
-import { randomInterval, capitalizeFirstLetter, indefinite_article, randIndex } from "../utility";
+import { randomInterval, indefinite_article, popIndex, randIndex } from "../utility";
 import { CONSTANTS } from "../data/constants";
 
 export type ConnectionDict = [Connection | null, Connection | null, Connection | null, Connection | null];
@@ -103,6 +103,10 @@ class Room {
 		}
 		return connectedRooms;
 	}
+
+	render() {
+
+	}
 }
 
 // all connections are 2-way
@@ -137,7 +141,7 @@ class RoomInfo {
 	name: string;
 	description: string;
 	
-	encounters: Array<Array<IndividualSoul>>;
+	encounter: Array<IndividualSoul>;
 
 	constructor(room: Room) {
 		this.room = room;
@@ -150,8 +154,7 @@ class RoomInfo {
 
         this.description = randItem(randNoun.descriptions);
 
-		this.encounters = [];
-		this.generateEncounters();
+		this.encounter = this.generateEncounters();
     }
 
 	html(): string {
@@ -162,6 +165,7 @@ class RoomInfo {
 		let exits = "";
 		let encounters = "";
 
+		if (this.encounter.length === 0) {
 			exits = "<p>Exits: ";
 			for (let i = 0; i < this.room.connections.length; i++) {
 				const c = this.room.connections[i];
@@ -176,34 +180,34 @@ class RoomInfo {
 				}
 			}
 			exits += "</p>";
+		}
 
-		if (this.encounters.length === 0) {
+		if (this.encounter.length === 0) {
 		}
 		else {
-			let encounter_index = randIndex(this.encounters);
-			let encounter = this.encounters[encounter_index];
-
 			encounters = "<p>"
-			encounters += "<a class='battleLink' encounterIndex=" + encounter_index + ">";
-			if (encounter!.length === 1) {
-				encounters += "You see " + indefinite_article(encounter![0].name) + " " + encounter![0].name + "!";
+			encounters += "<a class='battleLink'>";
+			if (this.encounter.length === 1) {
+				encounters += "You see " + indefinite_article(this.encounter[0].name) + " " + this.encounter[0].name + "!";
 			}
-			else if (encounter!.length >= 1) {
+			/*
+			else if (this.encounter.length >= 1) {
 				encounters += "You see: ";
-				for (let i = 0; i < encounter!.length; i++) {
-					encounters += indefinite_article(encounter![i].name) + " " + encounter![i].name;
+				for (let i = 0; i < this.encounter.length; i++) {
+					encounters += indefinite_article(this.encounter[i].name) + " " + this.encounter[i].name;
 
-					if (i === encounter!.length - 2) {
+					if (i === this.encounter.length - 2) {
 						encounters += ", and "
 					}
-					else if (i < encounter!.length - 1) {
+					else if (i < this.encounter.length - 1) {
 						encounters += ", "
 					}
 				}
 				encounters += "!";
 			}
+			*/
 			else {
-				console.error("Room contains encounter with 0 enemies!");
+				console.error("Room contains encounter with 0 or >1 enemies!");
 			}
 			encounters += "</a></p>";
 		}
@@ -222,7 +226,17 @@ class RoomInfo {
 				break;
 			}
 		}
-		this.encounters.push(encounterArray);
+		return encounterArray;
+	}
+
+	popEncounter() {
+		if (this.encounter.length === 0) {
+			console.error("Trying to get encounter from room with no encounters!");
+			return null;
+		}
+		else {
+			return popIndex(this.encounter, randIndex(this.encounter));
+		}
 	}
 }
 

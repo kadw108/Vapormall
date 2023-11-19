@@ -1,9 +1,12 @@
-import {PlayerSoul} from "./individualSoul";
+import {PlayerSoul, IndividualSoul} from "./individualSoul";
 import {MallMap} from "./map/mallmap";
 
 class GameState {
-    private static partySouls: Array<PlayerSoul> = [];
-    private static currentFloor: MallMap;
+    public static partySouls: Array<PlayerSoul> = [];
+    public static currentFloor: MallMap;
+
+    // used to pass info from room.ejs to battle.ejs
+    public static currentEnemy: IndividualSoul|null = null;
 
     static getPartySouls() {
         return GameState.partySouls;

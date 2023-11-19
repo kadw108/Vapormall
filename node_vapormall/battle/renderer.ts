@@ -143,18 +143,13 @@ class MessageRenderer {
         bottomContainer?.remove();
     }
 
-    queueShowActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul>) {
-        const timeout = setTimeout(() => {
+    showActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul>) {
+        const bottomContainer = document.createElement("div");
+        bottomContainer.id = "bottomContainer";
+        document.getElementById("bottomhalf")?.append(bottomContainer);
 
-            const bottomContainer = document.createElement("div");
-            bottomContainer.id = "bottomContainer";
-            document.getElementById("bottomhalf")?.append(bottomContainer);
-
-            this.renderSkills(playerSoul);
-            this.renderSwitch(playerParty, playerSouls);
-
-        }, DURATIONS.BETWEENBLOCKS * 2);
-        this.timeouts.push(timeout);
+        this.renderSkills(playerSoul);
+        this.renderSwitch(playerParty, playerSouls);
     }
 
     renderSwitch(playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul>) {
@@ -197,15 +192,18 @@ class MessageRenderer {
 
     endBattle() {
         document.getElementById("endScreen")?.classList.remove("hidden");
+
+        this.clearAll();
+        this.blocks = 0;
+        this.messages = [];
+        this.timeouts = [];
     }
 
-    /*
     clearAll() {
         this.timeouts.forEach((t) => {
             clearTimeout(t);
         });
     }
-    */
 }
 
 export {

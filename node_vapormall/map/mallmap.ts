@@ -24,7 +24,7 @@ class MallMap {
 		this.generateFloor();
 		this.currentLocation = this.centerCoord;
 
-		this.renderRoom(this.currentRoom());
+		this.renderRoom();
 	}
 
 	currentRoom(): Room {
@@ -126,10 +126,12 @@ class MallMap {
 				break;
 		}
 
-		this.renderRoom(this.currentRoom());
+		this.renderRoom();
 	}
 
-	renderRoom(room: Room) {
+	renderRoom() {
+		const room = this.currentRoom();
+
 		const nameDiv = document.getElementById("roomName");
 		if (nameDiv !== null) {
 			nameDiv.innerText = room.info.name;
@@ -156,8 +158,9 @@ class MallMap {
 		battles.forEach((e, key) => {
 			const element = e as HTMLElement;
 			element.onclick = function() {
-				/* story.showSnippet("Battle");*/
-				console.log(story);
+				GameState.currentEnemy = room.info.popEncounter();
+				const result = story.showSnippet("Battle", false);
+				console.log("battle start! " + result);
 			}
 		})
 	}
