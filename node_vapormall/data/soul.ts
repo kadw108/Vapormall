@@ -83,6 +83,26 @@ const SOUL_LIST = {
                 {stat: CONSTANTS.STATS.GLITCHDEFENSE, change: 3},
                 {stat: CONSTANTS.STATS.DEFENSE, change: 3},
               ]
+            },
+            {
+              level: 6,
+              statChanges: [
+                {stat: CONSTANTS.STATS.ATTACK, change: 6},
+                {stat: CONSTANTS.STATS.GLITCHATTACK, change: 6},
+              ]
+            },
+            {
+              level: 7,
+              statChanges: [
+                {stat: CONSTANTS.STATS.ATTACK, change: 6},
+                {stat: CONSTANTS.STATS.GLITCHATTACK, change: 6},
+              ]
+            },
+            {
+              level: 8,
+              statChanges: [
+                {stat: CONSTANTS.STATS.HP, change: 20},
+              ]
             }
         ],
     }

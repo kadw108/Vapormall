@@ -89,6 +89,7 @@ class Battle {
     victory() {
         // clear encounter
         GameState.currentFloor.currentRoom().info.encounter = [];
+        GameState.currentEnemy = null;
         const result = story.showSnippet("Room", false);
         console.log("battle end! " + result);
     }
