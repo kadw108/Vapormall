@@ -20,6 +20,8 @@ class Battle {
     messageRenderer: MessageRenderer;
     battleCalculator: BattleCalculator;
 
+    turns: number;
+
     constructor(playerSouls: Array<PlayerSoul>, enemySouls: Array<IndividualSoul>) {
         this.playerParty = playerSouls;
         this.enemyParty = enemySouls;
@@ -35,6 +37,8 @@ class Battle {
         const playerSoul = this.playerSouls[0];
         this.messageRenderer.renderSkills(playerSoul);
         this.messageRenderer.renderSwitch(this.playerParty, this.playerSouls);
+
+        this.turns = 0;
     }
 
     static getName(battleSoul: BattleSoul): string {
@@ -54,6 +58,8 @@ class Battle {
        for (let i = 0; i < speed_order.length; i++) {
             this.useSkill(speed_order[i]);
        }
+
+       this.turns++;
     }
 
     checkBattleOver() {
@@ -91,7 +97,6 @@ class Battle {
         GameState.currentFloor.currentRoom().info.encounter = [];
         GameState.currentEnemy = null;
         const result = story.showSnippet("Room", false);
-        console.log("battle end! " + result);
     }
 
     selectEnemySkills() {

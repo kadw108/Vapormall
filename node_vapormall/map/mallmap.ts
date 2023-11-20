@@ -160,7 +160,6 @@ class MallMap {
 			element.onclick = function() {
 				GameState.currentEnemy = room.info.popEncounter();
 				const result = story.showSnippet("Battle", false);
-				console.log("battle start! " + result);
 			}
 		})
 	}

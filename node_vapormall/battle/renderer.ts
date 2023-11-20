@@ -1,7 +1,6 @@
 import { FieldedPlayerSoul } from "./battleSoul";
 import { Skill } from "../skill";
 import { capitalizeFirstLetter } from "../utility";
-import { GameState } from "../gameState";
 import { IndividualSoul, PlayerSoul } from "../individualSoul";
 
 enum DURATIONS {
@@ -9,7 +8,7 @@ enum DURATIONS {
     BETWEENLINES = 750,
 }
 
-class MessageRenderer {
+class MessageRenderer { // split into 1 class to handle timed actions + 1 to render?
     static readonly ENDBLOCK_STRING: string = "ENDBLOCK";
 
     messages: Array<string|Function>;
@@ -18,21 +17,20 @@ class MessageRenderer {
     messageContainer: HTMLElement;
     timeouts: Array<NodeJS.Timeout>;
 
+    battleLog: HTMLElement;
+
     skillHandlerCreator: Function;
     switchHandlerCreator: Function;
 
     constructor(skillHandlerCreator: Function, switchHandlerCreator: Function) {
-        const messageContainer = document.getElementById("messageContainer");
-        if (messageContainer === null) {
-            console.error("messageContainer is null! Cannot display messages!");
-            return;
-        }
-
         this.messages = [];
 
-        this.messageContainer = messageContainer;
+        this.messageContainer = document.getElementById("messageContainer")!;
         this.blocks = 0;
         this.timeouts = [];
+
+        this.battleLog = document.getElementById("battleLog")!;
+        this.prepBattleLog();
 
         this.skillHandlerCreator = skillHandlerCreator;
         this.switchHandlerCreator = switchHandlerCreator;
@@ -70,10 +68,33 @@ class MessageRenderer {
         this.blocks++;
     }
 
+    private getHTMLFromMessage(message: string, small: boolean): HTMLElement {
+        const html = document.createElement("span");
+
+        if (small) {
+            html.style.setProperty("font-size", "90%");
+        }
+        else {
+            html.style.setProperty("font-weight", "bold");
+        }
+
+        html.appendChild(
+            document.createTextNode(capitalizeFirstLetter(message))
+        );
+        html.appendChild(
+            document.createElement("br")
+        );
+        return html;
+    }
+
     private displayBlock(messages: Array<string|Function>) {
         const messageDiv = document.createElement("div");
-        messageDiv.classList.add("message", "blackBg");
+        messageDiv.classList.add("message", "topMessage", "blackBg");
         this.messageContainer.append(messageDiv);
+
+        const logDiv = document.createElement("div");
+        logDiv.classList.add("message", "bottomMessage")
+        this.battleLog.append(logDiv);
 
         let stringNum = 0;
         messages.forEach((item, i) => {
@@ -81,13 +102,18 @@ class MessageRenderer {
             const delay = stringNum * DURATIONS.BETWEENLINES;
             
             if (typeof item === "string") {
+                let messageHTML: HTMLElement;
+                if (i === 0) {
+                    messageHTML = this.getHTMLFromMessage(item, false);
+                }
+                else {
+                    messageHTML = this.getHTMLFromMessage(item, true);
+                }
+
                 const timeout = setTimeout(() => {
-                    messageDiv.append(
-                        document.createTextNode(capitalizeFirstLetter(item))
-                    );
-                    messageDiv.append(
-                        document.createElement("br")
-                    );
+                    messageDiv.append(messageHTML);
+                    logDiv.append(messageHTML);
+
                 }, delay);
                 this.timeouts.push(timeout);
 
@@ -140,14 +166,10 @@ class MessageRenderer {
 
     hideActions() {
         const bottomContainer = document.getElementById("bottomContainer");
-        bottomContainer?.remove();
+        bottomContainer!.innerHTML = "";
     }
 
     showActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul>) {
-        const bottomContainer = document.createElement("div");
-        bottomContainer.id = "bottomContainer";
-        document.getElementById("bottomhalf")?.append(bottomContainer);
-
         this.renderSkills(playerSoul);
         this.renderSwitch(playerParty, playerSouls);
     }
@@ -190,8 +212,26 @@ class MessageRenderer {
         return switchContainer;
     }
 
+    prepBattleLog() {
+        const logButton = document.getElementById("logButton")!;
+        logButton.addEventListener("click",
+            () => {
+                if (logButton.innerText === "Battle Log") {
+                    this.battleLog.classList.remove("hidden");
+                    document.getElementById("bottomContainer")!.classList.add("hidden");
+                    logButton.innerText = "Hide Battle Log";
+                }
+                else {
+                    this.battleLog.classList.add("hidden");
+                    document.getElementById("bottomContainer")!.classList.remove("hidden");
+                    logButton.innerText = "Battle Log";
+                }
+            }
+        );
+    } 
+
     endBattle() {
-        document.getElementById("endScreen")?.classList.remove("hidden");
+        document.getElementById("endScreen")!.classList.remove("hidden");
 
         this.clearAll();
         this.blocks = 0;

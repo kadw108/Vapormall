@@ -121,7 +121,6 @@ class IndividualSoul {
                 statContainer.append(statSpan);
                 statContainer.append(document.createTextNode(" / "));
             }
-            console.log(statContainer);
         }
         return statContainer;
     }

@@ -192,7 +192,6 @@ class EnemySoul extends BattleSoul {
         playerSouls: Array<FieldedPlayerSoul>,
         enemySouls: Array<EnemySoul>
     ) {
-        console.log(this.soul.skills);
 
         const randomSkill = Math.floor(Math.random() * this.soul.skills.length);
         this.selected_skill = this.soul.skills[randomSkill];

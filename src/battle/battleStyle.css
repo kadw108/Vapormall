@@ -1,25 +1,3 @@
-#messageContainer {
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: column;
-
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-.message {
-  width: fit-content;
-  padding: 3px;
-
-  z-index: 1;
-  font-size: 80%;
-
-  margin-bottom: 5px;
-  margin-left: auto; /* right align */
-  text-align: right;
-}
-
 #endScreen {
   z-index: 4;
   position: absolute;
@@ -32,6 +10,42 @@
 #endScreen > div {
   text-align: center;
   margin-top: 50%;
+}
+
+/* Battle Messages */
+
+#messageContainer {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.message {
+  width: fit-content;
+  z-index: 1;
+
+  font-size: 85%;
+}
+
+.topMessage {
+  padding: 3px;
+  margin-bottom: 5px;
+  margin-left: auto; /* right align */
+  text-align: right;
+}
+
+.bottomMessage {
+  margin-bottom: 15px;
+}
+
+#logButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 /* General Styles */
