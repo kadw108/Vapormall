@@ -88,13 +88,13 @@ class MessageTimer {
     }
 
     private displayBlock(messages: Array<string|Function>) {
+        let displayDiv = false;
+
         const messageDiv = document.createElement("div");
         messageDiv.classList.add("message", "topMessage", "blackBg");
-        this.messageContainer.append(messageDiv);
 
         const logDiv = document.createElement("div");
         logDiv.classList.add("message", "bottomMessage")
-        this.battleLog.append(logDiv);
 
         let stringNum = 0;
         messages.forEach((item, i) => {
@@ -102,6 +102,8 @@ class MessageTimer {
             const delay = stringNum * DURATIONS.BETWEENLINES;
             
             if (typeof item === "string") {
+                displayDiv = true;
+
                 let messageHTML: HTMLElement;
                 if (i === 0) {
                     messageHTML = this.getHTMLFromMessage(item, false);
@@ -131,6 +133,11 @@ class MessageTimer {
             this.blocks--;
         }, messages.length * DURATIONS.BETWEENLINES);
         this.timeouts.push(timeout);
+
+        if (displayDiv) {
+            this.messageContainer.append(messageDiv);
+            this.battleLog.append(logDiv);
+        }
     }
 
     endBattle() {

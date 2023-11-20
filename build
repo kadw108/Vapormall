@@ -1,3 +1,4 @@
+rm -f ../export/index.html
 cd node_vapormall
 npx esbuild index.js --bundle --minify --outfile=../src/meta/vapormall.js --global-name=vapormall
 
