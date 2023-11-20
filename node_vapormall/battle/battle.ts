@@ -4,21 +4,23 @@ import {StatChange} from "../data/skills";
 import {CONSTANTS} from "../data/constants";
 
 import {BattleSoul, FieldedPlayerSoul, EnemySoul} from "./battleSoul";
-import { MessageRenderer } from "./renderer";
-import { BattleCalculator } from "./battleCalculator";
+import { Renderer } from "./renderer";
+import { MessageTimer } from "./messageTimer";
+import { Calculator } from "./calculator";
 import { GameState } from "../gameState";
 
 class Battle {
+    playerParty: Array<PlayerSoul>;
+    enemyParty: Array<IndividualSoul>;
+
     playerSouls: Array<FieldedPlayerSoul>;
     enemySouls: Array<EnemySoul>;
     souls: Array<FieldedPlayerSoul | EnemySoul>;
     battleOver: boolean;
 
-    playerParty: Array<PlayerSoul>;
-    enemyParty: Array<IndividualSoul>;
-
-    messageRenderer: MessageRenderer;
-    battleCalculator: BattleCalculator;
+    renderer: Renderer;
+    calculator: Calculator;
+    messageTimer: MessageTimer;
 
     turns: number;
 
@@ -32,11 +34,12 @@ class Battle {
         this.souls = [...this.playerSouls, ...this.enemySouls];
         this.battleOver = false;
 
-        this.battleCalculator = new BattleCalculator(this);
-        this.messageRenderer = new MessageRenderer(this.createSkillClickHandler.bind(this), this.createSwitchClickHandler.bind(this));
+        this.renderer = new Renderer(this.createSkillClickHandler.bind(this), this.createSwitchClickHandler.bind(this));
         const playerSoul = this.playerSouls[0];
-        this.messageRenderer.renderSkills(playerSoul);
-        this.messageRenderer.renderSwitch(this.playerParty, this.playerSouls);
+        this.renderer.renderSkills(playerSoul);
+        this.renderer.renderSwitch(this.playerParty, this.playerSouls);
+        this.calculator = new Calculator(this);
+        this.messageTimer = new MessageTimer();
 
         this.turns = 0;
     }
@@ -64,8 +67,6 @@ class Battle {
 
     checkBattleOver() {
         if (this.playerSouls.length === 0 || this.enemySouls.length === 0) {
-            // this.messageRenderer.endMessageBlock();
-            // commented out since it adds unnecessary pause
 
             if (this.playerSouls.length === 0) {
                 // TODO
@@ -84,9 +85,9 @@ class Battle {
                }
             }
 
-            this.messageRenderer.addMessage(
+            this.messageTimer.addMessage(
                 () => {
-                    this.messageRenderer.endBattle();
+                    this.messageTimer.endBattle();
                 }
             );
         }
@@ -152,7 +153,7 @@ class Battle {
             case CONSTANTS.TARGETS.SELF:
                 if (user.selected_target !== null) {
                     user.selected_target.forEach((target) => {
-                        this.battleCalculator.applySkillEffects(user, skill, target);
+                        this.calculator.applySkillEffects(user, skill, target);
                     });
                 }
                 else {
@@ -170,7 +171,7 @@ class Battle {
 
         leaving.switchOut();
         this.playerSouls[switchOut] = entering;
-        this.messageRenderer.addMessage("Switching out " + Battle.getName(leaving) + " for " + entering.soul.name);
+        this.messageTimer.addMessage("Switching out " + Battle.getName(leaving) + " for " + entering.soul.name);
 
         return entering;
     }
@@ -179,19 +180,19 @@ class Battle {
         // from https://stackoverflow.com/questions/8941183/pass-multiple-arguments-along-with-an-event-object-to-an-event-handler
         return () => {
             // arrow function for `this` https://stackoverflow.com/a/73068955
-            this.messageRenderer.hideActions();
+            this.renderer.hideActions();
 
             playerSoul.selected_skill = playerSoul.soul.skills[whichSkill];
             this.selectPlayerTarget(playerSoul);
 
             this.selectEnemySkills();
             this.passTurn();
-            this.messageRenderer.addMessage(
+            this.messageTimer.addMessage(
                 () => {
-                    this.messageRenderer.showActions(playerSoul, this.playerParty, this.playerSouls);
+                    this.renderer.showActions(playerSoul, this.playerParty, this.playerSouls);
                 }
             );
-            this.messageRenderer.displayMessages();
+            this.messageTimer.displayMessages(this.turns);
         }
     }
 
@@ -199,18 +200,18 @@ class Battle {
         // from https://stackoverflow.com/questions/8941183/pass-multiple-arguments-along-with-an-event-object-to-an-event-handler
         return () => {
             // arrow function for `this` https://stackoverflow.com/a/73068955
-            this.messageRenderer.hideActions();
+            this.renderer.hideActions();
 
             const switchInFieldedPlayerSoul = this.switchSoul(switchOut, switchIn);
 
             this.selectEnemySkills();
             this.passTurn();
-            this.messageRenderer.addMessage(
+            this.messageTimer.addMessage(
                 () => {
-                    this.messageRenderer.showActions(switchInFieldedPlayerSoul, this.playerParty, this.playerSouls);
+                    this.renderer.showActions(switchInFieldedPlayerSoul, this.playerParty, this.playerSouls);
                 }
             );
-            this.messageRenderer.displayMessages();
+            this.messageTimer.displayMessages(this.turns);
         }
     }
 }

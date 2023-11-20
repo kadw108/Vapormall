@@ -31,6 +31,23 @@
 <%
 
 $(function () {
+    const logButton = document.getElementById("logButton");
+    const battleLog = document.getElementById("battleLog");
+    logButton.addEventListener("click",
+        () => {
+            if (logButton.innerText === "Battle Log") {
+                battleLog.classList.remove("hidden");
+                document.getElementById("bottomContainer").classList.add("hidden");
+                logButton.innerText = "Hide Battle Log";
+            }
+            else {
+                battleLog.classList.add("hidden");
+                document.getElementById("bottomContainer").classList.remove("hidden");
+                logButton.innerText = "Battle Log";
+            }
+        }
+    );
+
     const ref = window.vapormall;
 
     ref.Manager.startBattle();

@@ -4,7 +4,7 @@ import {StatChange} from "../data/skills";
 import {CONSTANTS} from "../data/constants";
 import {BattleSoul, FieldedPlayerSoul, EnemySoul} from "./battleSoul";
 
-class BattleCalculator {
+class Calculator {
     battle: Battle;
     
     constructor(battle: Battle) {
@@ -12,7 +12,7 @@ class BattleCalculator {
     }
 
     applySkillEffects(user: BattleSoul, skill: Skill, target: BattleSoul) {
-        this.battle.messageRenderer.addMessage(
+        this.battle.messageTimer.addMessage(
             Battle.getName(user) + " used " + skill.data.name + "!"
         );
 
@@ -30,26 +30,26 @@ class BattleCalculator {
                     })
 
                     if (multiplier === 0) {
-                        this.battle.messageRenderer.addMessage(
+                        this.battle.messageTimer.addMessage(
                             "It didn't affect " + Battle.getName(target) + "..."
                         );
                     }
                     else {
                         damage = Math.ceil(damage * multiplier);
 
-                        this.battle.messageRenderer.addMessage(() => {
+                        this.battle.messageTimer.addMessage(() => {
                             target.displayHP -= damage;
                             target.updateHP();
                         });
 
                         if (multiplier > 1) {
-                            this.battle.messageRenderer.addMessage("It's super effective!");
+                            this.battle.messageTimer.addMessage("It's super effective!");
                         }
                         else if (multiplier < 1) {
-                            this.battle.messageRenderer.addMessage("It's not very effective...");
+                            this.battle.messageTimer.addMessage("It's not very effective...");
                         }
 
-                        this.battle.messageRenderer.addMessage(
+                        this.battle.messageTimer.addMessage(
                             Battle.getName(target) + " lost " + damage + " HP!"
                         );
                         target.soul.changeHP(-damage);
@@ -58,18 +58,18 @@ class BattleCalculator {
                         if (skill.data.meta.drain !== 0) {
                             const drain = Math.floor(damage * (skill.data.meta.drain/100));
 
-                            this.battle.messageRenderer.addMessage(() => {
+                            this.battle.messageTimer.addMessage(() => {
                                 user.displayHP += drain;
                                 user.updateHP();
                             });
 
                             if (drain > 0) {
-                                this.battle.messageRenderer.addMessage(
+                                this.battle.messageTimer.addMessage(
                                     Battle.getName(user) + " drained " + drain + " HP!"
                                 );
                             }
                             else if (drain < 0) {
-                                this.battle.messageRenderer.addMessage(
+                                this.battle.messageTimer.addMessage(
                                     Battle.getName(user) + " lost " + (-drain) + " HP from recoil!"
                                 );
                             }
@@ -86,12 +86,12 @@ class BattleCalculator {
                         console.error("Stat change for HP not allowed!")
                     }
                     else if (target.stat_changes[statChange.stat] === 6) {
-                        this.battle.messageRenderer.addMessage(
+                        this.battle.messageTimer.addMessage(
                             Battle.getName(target) + "'s " + statChange.stat + " couldn't go any higher!"
                         );
                     }
                     else if (target.stat_changes[statChange.stat] === -6) {
-                        this.battle.messageRenderer.addMessage(
+                        this.battle.messageTimer.addMessage(
                             Battle.getName(target) + "'s " + statChange.stat + " couldn't go any lower!"
                         );
                     }
@@ -112,10 +112,10 @@ class BattleCalculator {
                             changeDesc += " " + Math.abs(statChange.change) + " stage!";
                         }
 
-                        this.battle.messageRenderer.addMessage(() => {
+                        this.battle.messageTimer.addMessage(() => {
                             target.updateStats();
                         });
-                        this.battle.messageRenderer.addMessage(
+                        this.battle.messageTimer.addMessage(
                             Battle.getName(target) + "'s " + statChange.stat + changeDesc
                         );
                     }
@@ -123,7 +123,7 @@ class BattleCalculator {
                 break;
         }
 
-        this.battle.messageRenderer.endMessageBlock();
+        this.battle.messageTimer.endMessageBlock();
     }
 
     damageCalc(user: BattleSoul, skill: Skill, target: BattleSoul, isGlitch: boolean) {
@@ -185,8 +185,8 @@ class BattleCalculator {
     checkFaint(soul: BattleSoul) {
         if (soul.soul.currentHP <= 0) { 
 
-            this.battle.messageRenderer.endMessageBlock();
-            this.battle.messageRenderer.addMessage(Battle.getName(soul) + " was destroyed!");
+            this.battle.messageTimer.endMessageBlock();
+            this.battle.messageTimer.addMessage(Battle.getName(soul) + " was destroyed!");
 
             this.battle.souls.filter((s) => {s.soul.name !== soul.soul.name});
             if (soul instanceof FieldedPlayerSoul) {
@@ -206,5 +206,5 @@ class BattleCalculator {
 }
 
 export {
-    BattleCalculator
+    Calculator
 };

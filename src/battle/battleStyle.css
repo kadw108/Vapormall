@@ -48,6 +48,11 @@
   right: 5px;
 }
 
+#battleLog {
+  overflow: scroll;
+  height: 100%;
+}
+
 /* General Styles */
 
 .outlineDiv {
