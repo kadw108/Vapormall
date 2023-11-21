@@ -1,4 +1,4 @@
-import {SkillData, SKILL_LIST} from "./data/skills";
+import {SkillData, SKILL_LIST} from "../data/skills";
 
 class Skill{
     data: SkillData;

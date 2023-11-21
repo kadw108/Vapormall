@@ -1,22 +1,18 @@
-import {Skill} from "../skill";
-import {IndividualSoul, PlayerSoul} from "../individualSoul";
+import {Skill} from "../soul/skill";
+import {IndividualSoul, PlayerSoul} from "../soul/individualSoul";
 import {StatDict, CONSTANTS } from "../data/constants";
+import { RenderBattleSoul } from "./renderBattleSoul";
 
 abstract class BattleSoul {
     soul: IndividualSoul;
     selected_skill: Skill | null;
     selected_target: Array<BattleSoul> | null;
 
-    infoContainer: HTMLElement;
-    detailedInfoDiv: HTMLElement;
-
-    displayHP: number;
-    hpText: HTMLElement;
-    modifiedStatInfoBox: HTMLElement;
-
     stat_changes: StatDict;
 
     index: number;
+
+    renderer: RenderBattleSoul;
 
     constructor(soul: IndividualSoul) {
         this.soul = soul;
@@ -32,66 +28,9 @@ abstract class BattleSoul {
             [CONSTANTS.STATS.SPEED]: 0,
         }
 
-        this.displayHP = this.soul.currentHP;
-        this.hpText = document.createElement("small");
-        this.hpText.append(
-            document.createTextNode(this.getHPString())
-        );
-
-        this.infoContainer = this.genInfoContainer();
-        document.getElementById("topHalf")?.append(this.infoContainer);
-
         this.index = 0;
-    }
 
-    genInfoContainer() {
-        const infoDiv = this.genInfoDiv();
-        const detailedInfoDiv = this.genDetailedInfo();
-
-        const infoContainer = document.createElement("div");
-        infoContainer.append(
-            infoDiv,
-            detailedInfoDiv
-        );
-
-        infoDiv.onmouseover = function(){
-            detailedInfoDiv.style.display = "block";
-        }
-        infoDiv.onmouseout = function(){
-            detailedInfoDiv.style.display = "none";
-        }
-
-        this.detailedInfoDiv = detailedInfoDiv;
-
-        return infoContainer;
-    }
-
-    genInfoDiv() {
-        const infoDiv = document.createElement("div");
-        const nameText = document.createTextNode(this.soul.name);
-
-        infoDiv.append(
-            nameText,
-            document.createElement("br"),
-            this.soul.getLevelText(),
-            document.createElement("br"),
-            this.hpText
-        );
-
-        return infoDiv;
-    }
-
-    genDetailedInfo() {
-        const infoDiv = this.soul.genDetailedInfo();
-        infoDiv.classList.remove("bottomhalf-tip");
-        infoDiv.classList.add("topHalf-tip");
-
-        this.modifiedStatInfoBox = this.modifiedStatInfo();
-        infoDiv.append(
-            this.modifiedStatInfoBox
-        );
-
-        return infoDiv;
+        this.renderer = new RenderBattleSoul(this);
     }
 
     hasModifiers(): boolean {
@@ -104,27 +43,6 @@ abstract class BattleSoul {
         return false;
     }
 
-    private modifiedStatInfo() {
-        const statGroup = document.createElement("div");
-
-        if (this.hasModifiers()) {
-            const statModifiers = document.createElement("small");
-            statModifiers.append(
-                document.createElement("br"),
-                document.createElement("br"),
-                document.createTextNode("(After stat modifiers:)"),
-                document.createElement("br")
-            );
-
-            statGroup.append(
-                statModifiers,
-                this.soul.genStatText(this.modifiedStatDict())
-            );
-        }
-
-        return statGroup;
-    }
-
     modifiedStatDict(): StatDict {
         return {
             [CONSTANTS.STATS.HP]: this.soul.currentHP,
@@ -134,20 +52,6 @@ abstract class BattleSoul {
             [CONSTANTS.STATS.GLITCHDEFENSE]: this.calculateStat(CONSTANTS.STATS.GLITCHDEFENSE),
             [CONSTANTS.STATS.SPEED]: this.calculateStat(CONSTANTS.STATS.SPEED)
         };
-    }
-
-    updateHP() {
-        this.hpText.innerHTML = this.getHPString();
-    }
-
-    updateStats() {
-        this.modifiedStatInfoBox.remove();
-        this.modifiedStatInfoBox = this.modifiedStatInfo();
-        this.detailedInfoDiv.append(this.modifiedStatInfoBox);
-    }
-
-    getHPString() {
-        return "HP: " + this.displayHP + "/" + this.soul.stats[CONSTANTS.STATS.HP];
     }
 
     calculateStat(stat: CONSTANTS.STATS) {
@@ -169,21 +73,21 @@ abstract class BattleSoul {
     }
 
     switchOut() {
-        this.infoContainer.remove();
+        this.renderer.infoContainer.remove();
     }
 }
 
 class FieldedPlayerSoul extends BattleSoul {
     constructor(soul: PlayerSoul) {
         super(soul);
-        this.infoContainer.classList.add("playerInfo", "soulInfo", "blackBg");
+        this.renderer.infoContainer.classList.add("playerInfo", "soulInfo", "blackBg");
     }
 }
 
 class EnemySoul extends BattleSoul {
     constructor(soul: IndividualSoul) {
         super(soul);
-        this.infoContainer.classList.add("enemyInfo", "soulInfo", "blackBg");
+        this.renderer.infoContainer.classList.add("enemyInfo", "soulInfo", "blackBg");
     }
 
     chooseMove(

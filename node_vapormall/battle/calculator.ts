@@ -1,5 +1,5 @@
 import {Battle} from "./battle";
-import {Skill} from "../skill";
+import {Skill} from "../soul/skill";
 import {StatChange} from "../data/skills";
 import {CONSTANTS} from "../data/constants";
 import {BattleSoul, FieldedPlayerSoul, EnemySoul} from "./battleSoul";
@@ -38,8 +38,8 @@ class Calculator {
                         damage = Math.ceil(damage * multiplier);
 
                         this.battle.messageTimer.addMessage(() => {
-                            target.displayHP -= damage;
-                            target.updateHP();
+                            target.renderer.displayHP -= damage;
+                            target.renderer.updateHP();
                         });
 
                         if (multiplier > 1) {
@@ -59,8 +59,8 @@ class Calculator {
                             const drain = Math.floor(damage * (skill.data.meta.drain/100));
 
                             this.battle.messageTimer.addMessage(() => {
-                                user.displayHP += drain;
-                                user.updateHP();
+                                user.renderer.displayHP += drain;
+                                user.renderer.updateHP();
                             });
 
                             if (drain > 0) {
@@ -113,7 +113,7 @@ class Calculator {
                         }
 
                         this.battle.messageTimer.addMessage(() => {
-                            target.updateStats();
+                            target.renderer.updateStats();
                         });
                         this.battle.messageTimer.addMessage(
                             Battle.getName(target) + "'s " + statChange.stat + changeDesc

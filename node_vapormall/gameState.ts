@@ -1,4 +1,4 @@
-import {PlayerSoul, IndividualSoul} from "./individualSoul";
+import {PlayerSoul, IndividualSoul} from "./soul/individualSoul";
 import {MallMap} from "./map/mallmap";
 
 class GameState {

@@ -1,7 +1,8 @@
 import { GameState } from "../gameState";
-import { PlayerSoul } from "../individualSoul";
+import { PlayerSoul } from "../soul/individualSoul";
 import { CONSTANTS } from "../data/constants";
 import { Manager } from "../manager";
+import { RenderSoul } from "../soul/renderSoul";
 
 class Party {
     constructor() {
@@ -20,14 +21,14 @@ class Party {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("partySoulDiv");
 
-        const levelText = playerSoul.getLevelText();
+        const levelText = RenderSoul.getLevelText(playerSoul);
         levelText.style.marginLeft = "10px";
 
         infoDiv.append(
-            playerSoul.getNameText(),
+            RenderSoul.getNameText(playerSoul),
             levelText,
             document.createElement("br"),
-            playerSoul.getHPText()
+            RenderSoul.getHPText(playerSoul)
         );
 
         return infoDiv;
@@ -37,10 +38,10 @@ class Party {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("menuPanel", "hidden", "absoluteAlign", "detailedPartySoulDiv");
 
-        const levelText = playerSoul.getLevelText();
+        const levelText = RenderSoul.getLevelText(playerSoul);
         levelText.style.marginLeft = "10px";
 
-        const typeContainer = playerSoul.genTypeContainer();
+        const typeContainer = RenderSoul.genTypeContainer(playerSoul);
         typeContainer.style.marginLeft = "10px";
 
         const divider = document.createElement("hr");
@@ -57,7 +58,7 @@ class Party {
                 statDiv.innerText = key + " " + playerSoul.stats[keyType];
             }
             else {
-                statDiv.innerText = playerSoul.getHPText();
+                statDiv.innerText = RenderSoul.getHPText(playerSoul);
             }
 
             statContainer.append(statDiv);
@@ -71,7 +72,7 @@ class Party {
         });
 
         infoDiv.append(
-            playerSoul.getNameText(),
+            RenderSoul.getNameText(playerSoul),
             levelText,
             typeContainer,
             divider,

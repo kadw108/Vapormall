@@ -132,7 +132,7 @@ class Connection {
 
 import { ROOMS } from "../data/room_data";
 import { randItem } from "../utility";
-import { IndividualSoul } from "../individualSoul";
+import { IndividualSoul } from "../soul/individualSoul";
 import { SOUL_LIST } from "../data/soul";
 import { randomInt } from "crypto";
 

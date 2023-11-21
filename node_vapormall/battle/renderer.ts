@@ -1,6 +1,7 @@
 import { FieldedPlayerSoul } from "./battleSoul";
-import { PlayerSoul } from "../individualSoul";
-import { Skill } from "../skill";
+import { PlayerSoul } from "../soul/individualSoul";
+import { Skill } from "../soul/skill";
+import { RenderSoul } from "../soul/renderSoul";
 
 class Renderer { 
 
@@ -68,7 +69,7 @@ class Renderer {
     }
 
     makeSwitchWrapper(playerSoul: PlayerSoul, switchIn: number, playerSouls: Array<FieldedPlayerSoul>) {
-        const switchContainer = playerSoul.getSwitchContainer();
+        const switchContainer = RenderSoul.getSwitchContainer(playerSoul);
         const switchButton = switchContainer.getElementsByTagName("button")[0];
 
         let offField = true;

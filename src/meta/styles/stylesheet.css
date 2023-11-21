@@ -109,6 +109,10 @@ CUSTOM STYLES
   border-radius: 10px;
 }
 
+.menuButton {
+  z-index: 2;
+}
+
 .hoverDiv {
   position: absolute;
   z-index: 3;
