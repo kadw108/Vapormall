@@ -11,6 +11,8 @@ import {Manager} from "./manager";
 
 import {MallMap} from "./map/mallmap";
 
+import {Party} from "./menu/party";
+
 export {
   CONSTANTS,
   SKILL_LIST,
@@ -21,5 +23,6 @@ export {
   Skill,
   GameState,
   Manager,
-  MallMap
+  MallMap,
+  Party
 }

@@ -6,7 +6,7 @@ enum DURATIONS {
 }
 
 class MessageTimer { 
-    static readonly ENDBLOCK_STRING: string = "ENDBLOCK";
+    private static readonly ENDBLOCK_STRING: string = "ENDBLOCK";
 
     messages: Array<string|Function>;
     blocks: number;
@@ -23,6 +23,7 @@ class MessageTimer {
         this.timeouts = [];
 
         this.battleLog = document.getElementById("battleLog")!;
+        this.battleLog.innerHTML = "<p>BATTLE LOG</p>";
     }
 
     addMessage(message: string|Function) {

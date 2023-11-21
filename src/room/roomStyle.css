@@ -2,23 +2,23 @@
     width: fit-content;
     height: 7%;
     padding: 0 5px 0 5px;
+    float: right;
+
     font-size: 85%;
     color: white;
+
+    position: relative;
+    z-index: 2;
 }
 
-#menu {
+#menuButtons {
     position: absolute;
     bottom: 5px;
     right: 5px;
     font-size: 85%;
 
-    /* to center absolute div horizontally 
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    */
+    display: flex;
+    gap: 10px;
 }
 
 /* transparent black bg with solid black border */
@@ -37,4 +37,15 @@
     border-image-source: url("assets/pattern2.gif");
     border-image-slice: 50;
     border-image-repeat: round;
+}
+
+/* party menu */
+
+.partySoulDiv {
+  margin: 5px;
+  border: 1px solid #fff;
+  padding: 3px 7px 3px 7px;
+  border-radius: 20px;
+  background-color: #000;
+  cursor: pointer;
 }

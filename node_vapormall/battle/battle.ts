@@ -169,7 +169,8 @@ class Battle {
 
         leaving.switchOut();
         this.playerSouls[switchOut] = entering;
-        this.messageTimer.addMessage("Switching out " + Battle.getName(leaving) + " for " + entering.soul.name);
+        this.messageTimer.addMessage("Switching out " + Battle.getName(leaving) + " for " + entering.soul.name + ".");
+        this.messageTimer.endMessageBlock();
 
         return entering;
     }
@@ -188,9 +189,11 @@ class Battle {
             this.messageTimer.addMessage(
                 () => {
                     this.renderer.showActions(playerSoul, this.playerParty, this.playerSouls);
+                    playerSoul.selected_skill = null;
                 }
             );
             this.messageTimer.displayMessages(this.turns);
+
         }
     }
 

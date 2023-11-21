@@ -39,7 +39,7 @@ abstract class BattleSoul {
         );
 
         this.infoContainer = this.genInfoContainer();
-        document.getElementById("tophalf")?.append(this.infoContainer);
+        document.getElementById("topHalf")?.append(this.infoContainer);
 
         this.index = 0;
     }
@@ -84,7 +84,7 @@ abstract class BattleSoul {
     genDetailedInfo() {
         const infoDiv = this.soul.genDetailedInfo();
         infoDiv.classList.remove("bottomhalf-tip");
-        infoDiv.classList.add("tophalf-tip");
+        infoDiv.classList.add("topHalf-tip");
 
         this.modifiedStatInfoBox = this.modifiedStatInfo();
         infoDiv.append(
@@ -135,7 +135,6 @@ abstract class BattleSoul {
             [CONSTANTS.STATS.SPEED]: this.calculateStat(CONSTANTS.STATS.SPEED)
         };
     }
-
 
     updateHP() {
         this.hpText.innerHTML = this.getHPString();

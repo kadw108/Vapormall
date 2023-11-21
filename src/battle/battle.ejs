@@ -14,14 +14,14 @@
                 </div>
             </div>
 
-            <div id="tophalf" class="absoluteAlign">
+            <div id="topHalf" class="absoluteAlign">
                 <div id="messageContainer"></div>
             </div>
             <div id="bottomhalf" class="absoluteAlign blackBg">
-                <button type="button" id="logButton">Battle Log</button>
-                <div id="battleLog" class="hidden"></div>
+                <button type="button" class="menuButton" id="logButton">Battle Log</button>
+                <div id="battleLog" class="hidden menuPanel absoluteAlign"></div>
 
-                <div id="bottomContainer">
+                <div id="bottomContent">
                 </div>
             </div>
         </div>
@@ -31,24 +31,9 @@
 <%
 
 $(function () {
-    const logButton = document.getElementById("logButton");
-    const battleLog = document.getElementById("battleLog");
-    logButton.addEventListener("click",
-        () => {
-            if (logButton.innerText === "Battle Log") {
-                battleLog.classList.remove("hidden");
-                document.getElementById("bottomContainer").classList.add("hidden");
-                logButton.innerText = "Hide Battle Log";
-            }
-            else {
-                battleLog.classList.add("hidden");
-                document.getElementById("bottomContainer").classList.remove("hidden");
-                logButton.innerText = "Battle Log";
-            }
-        }
-    );
-
     const ref = window.vapormall;
+
+    ref.Manager.menuButton("logButton", "battleLog", "Battle Log");
 
     ref.Manager.startBattle();
 });

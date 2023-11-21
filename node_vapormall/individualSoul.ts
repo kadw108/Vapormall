@@ -124,6 +124,10 @@ class IndividualSoul {
         }
         return statContainer;
     }
+
+    getHPText() {
+        return "HP: " + this.currentHP + "/" + this.stats[CONSTANTS.STATS.HP];
+    }
 }
 
 /*

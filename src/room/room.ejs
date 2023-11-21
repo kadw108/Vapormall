@@ -6,16 +6,21 @@
         <div id="screenBg"></div>
 
         <div id="screenContents" class="absoluteAlign">
-            <div id="tophalf" class="absoluteAlign">
+            <div id="topHalf" class="absoluteAlign">
                 <div id="roomName" class="blackBg2"></div>
             </div>
             <div id="bottomhalf" class="absoluteAlign blackBg">
                 <div id="bottomContent" class="blackBg2">
                 </div>
-                <div id="menu" class="blackBg2">
-                    <button type="button" id="inventory">Inventory</button>
-                    <button type="button" id="map">Map</button>
-                    <button type="button" id="party">Party</button>
+
+                <div id="inventory" class="hidden menuPanel absoluteAlign"></div>
+                <div id="map" class="hidden menuPanel absoluteAlign"></div>
+                <div id="party" class="hidden menuPanel absoluteAlign"></div>
+
+                <div id="menuButtons" class="blackBg2">
+                    <button type="button" class="menuButton" id="inventoryButton">Inventory</button>
+                    <button type="button" class="menuButton" id="mapButton">Map</button>
+                    <button type="button" class="menuButton" id="partyButton">Party</button>
                 </div>
             </div>
         </div>
@@ -25,6 +30,13 @@
 <%
 $(function () {
     const ref = window.vapormall;
+
+    ref.Manager.menuButton("inventoryButton", "inventory", "Inventory");
+    ref.Manager.menuButton("mapButton", "map", "Map");
+    ref.Manager.menuButton("partyButton", "party", "Party");
+
+    const party = new ref.Party();
+
     ref.GameState.currentFloor.renderRoom();
 });
 %>

@@ -24,7 +24,7 @@ class Renderer {
             const skillWrapper = this.makeSkillWrapper(playerSoul, skill, i);
             skillContainer?.append(skillWrapper);
         });
-        document.getElementById("bottomContainer")?.append(skillContainer);
+        document.getElementById("bottomContent")?.append(skillContainer);
     }
 
     makeSkillWrapper(playerSoul: FieldedPlayerSoul, skill: Skill, i: number) {
@@ -43,8 +43,8 @@ class Renderer {
     }
 
     hideActions() {
-        const bottomContainer = document.getElementById("bottomContainer");
-        bottomContainer!.innerHTML = "";
+        const bottomContent = document.getElementById("bottomContent");
+        bottomContent!.innerHTML = "";
     }
 
     showActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul>) {
@@ -64,7 +64,7 @@ class Renderer {
             const switchWrapper = this.makeSwitchWrapper(playerSoul, i, playerSouls);
             switchContainer?.append(switchWrapper);
         });
-        document.getElementById("bottomContainer")?.append(switchContainer);
+        document.getElementById("bottomContent")?.append(switchContainer);
     }
 
     makeSwitchWrapper(playerSoul: PlayerSoul, switchIn: number, playerSouls: Array<FieldedPlayerSoul>) {
