@@ -38,14 +38,3 @@
     border-image-slice: 50;
     border-image-repeat: round;
 }
-
-/* party menu */
-
-.partySoulDiv {
-  margin: 5px;
-  border: 1px solid #fff;
-  padding: 3px 7px 3px 7px;
-  border-radius: 20px;
-  background-color: #000;
-  cursor: pointer;
-}

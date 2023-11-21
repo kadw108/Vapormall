@@ -1,0 +1,34 @@
+.skill-button {
+  margin: 3px;
+  width: 100%;
+}
+
+.skill-typeless {
+  border-color: #57c;
+  background: linear-gradient(#333, #000);
+}
+
+.skill-sweet {
+  border-color: #f6c;
+  background: linear-gradient(#905, #000);
+}
+
+.skill-sangfroid {
+  border-color: #fc6;
+  background: linear-gradient(#950, #000);
+}
+
+.skill-corporate {
+  border-color: #2d2d2d;
+  background: linear-gradient(#808080, #000);
+}
+
+.skill-edge {
+  border-color: #ca2600;
+  background: linear-gradient(#6c000b, #000);
+}
+
+.skill-error {
+  border: dashed 1px #aaa;
+  background: linear-gradient(#888, #222, #000, #222, #888);
+}

@@ -12,7 +12,8 @@
     "styles": {
         "story": [
             "meta/styles/stylesheet.css",
-            "meta/styles/fonts.css"
+            "meta/styles/fonts.css",
+            "meta/styles/skillTypes.css"
         ]
     }
 }

@@ -102,11 +102,33 @@ CUSTOM STYLES
 .menuPanel {
   overflow: scroll;
   padding: 3px 7px 3px 7px;
-  margin: 10px;
+  margin: 5px;
 
   background-color: #001020;
   border: 1px dotted #ccc;
   border-radius: 10px;
+}
+
+.hoverDiv {
+  position: absolute;
+  z-index: 3;
+  line-height: 100%;
+  padding: 4px;
+
+  display: none;
+}
+
+.outlineDiv {
+  outline: none;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 1px 0 rgba(255,255,255,.4);
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.2),inset 0 -1px 2px #fff;
+
+  color: #fff;
+  border: solid 1px #aaa;
+  background: #000;
 }
 
 .blackBg {

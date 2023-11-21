@@ -1,4 +1,4 @@
-<snippet name="Room" styles="./room/roomStyle.css">
+<snippet name="Room" styles="./room/roomStyle.css; ./room/partyStyle.css">
 
 <div id="contents">
     <div id="bg"></div>
@@ -33,7 +33,6 @@ $(function () {
 
     ref.Manager.menuButton("inventoryButton", "inventory", "Inventory");
     ref.Manager.menuButton("mapButton", "map", "Map");
-    ref.Manager.menuButton("partyButton", "party", "Party");
 
     const party = new ref.Party();
 

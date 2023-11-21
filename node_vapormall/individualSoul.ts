@@ -76,27 +76,11 @@ class IndividualSoul {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("bottomhalf-tip", "outlineDiv", "hoverDiv");
 
-        const nameText = document.createElement("span");
-        nameText.innerText = this.name;
-        if (this.name !== this.soul_species.name) {
-            nameText.innerText += " (" + this.soul_species.name + ")";
-        }
         infoDiv.append(
-            nameText,
-            document.createElement("br")
-        );
-
-        const typeContainer = document.createElement("small");
-        this.soul_species.types.forEach((type, i) => {
-            typeContainer.innerText += type + "/";
-        });
-        infoDiv.append(typeContainer);
-
-        infoDiv.append(
-            document.createElement("hr")
-        );
-
-        infoDiv.append(
+            this.getNameText(),
+            document.createElement("br"),
+            this.genTypeContainer(),
+            document.createElement("hr"),
             this.genStatText(this.stats)
         );
 
@@ -127,6 +111,23 @@ class IndividualSoul {
 
     getHPText() {
         return "HP: " + this.currentHP + "/" + this.stats[CONSTANTS.STATS.HP];
+    }
+
+    genTypeContainer() {
+        const typeContainer = document.createElement("small");
+        this.soul_species.types.forEach((type, i) => {
+            typeContainer.innerText += type + "/";
+        });
+        return typeContainer;
+    }
+
+    getNameText() {
+        const nameText = document.createElement("span");
+        nameText.innerText = this.name;
+        if (this.name !== this.soul_species.name) {
+            nameText.innerText += " (" + this.soul_species.name + ")";
+        }
+        return nameText;
     }
 }
 
