@@ -1,10 +1,9 @@
 import { GameState } from "../gameState";
-import {PlayerSoul} from "../individualSoul";
+import { PlayerSoul } from "../individualSoul";
 import { CONSTANTS } from "../data/constants";
 import { Manager } from "../manager";
 
 class Party {
-
     constructor() {
         this.fillPartyDiv();
 
@@ -21,15 +20,15 @@ class Party {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("partySoulDiv");
 
-        infoDiv.append(playerSoul.getNameText());
-
-        const levelText = document.createElement("small");
-        levelText.innerText = "Lv " + playerSoul.level;
+        const levelText = playerSoul.getLevelText();
         levelText.style.marginLeft = "10px";
-        infoDiv.append(levelText);
-        infoDiv.append(document.createElement("br"));
 
-        infoDiv.append(playerSoul.getHPText());
+        infoDiv.append(
+            playerSoul.getNameText(),
+            levelText,
+            document.createElement("br"),
+            playerSoul.getHPText()
+        );
 
         return infoDiv;
     }
@@ -62,21 +61,15 @@ class Party {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("menuPanel", "hidden", "absoluteAlign", "detailedPartySoulDiv");
 
-        infoDiv.append(playerSoul.getNameText());
-
-        const levelText = document.createElement("small");
-        levelText.innerText = "Lv " + playerSoul.level;
+        const levelText = playerSoul.getLevelText();
         levelText.style.marginLeft = "10px";
-        infoDiv.append(levelText);
 
         const typeContainer = playerSoul.genTypeContainer();
         typeContainer.style.marginLeft = "10px";
-        infoDiv.append(typeContainer);
 
         const divider = document.createElement("hr");
         divider.style.color = "#4ad";
         divider.style.margin = "5px 0 10px 0";
-        infoDiv.append(divider);
 
         const statContainer = document.createElement("div");
         statContainer.classList.add("partyStatContainer", "partyContainer");
@@ -93,7 +86,6 @@ class Party {
 
             statContainer.append(statDiv);
         }
-        infoDiv.append(statContainer);
 
         const skillContainer = document.createElement("div");
         skillContainer.classList.add("partySkillContainer", "partyContainer");
@@ -101,7 +93,15 @@ class Party {
             const skillWrapper = skill.getSkillContainer();
             skillContainer.append(skillWrapper);
         });
-        infoDiv.append(skillContainer);
+
+        infoDiv.append(
+            playerSoul.getNameText(),
+            levelText,
+            typeContainer,
+            divider,
+            statContainer,
+            skillContainer
+        );
 
         return infoDiv;
     }

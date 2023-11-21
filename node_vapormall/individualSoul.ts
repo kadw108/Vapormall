@@ -92,7 +92,6 @@ class IndividualSoul {
         for (let key in this.stats) {
             if (key != "HP") {
                 const keyType = key as unknown as CONSTANTS.STATS;
-                statContainer.append(document.createTextNode(key + " "));
 
                 const statSpan = document.createElement("span");
                 if (dict[keyType] < this.stats[keyType]) {
@@ -102,8 +101,12 @@ class IndividualSoul {
                     statSpan.classList.add("green-text");
                 }
                 statSpan.innerText = "" + dict[keyType];
-                statContainer.append(statSpan);
-                statContainer.append(document.createTextNode(" / "));
+
+                statContainer.append(
+                    document.createTextNode(key + " "),
+                    statSpan,
+                    document.createTextNode(" / ")
+                );
             }
         }
         return statContainer;
@@ -128,6 +131,12 @@ class IndividualSoul {
             nameText.innerText += " (" + this.soul_species.name + ")";
         }
         return nameText;
+    }
+
+    getLevelText() {
+        const levelText = document.createElement("small");
+        levelText.innerText = "Lv " + this.level;
+        return levelText;
     }
 }
 
@@ -155,8 +164,10 @@ class PlayerSoul extends IndividualSoul {
 
         const switchContainer = document.createElement("div");
         switchContainer.classList.add("choice-wrapper");
-        switchContainer.append(switchButton);
-        switchContainer.append(detailedInfoDiv);
+        switchContainer.append(
+            switchButton,
+            detailedInfoDiv
+        );
 
         switchButton.onmouseover = function(){
             detailedInfoDiv.style.display = "block";
@@ -173,8 +184,10 @@ class PlayerSoul extends IndividualSoul {
         switchButton.classList.add("outlineDiv");
 
         const nameText = document.createTextNode(this.name);
-        switchButton.append(nameText);
-        switchButton.append(document.createElement("br"));
+        switchButton.append(
+            nameText,
+            document.createElement("br")
+        );
 
         return switchButton;
     }

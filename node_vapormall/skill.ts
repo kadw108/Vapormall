@@ -16,21 +16,22 @@ class Skill{
         const style_class = "skill-" + this.data.type;
         skillButton.classList.add(style_class);
 
-        const nameText = document.createTextNode(this.data.name);
-        skillButton.append(nameText);
-        skillButton.append(document.createElement("br"));
-
         const typeText = document.createElement("small");
         typeText.append(
             document.createTextNode(this.data.type + " ")
         );
-        skillButton.append(typeText);
 
         const ppText = document.createElement("small");
         ppText.append(
             document.createTextNode(this.pp + "/" + this.data.max_pp)
         );
-        skillButton.append(ppText);
+
+        skillButton.append(
+            document.createTextNode(this.data.name),
+            document.createElement("br"),
+            typeText,
+            ppText
+        );
 
         return skillButton;
     }

@@ -49,8 +49,10 @@ abstract class BattleSoul {
         const detailedInfoDiv = this.genDetailedInfo();
 
         const infoContainer = document.createElement("div");
-        infoContainer.append(infoDiv);
-        infoContainer.append(detailedInfoDiv);
+        infoContainer.append(
+            infoDiv,
+            detailedInfoDiv
+        );
 
         infoDiv.onmouseover = function(){
             detailedInfoDiv.style.display = "block";
@@ -66,17 +68,15 @@ abstract class BattleSoul {
 
     genInfoDiv() {
         const infoDiv = document.createElement("div");
-
         const nameText = document.createTextNode(this.soul.name);
-        infoDiv.append(nameText);
-        infoDiv.append(document.createElement("br"));
 
-        const levelText = document.createElement("small");
-        levelText.innerText = "Lv " + this.soul.level;
-        infoDiv.append(levelText);
-        infoDiv.append(document.createElement("br"));
-
-        infoDiv.append(this.hpText);
+        infoDiv.append(
+            nameText,
+            document.createElement("br"),
+            this.soul.getLevelText(),
+            document.createElement("br"),
+            this.hpText
+        );
 
         return infoDiv;
     }
@@ -116,10 +116,10 @@ abstract class BattleSoul {
                 document.createElement("br")
             );
 
-            statGroup.append(statModifiers);
             statGroup.append(
+                statModifiers,
                 this.soul.genStatText(this.modifiedStatDict())
-            )
+            );
         }
 
         return statGroup;
