@@ -13,7 +13,6 @@ class Battle {
 
     playerSouls: Array<FieldedPlayerSoul>;
     enemySouls: Array<EnemySoul>;
-    souls: Array<FieldedPlayerSoul | EnemySoul>;
     battleOver: boolean;
 
     renderer: Renderer;
@@ -29,7 +28,6 @@ class Battle {
         this.playerSouls = [new FieldedPlayerSoul(this.playerParty[0])];
         this.enemySouls = [new EnemySoul(this.enemyParty[0])];
 
-        this.souls = [...this.playerSouls, ...this.enemySouls];
         this.battleOver = false;
 
         this.renderer = new Renderer(this.createSkillClickHandler.bind(this), this.createSwitchClickHandler.bind(this));
@@ -49,12 +47,16 @@ class Battle {
         return "the opposing " + battleSoul.soul.name;
     }
 
+    allSouls() {
+        return [...this.playerSouls, ...this.enemySouls];
+    }
+
     passTurn() {
        function compareSpeed(soulAbsA: BattleSoul, soulAbsB: BattleSoul)  {
             return soulAbsA.calculateStat(CONSTANTS.STATS.SPEED) -
                 soulAbsB.calculateStat(CONSTANTS.STATS.SPEED);
        }
-       const speed_order = this.souls.sort(compareSpeed);
+       const speed_order = this.allSouls().sort(compareSpeed);
 
        for (let i = 0; i < speed_order.length; i++) {
             this.useSkill(speed_order[i]);
@@ -100,7 +102,7 @@ class Battle {
 
     selectEnemySkills() {
         for (const i of this.enemySouls) {
-            i.chooseMove(this.souls, this.playerSouls, this.enemySouls);
+            i.chooseMove(this.allSouls(), this.playerSouls, this.enemySouls);
         }
     }
 
@@ -119,7 +121,7 @@ class Battle {
                 playerSoul.selected_target = this.playerSouls;
                 break;
             case CONSTANTS.TARGETS.ALL:
-                playerSoul.selected_target = this.souls;
+                playerSoul.selected_target = this.allSouls();
                 break;
             case CONSTANTS.TARGETS.SELF:
                 playerSoul.selected_target = [playerSoul];
@@ -133,7 +135,7 @@ class Battle {
     useSkill(user: BattleSoul) {
         const skill = user.selected_skill;
         if (skill === null) {
-            console.error("Using null skill!");
+            console.log("Using null skill!");
             return;
         }
         if (skill.pp <= 0) {

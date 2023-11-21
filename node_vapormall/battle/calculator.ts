@@ -188,7 +188,7 @@ class Calculator {
             this.battle.messageTimer.endMessageBlock();
             this.battle.messageTimer.addMessage(Battle.getName(soul) + " was destroyed!");
 
-            this.battle.souls.filter((s) => {s.soul.name !== soul.soul.name});
+            this.battle.allSouls().filter((s) => {s.soul.name !== soul.soul.name});
             if (soul instanceof FieldedPlayerSoul) {
                 this.battle.playerSouls.splice(
                     this.battle.playerSouls.indexOf(soul as FieldedPlayerSoul), 1);

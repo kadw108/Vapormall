@@ -33,30 +33,6 @@ class Party {
         return infoDiv;
     }
 
-    fillPartyDiv() {
-        GameState.getPartySouls().forEach(playerSoul => {
-            const infoDiv = this.partySoulDiv(playerSoul);
-            const partyDiv = document.getElementById("party");
-            partyDiv?.append(infoDiv);
-
-            const detailedInfoDiv = this.detailedPartySoulDiv(playerSoul);
-            const topHalf = document.getElementById("topHalf");
-            topHalf?.append(detailedInfoDiv);
-
-            infoDiv.addEventListener("click", () => {
-                if (detailedInfoDiv.classList.contains("hidden")) {
-                    document.querySelectorAll(".detailedPartySoulDiv").forEach(div => {
-                        div.classList.add("hidden");
-                    })
-                    detailedInfoDiv.classList.remove("hidden");
-                }
-                else {
-                    detailedInfoDiv.classList.add("hidden");
-                }
-            });
-        });
-    }
-
     detailedPartySoulDiv(playerSoul: PlayerSoul) {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("menuPanel", "hidden", "absoluteAlign", "detailedPartySoulDiv");
@@ -104,6 +80,30 @@ class Party {
         );
 
         return infoDiv;
+    }
+
+    fillPartyDiv() {
+        GameState.getPartySouls().forEach(playerSoul => {
+            const infoDiv = this.partySoulDiv(playerSoul);
+            const partyDiv = document.getElementById("party");
+            partyDiv?.append(infoDiv);
+
+            const detailedInfoDiv = this.detailedPartySoulDiv(playerSoul);
+            const topHalf = document.getElementById("topHalf");
+            topHalf?.append(detailedInfoDiv);
+
+            infoDiv.addEventListener("click", () => {
+                if (detailedInfoDiv.classList.contains("hidden")) {
+                    document.querySelectorAll(".detailedPartySoulDiv").forEach(div => {
+                        div.classList.add("hidden");
+                    })
+                    detailedInfoDiv.classList.remove("hidden");
+                }
+                else {
+                    detailedInfoDiv.classList.add("hidden");
+                }
+            });
+        });
     }
 }
 

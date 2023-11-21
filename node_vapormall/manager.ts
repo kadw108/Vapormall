@@ -17,11 +17,8 @@ class Manager {
     }
 
     static menuButton(buttonId: string, menuId: string, menuName: string) {
-        console.log(menuName);
         const button = document.getElementById(buttonId);
-        console.log(button);
         const menu = document.getElementById(menuId);
-        console.log(menu);
 
         if (button === null) {
             console.error("menuButton running for null button! (id: " + buttonId + ")");
