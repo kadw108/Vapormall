@@ -13,7 +13,7 @@ class Calculator {
 
     applySkillEffects(user: BattleSoul, skill: Skill, target: BattleSoul) {
         this.battle.messageTimer.addMessage(
-            Battle.getName(user) + " used " + skill.data.name + "!"
+            user.renderer.getName() + " used " + skill.data.name + "!"
         );
 
         switch (skill.data.meta.category) {
@@ -31,7 +31,7 @@ class Calculator {
 
                     if (multiplier === 0) {
                         this.battle.messageTimer.addMessage(
-                            "It didn't affect " + Battle.getName(target) + "..."
+                            "It didn't affect " + target.renderer.getName() + "..."
                         );
                     }
                     else {
@@ -50,7 +50,7 @@ class Calculator {
                         }
 
                         this.battle.messageTimer.addMessage(
-                            Battle.getName(target) + " lost " + damage + " HP!"
+                            target.renderer.getName() + " lost " + damage + " HP!"
                         );
                         target.soul.changeHP(-damage);
                         this.checkFaint(target);
@@ -65,12 +65,12 @@ class Calculator {
 
                             if (drain > 0) {
                                 this.battle.messageTimer.addMessage(
-                                    Battle.getName(user) + " drained " + drain + " HP!"
+                                    user.renderer.getName() + " drained " + drain + " HP!"
                                 );
                             }
                             else if (drain < 0) {
                                 this.battle.messageTimer.addMessage(
-                                    Battle.getName(user) + " lost " + (-drain) + " HP from recoil!"
+                                    user.renderer.getName() + " lost " + (-drain) + " HP from recoil!"
                                 );
                             }
                             user.soul.changeHP(drain);
@@ -87,12 +87,12 @@ class Calculator {
                     }
                     else if (target.stat_changes[statChange.stat] === 6) {
                         this.battle.messageTimer.addMessage(
-                            Battle.getName(target) + "'s " + statChange.stat + " couldn't go any higher!"
+                            target.renderer.getName() + "'s " + statChange.stat + " couldn't go any higher!"
                         );
                     }
                     else if (target.stat_changes[statChange.stat] === -6) {
                         this.battle.messageTimer.addMessage(
-                            Battle.getName(target) + "'s " + statChange.stat + " couldn't go any lower!"
+                            target.renderer.getName() + "'s " + statChange.stat + " couldn't go any lower!"
                         );
                     }
                     else {
@@ -116,7 +116,7 @@ class Calculator {
                             target.renderer.updateStats();
                         });
                         this.battle.messageTimer.addMessage(
-                            Battle.getName(target) + "'s " + statChange.stat + changeDesc
+                            target.renderer.getName() + "'s " + statChange.stat + changeDesc
                         );
                     }
                 });
@@ -186,12 +186,13 @@ class Calculator {
         if (soul.soul.currentHP <= 0) { 
 
             this.battle.messageTimer.endMessageBlock();
-            this.battle.messageTimer.addMessage(Battle.getName(soul) + " was destroyed!");
+            this.battle.messageTimer.addMessage(soul.renderer.getName() + " was destroyed!");
 
-            this.battle.allSouls().filter((s) => {s.soul.name !== soul.soul.name});
+            this.battle.allSouls().filter((s) => {s === null || s.soul.name !== soul.soul.name});
             if (soul instanceof FieldedPlayerSoul) {
-                this.battle.playerSouls.splice(
-                    this.battle.playerSouls.indexOf(soul as FieldedPlayerSoul), 1);
+                this.battle.playerSoulDestroyed(
+                    this.battle.playerSouls.indexOf(soul as FieldedPlayerSoul)
+                );
             }
             else if (soul instanceof EnemySoul) {
                 this.battle.enemySouls.splice(

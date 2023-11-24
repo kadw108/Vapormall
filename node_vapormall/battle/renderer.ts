@@ -7,13 +7,19 @@ class Renderer {
 
     skillHandlerCreator: Function;
     switchHandlerCreator: Function;
+    switchFaintHandlerCreator: Function;
 
-    constructor(skillHandlerCreator: Function, switchHandlerCreator: Function) {
+    constructor(
+        skillHandlerCreator: Function,
+        switchHandlerCreator: Function,
+        switchFaintHandlerCreator: Function
+    ) {
         this.skillHandlerCreator = skillHandlerCreator;
         this.switchHandlerCreator = switchHandlerCreator;
+        this.switchFaintHandlerCreator = switchFaintHandlerCreator;
     }
 
-    renderSkills(playerSoul: FieldedPlayerSoul) {
+    private renderSkills(playerSoul: FieldedPlayerSoul) {
         const skillContainer = document.createElement("div");
         skillContainer.id = "skillContainer";
 
@@ -28,7 +34,7 @@ class Renderer {
         document.getElementById("bottomContent")?.append(skillContainer);
     }
 
-    makeSkillWrapper(playerSoul: FieldedPlayerSoul, skill: Skill, i: number) {
+    private makeSkillWrapper(playerSoul: FieldedPlayerSoul, skill: Skill, i: number) {
         const skillWrapper = skill.getSkillContainer();
         const skillButton = skillWrapper.getElementsByTagName("button")[0];
 
@@ -43,17 +49,7 @@ class Renderer {
         return skillWrapper;
     }
 
-    hideActions() {
-        const bottomContent = document.getElementById("bottomContent");
-        bottomContent!.innerHTML = "";
-    }
-
-    showActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul>) {
-        this.renderSkills(playerSoul);
-        this.renderSwitch(playerParty, playerSouls);
-    }
-
-    renderSwitch(playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul>) {
+    private renderSwitch(playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul | null>) {
         const switchContainer = document.createElement("div");
         switchContainer.id = "switchContainer";
 
@@ -68,13 +64,13 @@ class Renderer {
         document.getElementById("bottomContent")?.append(switchContainer);
     }
 
-    makeSwitchWrapper(playerSoul: PlayerSoul, switchIn: number, playerSouls: Array<FieldedPlayerSoul>) {
+    private makeSwitchWrapper(playerSoul: PlayerSoul, switchIn: number, playerSouls: Array<FieldedPlayerSoul | null>) {
         const switchContainer = RenderSoul.getSwitchContainer(playerSoul);
         const switchButton = switchContainer.getElementsByTagName("button")[0];
 
         let offField = true;
         playerSouls.forEach((s) => {
-            if (s.soul === playerSoul) {
+            if (s !== null && s.soul === playerSoul) {
                 offField = false;
             }
         })
@@ -89,6 +85,62 @@ class Renderer {
         }
 
         return switchContainer;
+    }
+
+    renderFaintSwitch(
+        faintedIndex: number,
+        playerParty: Array<PlayerSoul>,
+        playerSouls: Array<FieldedPlayerSoul | null>
+    ){
+        const switchContainer = document.createElement("div");
+        switchContainer.id = "switchContainer";
+
+        const prompt = document.createElement("p");
+        prompt.textContent = "PROCESS DESTROYED. MUST DEPLOY NEW PROCESS.";
+        switchContainer.append(prompt);
+
+        playerParty.forEach((playerSoul, i) => {
+            const switchWrapper = this.makeFaintSwitchWrapper(faintedIndex, playerSoul, i, playerSouls);
+            switchContainer?.append(switchWrapper);
+        });
+        document.getElementById("bottomContent")?.append(switchContainer);
+    }
+
+    private makeFaintSwitchWrapper(faintedIndex: number, playerSoul: PlayerSoul, switchIn: number, playerSouls: Array<FieldedPlayerSoul | null>) {
+        const switchContainer = RenderSoul.getSwitchContainer(playerSoul);
+        const switchButton = switchContainer.getElementsByTagName("button")[0];
+
+        let offField = true;
+        playerSouls.forEach((s) => {
+            if (s !== null && s.soul === playerSoul) {
+                offField = false;
+            }
+        })
+
+        if (playerSoul.currentHP > 0 && offField) {
+            switchButton.addEventListener("click",
+                this.switchFaintHandlerCreator(faintedIndex, switchIn),
+                false);
+        }
+        else {
+            switchButton.classList.add("noClick");
+        }
+
+        return switchContainer;
+    }
+
+    showActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul | null>) {
+        this.renderSkills(playerSoul);
+        this.renderSwitch(playerParty, playerSouls);
+    }
+
+    hideActions() {
+        const bottomContent = document.getElementById("bottomContent");
+        bottomContent!.innerHTML = "";
+    }
+
+    endBattle() {
+        document.getElementById("endScreen")!.classList.remove("hidden");
     }
 }
 

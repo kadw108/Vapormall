@@ -91,19 +91,27 @@ class EnemySoul extends BattleSoul {
     }
 
     chooseMove(
-        souls: Array<BattleSoul>,
-        playerSouls: Array<FieldedPlayerSoul>,
+        souls: Array<BattleSoul | null>,
+        playerSouls: Array<FieldedPlayerSoul | null>,
         enemySouls: Array<EnemySoul>
     ) {
 
-        const randomSkill = Math.floor(Math.random() * this.soul.skills.length);
+        // const randomSkill = Math.floor(Math.random() * this.soul.skills.length);
+        const randomSkill = 1;
         this.selected_skill = this.soul.skills[randomSkill];
 
         switch (this.selected_skill.data.target) {
             case CONSTANTS.TARGETS.SELECTED:
             case CONSTANTS.TARGETS.OPPOSING:
-                const randomTarget = Math.floor(Math.random() * playerSouls.length);
-                this.selected_target = [playerSouls[randomTarget]];
+                let randomTarget = Math.floor(Math.random() * playerSouls.length);
+                while (playerSouls[randomTarget] === null)  {
+                    randomTarget++;
+
+                    if (randomTarget > 500) {
+                        console.error("null player skill !!");
+                    }
+                }
+                this.selected_target = [playerSouls[randomTarget]!];
                 break;
 
             case CONSTANTS.TARGETS.ALLIED:

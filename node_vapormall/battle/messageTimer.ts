@@ -8,12 +8,12 @@ enum DURATIONS {
 class MessageTimer { 
     private static readonly ENDBLOCK_STRING: string = "ENDBLOCK";
 
-    messages: Array<string|Function>;
-    blocks: number;
-    timeouts: Array<NodeJS.Timeout>;
+    private messages: Array<string|Function>;
+    private blocks: number;
+    private timeouts: Array<NodeJS.Timeout>;
 
-    messageContainer: HTMLElement;
-    battleLog: HTMLElement;
+    private messageContainer: HTMLElement;
+    private battleLog: HTMLElement;
 
     constructor() {
         this.messages = [];
@@ -24,29 +24,6 @@ class MessageTimer {
 
         this.battleLog = document.getElementById("battleLog")!;
         this.battleLog.innerHTML = "<p>BATTLE LOG</p>";
-    }
-
-    addMessage(message: string|Function) {
-        this.messages.push(message);
-    }
-
-    endMessageBlock() {
-        this.messages.push(MessageTimer.ENDBLOCK_STRING);
-    }
-
-    displayMessages(turnCount: number) {
-        this.addTurnToLog(turnCount);
-
-        let startIndex = 0;
-        this.messages.forEach((message, i) => {
-            if (message === MessageTimer.ENDBLOCK_STRING) {
-               this.enqueueBlock(this.messages.slice(startIndex, i));
-               startIndex = i + 1;
-            }
-        });
-        this.enqueueBlock(this.messages.slice(startIndex, this.messages.length));
-
-        this.messages = [];
     }
 
     private enqueueBlock(messages: Array<string|Function>) {
@@ -78,14 +55,6 @@ class MessageTimer {
             document.createElement("br")
         );
         return html;
-    }
-
-    addTurnToLog(turnCount: number) {
-        const html = document.createElement("h4");
-        html.appendChild(
-            document.createTextNode("TURN " + turnCount)
-        );
-        this.battleLog.append(html);
     }
 
     private displayBlock(messages: Array<string|Function>) {
@@ -141,19 +110,56 @@ class MessageTimer {
         }
     }
 
-    endBattle() {
-        document.getElementById("endScreen")!.classList.remove("hidden");
+    addMessage(message: string|Function) {
+        this.messages.push(message);
+    }
 
-        this.clearAll();
-        this.blocks = 0;
+    endMessageBlock() {
+        this.messages.push(MessageTimer.ENDBLOCK_STRING);
+    }
+
+    removeLastMessage() {
+        console.log(this.messages);
+        console.log(this.timeouts);
+        console.log(this.messages.length, this.timeouts.length);
+        // clearTimeout(this.timeouts.pop());
+        this.messages.pop();
+    }
+
+    displayMessages(turnCount: number) {
+        this.addTurnToLog(turnCount);
+
+        let startIndex = 0;
+        this.messages.forEach((message, i) => {
+            if (message === MessageTimer.ENDBLOCK_STRING) {
+               this.enqueueBlock(this.messages.slice(startIndex, i));
+               startIndex = i + 1;
+            }
+        });
+        this.enqueueBlock(this.messages.slice(startIndex, this.messages.length));
+
         this.messages = [];
-        this.timeouts = [];
+    }
+
+    addTurnToLog(turnCount: number) {
+        const html = document.createElement("h4");
+        html.appendChild(
+            document.createTextNode("TURN " + turnCount)
+        );
+        this.battleLog.append(html);
     }
 
     clearAll() {
         this.timeouts.forEach((t) => {
             clearTimeout(t);
         });
+        this.timeouts = [];
+        this.blocks = 0;
+        this.messages = [];
+    }
+
+    printMessages() {
+        console.log(this.messages);
     }
 }
 

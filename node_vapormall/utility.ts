@@ -1,4 +1,4 @@
-export function capitalizeFirstLetter(string: string) {
+export function capitalizeFirstLetter(string: string): string {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -14,14 +14,14 @@ export function randItem(array: Array<any>): any {
     return array[randIndex(array)];
 }
 
-export function capitalizeAllWords(string: string) {
+export function capitalizeAllWords(string: string): string {
     return string
         .split(" ")
         .map((x) => {return capitalizeFirstLetter(x)})
         .join(" ");
 }
 
-export function randomInterval(length: number) {
+export function randomInterval(length: number): Array<number> {
     const start = Math.floor(Math.random() * length);
     const array = [];
 

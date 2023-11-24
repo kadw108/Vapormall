@@ -11,13 +11,16 @@ class Battle {
     playerParty: Array<PlayerSoul>;
     enemyParty: Array<IndividualSoul>;
 
-    playerSouls: Array<FieldedPlayerSoul>;
+    playerSouls: Array<FieldedPlayerSoul | null>;
     enemySouls: Array<EnemySoul>;
     battleOver: boolean;
 
     renderer: Renderer;
     calculator: Calculator;
     messageTimer: MessageTimer;
+
+    // fainted soul, index of soul in this.playerSouls (i.e. order of soul in fielded party)
+    playersFaintedThisTurn: Array<[FieldedPlayerSoul, number]>;
 
     turns: number;
 
@@ -30,45 +33,83 @@ class Battle {
 
         this.battleOver = false;
 
-        this.renderer = new Renderer(this.createSkillClickHandler.bind(this), this.createSwitchClickHandler.bind(this));
+        this.renderer = new Renderer(
+            this.createSkillClickHandler.bind(this),
+            this.createSwitchClickHandler.bind(this),
+            this.createSwitchFaintClickHandler.bind(this));
         const playerSoul = this.playerSouls[0];
-        this.renderer.renderSkills(playerSoul);
-        this.renderer.renderSwitch(this.playerParty, this.playerSouls);
+        this.renderer.showActions(playerSoul!, this.playerParty, this.playerSouls);
         this.calculator = new Calculator(this);
         this.messageTimer = new MessageTimer();
+
+        this.playersFaintedThisTurn = [];
 
         this.turns = 0;
     }
 
-    static getName(battleSoul: BattleSoul): string {
-        if (battleSoul instanceof FieldedPlayerSoul) {
-            return "your " + battleSoul.soul.name;
+    private selectEnemySkills() {
+        for (const i of this.enemySouls) {
+            i.chooseMove(this.allSouls(), this.playerSouls, this.enemySouls);
         }
-        return "the opposing " + battleSoul.soul.name;
     }
 
-    allSouls() {
-        return [...this.playerSouls, ...this.enemySouls];
+    private selectPlayerTarget(playerSoul: FieldedPlayerSoul) {
+        if (playerSoul.selected_skill === null) {
+            console.error("SELECTING TARGET FOR NULL PLAYER SKILL");
+            return;
+        }
+
+
+
+        switch (playerSoul.selected_skill.data.target)  {
+            case CONSTANTS.TARGETS.SELECTED:
+            case CONSTANTS.TARGETS.OPPOSING:
+                const j = 0;
+                playerSoul.selected_target = [this.enemySouls[j]];
+                break;
+            case CONSTANTS.TARGETS.ALLIED:
+                playerSoul.selected_target = this.playerSouls.filter((i) => i !== null) as BattleSoul[];
+                break;
+            case CONSTANTS.TARGETS.ALL:
+                playerSoul.selected_target = this.allSouls().filter((i) => i !== null) as BattleSoul[];
+                break;
+            case CONSTANTS.TARGETS.SELF:
+                playerSoul.selected_target = [playerSoul];
+                break;
+            case CONSTANTS.TARGETS.NONE:
+                playerSoul.selected_target = [];
+                break;
+            }
     }
 
-    passTurn() {
-       function compareSpeed(soulAbsA: BattleSoul, soulAbsB: BattleSoul)  {
+    private passTurn() {
+       function compareSpeed(soulAbsA: BattleSoul | null, soulAbsB: BattleSoul | null)  {
+            if (soulAbsA === null || soulAbsB === null) {
+                console.error("comparing speed with null souls");
+                return 1;
+            }
             return soulAbsA.calculateStat(CONSTANTS.STATS.SPEED) -
                 soulAbsB.calculateStat(CONSTANTS.STATS.SPEED);
        }
        const speed_order = this.allSouls().sort(compareSpeed);
 
        for (let i = 0; i < speed_order.length; i++) {
-            this.useSkill(speed_order[i]);
+            if (speed_order[i] !== null) {
+                this.useSkill(speed_order[i]!);
+            }
        }
 
        this.turns++;
     }
 
-    checkBattleOver() {
-        if (this.playerSouls.length === 0 || this.enemySouls.length === 0) {
+    allSouls() {
+        return [...this.playerSouls, ...this.enemySouls];
+    }
 
-            if (this.playerSouls.length === 0) {
+    checkBattleOver() {
+        if (this.playerParty.length === 0 || this.enemyParty.length === 0) {
+
+            if (this.playerParty.length === 0) {
                 // TODO
             }
             else {
@@ -87,7 +128,8 @@ class Battle {
 
             this.messageTimer.addMessage(
                 () => {
-                    this.messageTimer.endBattle();
+                    this.messageTimer.clearAll();
+                    this.renderer.endBattle();
                 }
             );
         }
@@ -98,38 +140,6 @@ class Battle {
         GameState.currentFloor.currentRoom().info.encounter = [];
         GameState.currentEnemy = null;
         const result = story.showSnippet("Room", false);
-    }
-
-    selectEnemySkills() {
-        for (const i of this.enemySouls) {
-            i.chooseMove(this.allSouls(), this.playerSouls, this.enemySouls);
-        }
-    }
-
-    selectPlayerTarget(playerSoul: FieldedPlayerSoul) {
-        if (playerSoul.selected_skill === null) {
-            console.error("SELECTING TARGET FOR NULL PLAYER SKILL");
-            return;
-        }
-        switch (playerSoul.selected_skill.data.target)  {
-            case CONSTANTS.TARGETS.SELECTED:
-            case CONSTANTS.TARGETS.OPPOSING:
-                const j = 0;
-                playerSoul.selected_target = [this.enemySouls[j]];
-                break;
-            case CONSTANTS.TARGETS.ALLIED:
-                playerSoul.selected_target = this.playerSouls;
-                break;
-            case CONSTANTS.TARGETS.ALL:
-                playerSoul.selected_target = this.allSouls();
-                break;
-            case CONSTANTS.TARGETS.SELF:
-                playerSoul.selected_target = [playerSoul];
-                break;
-            case CONSTANTS.TARGETS.NONE:
-                playerSoul.selected_target = [];
-                break;
-            }
     }
 
     useSkill(user: BattleSoul) {
@@ -169,12 +179,39 @@ class Battle {
         const leaving = this.playerSouls[switchOut];
         const entering = new FieldedPlayerSoul(this.playerParty[switchIn]);
 
+        if (leaving === null) {
+            console.error("switching out null soul!");
+            return entering;
+        }
+
         leaving.switchOut();
         this.playerSouls[switchOut] = entering;
-        this.messageTimer.addMessage("Switching out " + Battle.getName(leaving) + " for " + entering.soul.name + ".");
+        this.messageTimer.addMessage("Switching out " + leaving.renderer.getName() + " for " + entering.soul.name + ".");
         this.messageTimer.endMessageBlock();
 
         return entering;
+    }
+
+    switchSoulFainted(fainted: number, switchIn: number): FieldedPlayerSoul {
+        const entering = new FieldedPlayerSoul(this.playerParty[switchIn]);
+
+        const faintedSoul: FieldedPlayerSoul = this.playersFaintedThisTurn[fainted][0];
+        const faintedIndex: number = this.playersFaintedThisTurn[fainted][1];
+
+        faintedSoul.switchOut();
+        this.playerSouls[faintedIndex] = entering;
+
+        return entering;
+    }
+
+    playerSoulDestroyed(destroyedSoul: number) {
+        if (this.playerSouls[destroyedSoul] === null) {
+            console.error("fainted soul is already fainted");
+        }
+        this.playersFaintedThisTurn.push([this.playerSouls[destroyedSoul]!, destroyedSoul]);
+
+        this.playerSouls[destroyedSoul] = null;
+        // todo remove from party
     }
 
     createSkillClickHandler(playerSoul: FieldedPlayerSoul, whichSkill: number) {
@@ -189,11 +226,13 @@ class Battle {
             this.selectEnemySkills();
             this.passTurn();
             this.messageTimer.addMessage(
-                () => {
-                    this.renderer.showActions(playerSoul, this.playerParty, this.playerSouls);
-                    playerSoul.selected_skill = null;
-                }
+                this.nextTurnChoices(playerSoul)
             );
+            this.messageTimer.addMessage(
+                    () => {
+                playerSoul.selected_skill = null;
+                }
+            )
             this.messageTimer.displayMessages(this.turns);
 
         }
@@ -210,12 +249,40 @@ class Battle {
             this.selectEnemySkills();
             this.passTurn();
             this.messageTimer.addMessage(
-                () => {
-                    this.renderer.showActions(switchInFieldedPlayerSoul, this.playerParty, this.playerSouls);
-                }
+                this.nextTurnChoices(switchInFieldedPlayerSoul)
+            );
+            console.log("v2");
+            this.messageTimer.displayMessages(this.turns);
+        }
+    }
+
+    createSwitchFaintClickHandler(fainted: number, switchIn: number) {
+        return () => {
+            this.renderer.hideActions();
+
+            const switchInFieldedPlayerSoul = this.switchSoulFainted(fainted, switchIn);
+            this.messageTimer.addMessage(
+                this.nextTurnChoices(switchInFieldedPlayerSoul)
             );
             this.messageTimer.displayMessages(this.turns);
         }
+    }
+
+    nextTurnChoices(nextTurnPlayer: FieldedPlayerSoul) {
+        for (let i = 0; i < this.playersFaintedThisTurn.length; i++) {
+            if (this.playersFaintedThisTurn[i][0] === nextTurnPlayer) {
+                return () => {
+                    this.renderer.renderFaintSwitch(
+                        this.playersFaintedThisTurn[i][1],
+                        this.playerParty,
+                        this.playerSouls);
+                };
+            }
+        }
+
+        return () => {
+            this.renderer.showActions(nextTurnPlayer, this.playerParty, this.playerSouls);
+        };
     }
 }
 

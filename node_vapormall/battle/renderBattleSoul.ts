@@ -1,6 +1,6 @@
 import { CONSTANTS } from "../data/constants";
 import { RenderSoul } from "../soul/renderSoul";
-import { BattleSoul } from "./battleSoul";
+import { BattleSoul, FieldedPlayerSoul } from "./battleSoul";
 
 class RenderBattleSoul {
 
@@ -24,6 +24,13 @@ class RenderBattleSoul {
 
         this.infoContainer = this.genInfoContainer();
         document.getElementById("topHalf")?.append(this.infoContainer);
+    }
+
+    getName(): string {
+        if (this.battleSoul instanceof FieldedPlayerSoul) {
+            return "your " + this.battleSoul.soul.name;
+        }
+        return "the opposing " + this.battleSoul.soul.name;
     }
 
     getHPString() {
