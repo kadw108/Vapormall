@@ -1,4 +1,6 @@
 import { FieldedPlayerSoul } from "./battleSoul";
+import { FaintData } from "./battle";
+
 import { PlayerSoul } from "../soul/individualSoul";
 import { Skill } from "../soul/skill";
 import { RenderSoul } from "../soul/renderSoul";
@@ -19,21 +21,6 @@ class Renderer {
         this.switchFaintHandlerCreator = switchFaintHandlerCreator;
     }
 
-    private renderSkills(playerSoul: FieldedPlayerSoul) {
-        const skillContainer = document.createElement("div");
-        skillContainer.id = "skillContainer";
-
-        const prompt = document.createElement("p");
-        prompt.textContent = "AGGRESSION PROTOCOL INITIATED.";
-        skillContainer.append(prompt);
-
-        playerSoul.soul.skills.forEach((skill, i) => {
-            const skillWrapper = this.makeSkillWrapper(playerSoul, skill, i);
-            skillContainer?.append(skillWrapper);
-        });
-        document.getElementById("bottomContent")?.append(skillContainer);
-    }
-
     private makeSkillWrapper(playerSoul: FieldedPlayerSoul, skill: Skill, i: number) {
         const skillWrapper = skill.getSkillContainer();
         const skillButton = skillWrapper.getElementsByTagName("button")[0];
@@ -49,22 +36,39 @@ class Renderer {
         return skillWrapper;
     }
 
-    private renderSwitch(playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul | null>) {
+    private renderSkills(playerSoul: FieldedPlayerSoul) {
+        const skillContainer = document.createElement("div");
+        skillContainer.id = "skillContainer";
+
+        const prompt = document.createElement("p");
+        prompt.textContent = "AGGRESSION PROTOCOL INITIATED.";
+        skillContainer.append(prompt);
+
+        playerSoul.soul.skills.forEach((skill, i) => {
+            const skillWrapper = this.makeSkillWrapper(playerSoul, skill, i);
+            skillContainer?.append(skillWrapper);
+        });
+        document.getElementById("bottomContent")?.append(skillContainer);
+    }
+
+    private makeSwitchContainer(): [HTMLDivElement, HTMLParagraphElement] {
         const switchContainer = document.createElement("div");
         switchContainer.id = "switchContainer";
 
         const prompt = document.createElement("p");
-        prompt.textContent = "SWITCH ACTIVE PROCESS?";
         switchContainer.append(prompt);
 
-        playerParty.forEach((playerSoul, i) => {
-            const switchWrapper = this.makeSwitchWrapper(playerSoul, i, playerSouls);
-            switchContainer?.append(switchWrapper);
-        });
         document.getElementById("bottomContent")?.append(switchContainer);
+
+        return [switchContainer, prompt];
     }
 
-    private makeSwitchWrapper(playerSoul: PlayerSoul, switchIn: number, playerSouls: Array<FieldedPlayerSoul | null>) {
+    private makeSwitchWrapper(
+        switchOut: number | FaintData,
+        playerSoul: PlayerSoul,
+        switchIn: number,
+        playerSouls: Array<FieldedPlayerSoul | null>,
+    ){
         const switchContainer = RenderSoul.getSwitchContainer(playerSoul);
         const switchButton = switchContainer.getElementsByTagName("button")[0];
 
@@ -76,9 +80,16 @@ class Renderer {
         })
 
         if (playerSoul.currentHP > 0 && offField) {
-            switchButton.addEventListener("click",
-                this.switchHandlerCreator(0, switchIn),
-                false);
+            if (typeof switchOut === "number") {
+                switchButton.addEventListener("click",
+                    this.switchHandlerCreator(switchOut, switchIn),
+                    false);
+            }
+            else {
+                switchButton.addEventListener("click",
+                    this.switchFaintHandlerCreator(switchOut, switchIn),
+                    false);
+            }
         }
         else {
             switchButton.classList.add("noClick");
@@ -87,46 +98,33 @@ class Renderer {
         return switchContainer;
     }
 
-    renderFaintSwitch(
-        faintedIndex: number,
+    private renderSwitch(
         playerParty: Array<PlayerSoul>,
         playerSouls: Array<FieldedPlayerSoul | null>
     ){
-        const switchContainer = document.createElement("div");
-        switchContainer.id = "switchContainer";
+        const switchContent = this.makeSwitchContainer();
 
-        const prompt = document.createElement("p");
-        prompt.textContent = "PROCESS DESTROYED. MUST DEPLOY NEW PROCESS.";
-        switchContainer.append(prompt);
+        switchContent[1].textContent = "SWITCH ACTIVE PROCESS?";
 
         playerParty.forEach((playerSoul, i) => {
-            const switchWrapper = this.makeFaintSwitchWrapper(faintedIndex, playerSoul, i, playerSouls);
-            switchContainer?.append(switchWrapper);
+            const switchWrapper = this.makeSwitchWrapper(0, playerSoul, i, playerSouls);
+            switchContent[0].append(switchWrapper);
         });
-        document.getElementById("bottomContent")?.append(switchContainer);
     }
 
-    private makeFaintSwitchWrapper(faintedIndex: number, playerSoul: PlayerSoul, switchIn: number, playerSouls: Array<FieldedPlayerSoul | null>) {
-        const switchContainer = RenderSoul.getSwitchContainer(playerSoul);
-        const switchButton = switchContainer.getElementsByTagName("button")[0];
+    renderFaintSwitch(
+        faintInfo: FaintData,
+        playerParty: Array<PlayerSoul>,
+        playerSouls: Array<FieldedPlayerSoul | null>
+    ){
+        const switchContent = this.makeSwitchContainer();
 
-        let offField = true;
-        playerSouls.forEach((s) => {
-            if (s !== null && s.soul === playerSoul) {
-                offField = false;
-            }
-        })
+        switchContent[1].textContent = "PROCESS DESTROYED. MUST DEPLOY NEW PROCESS.";
 
-        if (playerSoul.currentHP > 0 && offField) {
-            switchButton.addEventListener("click",
-                this.switchFaintHandlerCreator(faintedIndex, switchIn),
-                false);
-        }
-        else {
-            switchButton.classList.add("noClick");
-        }
-
-        return switchContainer;
+        playerParty.forEach((playerSoul, i) => {
+            const switchWrapper = this.makeSwitchWrapper(faintInfo, playerSoul, i, playerSouls);
+            switchContent[0].append(switchWrapper);
+        });
     }
 
     showActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul | null>) {

@@ -72,7 +72,7 @@ abstract class BattleSoul {
         return Math.max(Math.floor(base * modifier), 1);
     }
 
-    switchOut() {
+    removeUI() {
         this.renderer.infoContainer.remove();
     }
 }

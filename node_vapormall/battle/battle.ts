@@ -7,9 +7,14 @@ import { MessageTimer } from "./messageTimer";
 import { Calculator } from "./calculator";
 import { GameState } from "../gameState";
 
+interface FaintData {
+  soul: FieldedPlayerSoul;
+  playerSoulsIndex: number;
+}
+
 class Battle {
-    playerParty: Array<PlayerSoul>;
-    enemyParty: Array<IndividualSoul>;
+    readonly playerParty: Array<PlayerSoul>;
+    readonly enemyParty: Array<IndividualSoul>;
 
     playerSouls: Array<FieldedPlayerSoul | null>;
     enemySouls: Array<EnemySoul>;
@@ -19,8 +24,7 @@ class Battle {
     calculator: Calculator;
     messageTimer: MessageTimer;
 
-    // fainted soul, index of soul in this.playerSouls (i.e. order of soul in fielded party)
-    playersFaintedThisTurn: Array<[FieldedPlayerSoul, number]>;
+    playersFaintedThisTurn: Array<FaintData>;
 
     turns: number;
 
@@ -58,8 +62,6 @@ class Battle {
             console.error("SELECTING TARGET FOR NULL PLAYER SKILL");
             return;
         }
-
-
 
         switch (playerSoul.selected_skill.data.target)  {
             case CONSTANTS.TARGETS.SELECTED:
@@ -102,14 +104,24 @@ class Battle {
        this.turns++;
     }
 
+    private partyDefeated(party: Array<IndividualSoul>): boolean {
+        for (let i = 0; i < party.length; i++) {
+            if (party[i].currentHP > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     allSouls() {
         return [...this.playerSouls, ...this.enemySouls];
     }
 
     checkBattleOver() {
-        if (this.playerParty.length === 0 || this.enemyParty.length === 0) {
+        const playerDefeat = this.partyDefeated(this.playerParty);
+        if (playerDefeat || this.partyDefeated(this.enemyParty)) {
 
-            if (this.playerParty.length === 0) {
+            if (playerDefeat) {
                 // TODO
             }
             else {
@@ -184,7 +196,7 @@ class Battle {
             return entering;
         }
 
-        leaving.switchOut();
+        leaving.removeUI();
         this.playerSouls[switchOut] = entering;
         this.messageTimer.addMessage("Switching out " + leaving.renderer.getName() + " for " + entering.soul.name + ".");
         this.messageTimer.endMessageBlock();
@@ -192,14 +204,11 @@ class Battle {
         return entering;
     }
 
-    switchSoulFainted(fainted: number, switchIn: number): FieldedPlayerSoul {
+    switchSoulFainted(faint: FaintData, switchIn: number): FieldedPlayerSoul {
         const entering = new FieldedPlayerSoul(this.playerParty[switchIn]);
 
-        const faintedSoul: FieldedPlayerSoul = this.playersFaintedThisTurn[fainted][0];
-        const faintedIndex: number = this.playersFaintedThisTurn[fainted][1];
-
-        faintedSoul.switchOut();
-        this.playerSouls[faintedIndex] = entering;
+        faint.soul.removeUI();
+        this.playerSouls[faint.playerSoulsIndex] = entering;
 
         return entering;
     }
@@ -208,10 +217,10 @@ class Battle {
         if (this.playerSouls[destroyedSoul] === null) {
             console.error("fainted soul is already fainted");
         }
-        this.playersFaintedThisTurn.push([this.playerSouls[destroyedSoul]!, destroyedSoul]);
+        this.playersFaintedThisTurn.push(
+            {soul: this.playerSouls[destroyedSoul]!, playerSoulsIndex: destroyedSoul});
 
         this.playerSouls[destroyedSoul] = null;
-        // todo remove from party
     }
 
     createSkillClickHandler(playerSoul: FieldedPlayerSoul, whichSkill: number) {
@@ -229,8 +238,8 @@ class Battle {
                 this.nextTurnChoices(playerSoul)
             );
             this.messageTimer.addMessage(
-                    () => {
-                playerSoul.selected_skill = null;
+                () => {
+                    playerSoul.selected_skill = null;
                 }
             )
             this.messageTimer.displayMessages(this.turns);
@@ -251,16 +260,15 @@ class Battle {
             this.messageTimer.addMessage(
                 this.nextTurnChoices(switchInFieldedPlayerSoul)
             );
-            console.log("v2");
             this.messageTimer.displayMessages(this.turns);
         }
     }
 
-    createSwitchFaintClickHandler(fainted: number, switchIn: number) {
+    createSwitchFaintClickHandler(faint: FaintData, switchIn: number) {
         return () => {
             this.renderer.hideActions();
 
-            const switchInFieldedPlayerSoul = this.switchSoulFainted(fainted, switchIn);
+            const switchInFieldedPlayerSoul = this.switchSoulFainted(faint, switchIn);
             this.messageTimer.addMessage(
                 this.nextTurnChoices(switchInFieldedPlayerSoul)
             );
@@ -270,10 +278,10 @@ class Battle {
 
     nextTurnChoices(nextTurnPlayer: FieldedPlayerSoul) {
         for (let i = 0; i < this.playersFaintedThisTurn.length; i++) {
-            if (this.playersFaintedThisTurn[i][0] === nextTurnPlayer) {
+            if (this.playersFaintedThisTurn[i].soul === nextTurnPlayer) {
                 return () => {
                     this.renderer.renderFaintSwitch(
-                        this.playersFaintedThisTurn[i][1],
+                        this.playersFaintedThisTurn[i],
                         this.playerParty,
                         this.playerSouls);
                 };
@@ -286,4 +294,7 @@ class Battle {
     }
 }
 
-export {Battle};
+export {
+    Battle,
+    FaintData
+};

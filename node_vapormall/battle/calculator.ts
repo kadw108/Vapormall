@@ -3,6 +3,7 @@ import {Skill} from "../soul/skill";
 import {StatChange} from "../data/skills";
 import {CONSTANTS} from "../data/constants";
 import {BattleSoul, FieldedPlayerSoul, EnemySoul} from "./battleSoul";
+import { IndividualSoul } from "../soul/individualSoul";
 
 class Calculator {
     battle: Battle;
@@ -35,7 +36,9 @@ class Calculator {
                         );
                     }
                     else {
-                        damage = Math.ceil(damage * multiplier);
+                        damage = this.capDamageToHP(
+                            Math.ceil(damage * multiplier),
+                            target.soul);
 
                         this.battle.messageTimer.addMessage(() => {
                             target.renderer.displayHP -= damage;
@@ -56,7 +59,10 @@ class Calculator {
                         this.checkFaint(target);
 
                         if (skill.data.meta.drain !== 0) {
-                            const drain = Math.floor(damage * (skill.data.meta.drain/100));
+                            const drain = this.capDamageToHP(
+                                Math.floor(damage * (skill.data.meta.drain/100)),
+                                user.soul
+                            );
 
                             this.battle.messageTimer.addMessage(() => {
                                 user.renderer.displayHP += drain;
@@ -126,7 +132,7 @@ class Calculator {
         this.battle.messageTimer.endMessageBlock();
     }
 
-    damageCalc(user: BattleSoul, skill: Skill, target: BattleSoul, isGlitch: boolean) {
+    damageCalc(user: BattleSoul, skill: Skill, target: BattleSoul, isGlitch: boolean): number {
         if (isGlitch) {
             const damage_num = user.calculateStat(CONSTANTS.STATS.GLITCHATTACK) * skill.data.power!;
             const damage = Math.ceil(damage_num / target.calculateStat(CONSTANTS.STATS.GLITCHDEFENSE));
@@ -138,7 +144,14 @@ class Calculator {
         return damage;
     }
 
-    typeMultiplier(attackType: CONSTANTS.TYPES, defendType: CONSTANTS.TYPES) {
+    capDamageToHP(damage: number, target: IndividualSoul): number {
+        if (target.currentHP - damage < 0) {
+            return target.currentHP;
+        }
+        return damage;
+    }
+
+    typeMultiplier(attackType: CONSTANTS.TYPES, defendType: CONSTANTS.TYPES): number {
         switch (attackType) {
             case CONSTANTS.TYPES.TYPELESS:
                 if (defendType === CONSTANTS.TYPES.ERROR) {
@@ -182,7 +195,7 @@ class Calculator {
         return 1;
     }
 
-    checkFaint(soul: BattleSoul) {
+    checkFaint(soul: BattleSoul): void {
         if (soul.soul.currentHP <= 0) { 
 
             this.battle.messageTimer.endMessageBlock();
