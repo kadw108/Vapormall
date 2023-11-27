@@ -11,7 +11,7 @@ import {Manager} from "./manager";
 
 import {MallMap} from "./map/mallmap";
 
-import {Party} from "./menu/party";
+import {PartyMenu} from "./menu/party";
 
 export {
   CONSTANTS,
@@ -24,5 +24,5 @@ export {
   GameState,
   Manager,
   MallMap,
-  Party
+  PartyMenu
 }

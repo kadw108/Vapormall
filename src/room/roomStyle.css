@@ -11,16 +11,6 @@
     z-index: 2;
 }
 
-#menuButtons {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    font-size: 85%;
-
-    display: flex;
-    gap: 10px;
-}
-
 /* transparent black bg with solid black border */
 .blackBg2 {
     background-color: rgba(0, 0, 0, 0.6);

@@ -4,7 +4,7 @@ import { CONSTANTS } from "../data/constants";
 import { Manager } from "../manager";
 import { RenderSoul } from "../soul/renderSoul";
 
-class Party {
+class PartyMenu {
     constructor() {
         this.fillPartyDiv();
 
@@ -109,5 +109,5 @@ class Party {
 }
 
 export {
-    Party
+    PartyMenu as PartyMenu
 };

@@ -1,4 +1,4 @@
-<snippet name="Room" styles="./room/roomStyle.css; ../meta/styles/partyStyle.css">
+<snippet name="Loss" styles="./meta/styles/partyStyle.css">
 
 <div id="contents">
     <div id="bg"></div>
@@ -7,19 +7,18 @@
 
         <div id="screenContents" class="absoluteAlign">
             <div id="topHalf" class="absoluteAlign">
-                <div id="roomName" class="blackBg2"></div>
+                <div id="messageContainer"></div>
             </div>
             <div id="bottomhalf" class="absoluteAlign blackBg">
-                <div id="bottomContent" class="blackBg2">
+                <div id="bottomContent">
+                    <p>YOU HAVE LOST</p>
+
+                    <p>The digital remnants of your soul are garbage collected and cleansed from memory.</p>
                 </div>
 
-                <div id="inventory" class="hidden menuPanel absoluteAlign"></div>
-                <div id="map" class="hidden menuPanel absoluteAlign"></div>
                 <div id="party" class="hidden menuPanel absoluteAlign"></div>
 
                 <div id="menuButtons" class="blackBg2">
-                    <button type="button" class="menuButton" id="inventoryButton">Inventory</button>
-                    <button type="button" class="menuButton" id="mapButton">Map</button>
                     <button type="button" class="menuButton" id="partyButton">Party</button>
                 </div>
             </div>
@@ -28,16 +27,11 @@
 </div>
 
 <%
+
 $(function () {
     const ref = window.vapormall;
-
-    ref.Manager.menuButton("inventoryButton", "inventory", "Inventory");
-    ref.Manager.menuButton("mapButton", "map", "Map");
-
     const party = new ref.PartyMenu();
-
-    ref.GameState.currentFloor.renderRoom();
 });
-%>
 
+%>
 </snippet>

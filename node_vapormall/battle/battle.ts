@@ -104,7 +104,7 @@ class Battle {
        this.turns++;
     }
 
-    private partyDefeated(party: Array<IndividualSoul>): boolean {
+    private checkPartyDefeated(party: Array<IndividualSoul>): boolean {
         for (let i = 0; i < party.length; i++) {
             if (party[i].currentHP > 0) {
                 return false;
@@ -118,11 +118,16 @@ class Battle {
     }
 
     checkBattleOver() {
-        const playerDefeat = this.partyDefeated(this.playerParty);
-        if (playerDefeat || this.partyDefeated(this.enemyParty)) {
+        const playerDefeat = this.checkPartyDefeated(this.playerParty);
+        if (playerDefeat || this.checkPartyDefeated(this.enemyParty)) {
 
             if (playerDefeat) {
-                // TODO
+                this.messageTimer.addMessage(
+                    () => {
+                        this.messageTimer.clearAll();
+                        story.showSnippet("Loss", false);
+                    }
+                );
             }
             else {
                const nextButton = document.getElementById("next");
