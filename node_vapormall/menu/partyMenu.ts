@@ -84,7 +84,7 @@ class PartyMenu {
     }
 
     fillPartyDiv() {
-        GameState.getPartySouls().forEach(playerSoul => {
+        GameState.partySouls.forEach(playerSoul => {
             const infoDiv = this.partySoulDiv(playerSoul);
             const partyDiv = document.getElementById("party");
             partyDiv?.append(infoDiv);
@@ -109,5 +109,5 @@ class PartyMenu {
 }
 
 export {
-    PartyMenu as PartyMenu
+    PartyMenu
 };

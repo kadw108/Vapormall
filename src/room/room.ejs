@@ -1,4 +1,4 @@
-<snippet name="Room" styles="./room/roomStyle.css; ../meta/styles/partyStyle.css">
+<snippet name="Room" styles="./room/roomStyle.css; ../meta/styles/partyStyle.css; ../meta/styles/inventoryStyle.css">
 
 <div id="contents">
     <div id="bg"></div>
@@ -31,10 +31,10 @@
 $(function () {
     const ref = window.vapormall;
 
-    ref.Manager.menuButton("inventoryButton", "inventory", "Inventory");
     ref.Manager.menuButton("mapButton", "map", "Map");
 
     const party = new ref.PartyMenu();
+    const inventory = new ref.InventoryMenu();
 
     ref.GameState.currentFloor.renderRoom();
 });

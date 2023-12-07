@@ -3,7 +3,7 @@ import {Battle} from "./battle/battle";
 
 class Manager {
     static startBattle(): Battle|null {
-        const players = GameState.getPartySouls();
+        const players = GameState.partySouls;
         const enemy1 = GameState.currentEnemy;
 
         if (enemy1 === null) {
