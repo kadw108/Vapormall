@@ -29,6 +29,9 @@ class Manager {
             return;
         }
 
+        if (button.getAttribute("listener-added") === "true") {
+            return;
+        }
         button.addEventListener("click",
             () => {
                 if (button.innerText === menuName) {
@@ -56,6 +59,7 @@ class Manager {
                 }
             }
         );
+        button.setAttribute("listener-added", "true");
     }
 }
 
