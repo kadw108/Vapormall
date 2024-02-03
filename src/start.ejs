@@ -21,17 +21,20 @@ $(function () {
         const ref = window.vapormall;
         ref.GameState.generateFloor();
 
-        /*
         const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
         player1.changeName("cool dude");
         const player1_real = ref.PlayerSoul.createPlayerSoul(player1);
         ref.GameState.addSoul(player1_real);
-        */
 
         const player2 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
         player2.changeName("newbie");
         const player2_real = ref.PlayerSoul.createPlayerSoul(player2);
         ref.GameState.addSoul(player2_real);
+
+        const player3 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 7);
+        player3.changeName("STRONG");
+        const player3_real = ref.PlayerSoul.createPlayerSoul(player3);
+        ref.GameState.addSoul(player3_real);
 
         story.showSnippet("Room", false);
     };

@@ -4,59 +4,53 @@ import { CONSTANTS } from "../data/constants";
 import { Manager } from "../manager";
 import { RenderSoul } from "../soul/renderSoul";
 import { Inventory, ItemKey } from "../inventory";
+import { Item } from "../data/item";
 
 class InventoryMenu {
+
+    selected: HTMLDivElement|null;
+
     constructor() {
         this.fillInventoryDiv();
 
         Manager.menuButton("inventoryButton", "inventory", "Inventory");
         const button = document.getElementById("inventoryButton");
         button?.addEventListener("click", () => {
-            /*
-            document.querySelectorAll(".detailedPartySoulDiv").forEach(div => {
-                div.classList.add("hidden");
-            });
-            */
+            this.clearSelection();
         });
+
+        this.selected = null;
     }
 
-    fillInventoryDiv() {
+    private fillInventoryDiv() {
         GameState.Inventory.Keys.forEach(key => {
             const infoDiv = this.itemDiv(key);
             const inventoryDiv = document.getElementById("inventory");
             inventoryDiv?.append(infoDiv);
-
-            infoDiv.addEventListener("mouseenter", () => {
-                const detailedInfoDiv = this.itemInfoDiv(key);
-                const topHalf = document.getElementById("topHalf");
-                topHalf?.append(detailedInfoDiv);
-            });
-            infoDiv.addEventListener("mouseleave", () => {
-                const detailedInfoDiv = document.getElementById("itemInfoDiv");
-                detailedInfoDiv?.remove();
-            });
-
-            /*
-            const detailedInfoDiv = this.detailedPartySoulDiv(playerSoul);
-            const topHalf = document.getElementById("topHalf");
-            topHalf?.append(detailedInfoDiv);
-
-            infoDiv.addEventListener("click", () => {
-                if (detailedInfoDiv.classList.contains("hidden")) {
-                    document.querySelectorAll(".detailedPartySoulDiv").forEach(div => {
-                        div.classList.add("hidden");
-                    })
-                    detailedInfoDiv.classList.remove("hidden");
-                }
-                else {
-                    detailedInfoDiv.classList.add("hidden");
-                }
-            });
-            */
         });
     }
 
-    itemDiv(itemKey: ItemKey) {
+    private addDetailedInfoDiv(key: ItemKey) {
+        const detailedInfoDiv = this.itemInfoDiv(key);
+        const topHalf = document.getElementById("topHalf");
+        topHalf?.append(detailedInfoDiv);
+    }
+
+    private removeDetailedInfoDiv() {
+        document.getElementById("itemInfoDiv")?.remove();
+    }
+
+    private removeUseMenu() {
+        document.getElementById("itemUseMenu")?.remove();
+    }
+
+    private clearSelection() {
+        this.selected?.classList.remove("selected");
+        this.removeDetailedInfoDiv();
+        this.removeUseMenu();
+    }
+
+    private itemDiv(itemKey: ItemKey) {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("itemKeyDiv");
 
@@ -69,10 +63,45 @@ class InventoryMenu {
             countText
         );
 
+        infoDiv.addEventListener("mouseenter", () => {
+            if (this.selected === null) {
+                this.addDetailedInfoDiv(itemKey);
+            }
+        });
+        infoDiv.addEventListener("mouseleave", () => {
+            if (this.selected === null) {
+                this.removeDetailedInfoDiv();
+            }
+        });
+
+        infoDiv.addEventListener("click", () => {
+            if (this.selected === infoDiv) {
+                this.selected.classList.remove("selected");
+                document.getElementById("itemInfoDiv")?.classList.remove("selected");
+                this.selected = null;
+
+                this.removeUseMenu();
+            }
+            else {
+                if (this.selected !== null) {
+                    this.clearSelection();
+                    this.addDetailedInfoDiv(itemKey);
+                }
+
+                this.selected = infoDiv;
+                this.selected.classList.add("selected");
+                document.getElementById("itemInfoDiv")?.classList.add("selected");
+
+                const useMenu = this.useMenu(itemKey);
+                const topHalf = document.getElementById("topHalf");
+                topHalf?.append(useMenu);
+            }
+        });
+
         return infoDiv;
     }
 
-    itemInfoDiv(itemKey: ItemKey) {
+    private itemInfoDiv(itemKey: ItemKey) {
         const infoDiv = document.createElement("div");
         infoDiv.id = "itemInfoDiv";
         infoDiv.classList.add("menuPanel", "absoluteAlign");
@@ -89,6 +118,50 @@ class InventoryMenu {
         );
 
         return infoDiv;
+    }
+
+    private makeUseButton(
+        playerSoul: PlayerSoul,
+        itemKey: ItemKey,
+    ){
+        const useButton = RenderSoul.getSwitchContainer(playerSoul);
+
+        if (itemKey.item.soulCanUse(playerSoul)) {
+            useButton.addEventListener("click",
+                (event) => {
+                    itemKey.item.itemEffect(playerSoul);
+                },
+                false);
+        }
+        else {
+            // useButton.classList.add("noClick");
+        }
+
+        return useButton;
+    }
+
+    private useMenu(itemKey: ItemKey) {
+        const useMenu = document.createElement("div");
+        useMenu.id = "itemUseMenu";
+        useMenu.classList.add("menuPanel", "absoluteAlign", "selected");
+
+        const name = document.createElement("h4");
+        name.innerText = "Use " + itemKey.item.long_name;
+
+        const useButtonContainer = document.createElement("div");
+        useButtonContainer.id = "useButtonContainer";
+
+        GameState.partySouls.forEach((playerSoul, i) => {
+            const useButton = this.makeUseButton(playerSoul, itemKey);
+            useButtonContainer.append(useButton);
+        });
+
+        useMenu.append(
+            name,
+            useButtonContainer
+        );
+
+        return useMenu;
     }
 }
 

@@ -1,42 +1,53 @@
+import { IndividualSoul } from "../soul/individualSoul";
+import { CONSTANTS } from "../data/constants";
+
 interface Item {
     name: string;
     long_name: string;
     sprite: string;
     description: string;
+    soulCanUse: Function;
+    itemEffect: Function;
 }
 
-interface HealingItem extends Item {
-    healHp: number;
-    healPercent: number;
+interface ItemList { [key: string]: Item };
+
+function hpOverZero(soul: IndividualSoul): boolean {
+    return ((soul.currentHP !== soul.stats[CONSTANTS.STATS.HP]) && (soul.currentHP > 0));
 }
 
-interface HealingItemList { [key: string]: HealingItem };
+function makeHealHPFunction(healAmount: number, healPercent: number): Function {
+    return (playerSoul: IndividualSoul) => {
+        playerSoul.changeHP(healAmount);
+        playerSoul.changeHP(playerSoul.stats[CONSTANTS.STATS.HP] * healPercent * 0.01);
+    }
+}
 
-const HEALING_ITEMS : HealingItemList = {
+const ITEMS : ItemList = {
     repair_module: {
         name: "Repair Module",
         long_name: "Repair Module",
         sprite: "temp.png",
         description: "Restores integrity of damaged process by 10.",
-        healHp: 10,
-        healPercent: -1
+        soulCanUse: hpOverZero,
+        itemEffect: makeHealHPFunction(10, 0)
     },
     advanced_repair_module: {
         name: "Adv. Repair Module",
         long_name: "Advanced Repair Module",
         sprite: "temp.png",
         description: "Restores integrity of damaged process by 25.",
-        healHp: 25,
-        healPercent: -1
+        soulCanUse: hpOverZero,
+        itemEffect: makeHealHPFunction(25, 0)
     },
     full_repair_module: {
         name: "Full Repair Module",
         long_name: "Full Repair Module",
         sprite: "temp.png",
         description: "Restores all integrity of damaged process.",
-        healHp: -1,
-        healPercent: 100
+        soulCanUse: hpOverZero,
+        itemEffect: makeHealHPFunction(0, 100)
     }
 }
 
-export {Item, HEALING_ITEMS};
+export {Item, ITEMS};

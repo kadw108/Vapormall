@@ -58,11 +58,16 @@ class RenderSoul {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("bottomhalf-tip", "outlineDiv", "hoverDiv");
 
+        const hpText = document.createElement("small");
+        hpText.innerText = RenderSoul.getHPText(individualSoul);
+
         infoDiv.append(
             RenderSoul.getNameText(individualSoul),
             document.createElement("br"),
             RenderSoul.genTypeContainer(individualSoul),
             document.createElement("hr"),
+            hpText,
+            document.createElement("br"),
             RenderSoul.genStatText(individualSoul, individualSoul.stats)
         );
 

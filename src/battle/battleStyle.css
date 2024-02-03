@@ -76,7 +76,7 @@
   width: 40%;
 }
 
-.enemyInfo {
+.enemyInfo, .enemyInfo .topHalf-tip {
   right: 0;
 }
 

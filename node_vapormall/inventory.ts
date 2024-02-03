@@ -1,4 +1,4 @@
-import { Item, HEALING_ITEMS } from "./data/item";
+import { Item, ITEMS } from "./data/item";
 
 class ItemKey {
     item: Item;
@@ -19,9 +19,9 @@ class Inventory {
 
     constructor() {
         this._keys = [
-            new ItemKey(HEALING_ITEMS.repair_module, 1),
-            new ItemKey(HEALING_ITEMS.advanced_repair_module, 1),
-            new ItemKey(HEALING_ITEMS.full_repair_module, 1),
+            new ItemKey(ITEMS.repair_module, 1),
+            new ItemKey(ITEMS.advanced_repair_module, 1),
+            new ItemKey(ITEMS.full_repair_module, 1),
         ];
     }
 

@@ -19,3 +19,13 @@
   top: auto;
   font-size: 85%;
 }
+
+.selected {
+  border: 3px solid #ffc740;
+}
+
+#itemUseMenu {
+  height: 62%;
+  top: 8%;
+  font-size: 85%;
+}
