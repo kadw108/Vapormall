@@ -6,7 +6,7 @@ import { RenderSoul } from "../soul/renderSoul";
 
 class PartyMenu {
     constructor() {
-        this.fillPartyDiv();
+        this.refresh();
 
         Manager.menuButton("partyButton", "party", "Party");
         const partyButton = document.getElementById("partyButton");
@@ -15,6 +15,16 @@ class PartyMenu {
                 div.classList.add("hidden");
             });
         });
+    }
+
+    refresh() {
+        const partyDiv = document.getElementById("party");
+        if (partyDiv === null) {
+            console.error("Party div is null!");
+            return;
+        }
+        partyDiv.innerHTML = "";
+        this.fillPartyDiv();
     }
 
     partySoulDiv(playerSoul: PlayerSoul) {

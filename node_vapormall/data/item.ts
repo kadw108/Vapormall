@@ -19,7 +19,7 @@ function hpOverZero(soul: IndividualSoul): boolean {
 function makeHealHPFunction(healAmount: number, healPercent: number): Function {
     return (playerSoul: IndividualSoul) => {
         playerSoul.changeHP(healAmount);
-        playerSoul.changeHP(playerSoul.stats[CONSTANTS.STATS.HP] * healPercent * 0.01);
+        playerSoul.changeHP(Math.ceil(playerSoul.stats[CONSTANTS.STATS.HP] * healPercent * 0.01));
     }
 }
 

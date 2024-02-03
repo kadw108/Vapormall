@@ -36,25 +36,27 @@ class Inventory {
         this._keys.push(new ItemKey(newItem, 1));
     }
 
-    removeItem(usedItem: Item) {
+    // boolean is whether there is an item left or not
+    removeItem(usedItem: Item): boolean {
         this._keys.forEach((key, index) => {
             if (key.item === usedItem) {
                 if (key.count > 1) {
                     key.count--;
-                    return;
+                    return true;
                 }
                 else if (key.count === 1) {
                     this._keys.splice(index, 1);
-                    return;
+                    return false;
                 }
                 else {
                     console.error("Inventory has 0 or less of an item!");
-                    return;
+                    return false;
                 }
             }
         });
 
         console.error("Removing item that inventory does not have!");
+        return false;
     }
 }
 

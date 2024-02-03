@@ -11,7 +11,7 @@ class InventoryMenu {
     selected: HTMLDivElement|null;
 
     constructor() {
-        this.fillInventoryDiv();
+        this.refreshMenu();
 
         Manager.menuButton("inventoryButton", "inventory", "Inventory");
         const button = document.getElementById("inventoryButton");
@@ -20,6 +20,16 @@ class InventoryMenu {
         });
 
         this.selected = null;
+    }
+
+    private refreshMenu() {
+        const inventoryDiv = document.getElementById("inventory");
+        if (inventoryDiv === null) {
+            console.error("Inventory menu is null!");
+            return;
+        }
+        inventoryDiv.innerHTML = "";
+        this.fillInventoryDiv();
     }
 
     private fillInventoryDiv() {
@@ -130,6 +140,12 @@ class InventoryMenu {
             useButton.addEventListener("click",
                 (event) => {
                     itemKey.item.itemEffect(playerSoul);
+                    const itemRemains = GameState.Inventory.removeItem(itemKey.item);
+                    if (!itemRemains) {
+                        this.clearSelection();
+                    }
+
+                    this.refreshMenu();
                 },
                 false);
         }
