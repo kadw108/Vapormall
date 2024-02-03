@@ -1,4 +1,4 @@
-<snippet name="Room" styles="./room/roomStyle.css; ../meta/styles/partyStyle.css; ../meta/styles/inventoryStyle.css; ../battle/battleStyle.css">
+<snippet name="Room" styles="./room/roomStyle.css; ../meta/styles/partyStyle.css; ../meta/styles/mapStyle.css; ../meta/styles/inventoryStyle.css; ../battle/battleStyle.css">
 
 <div id="contents">
     <div id="bg"></div>
@@ -6,6 +6,9 @@
         <div id="screenBg"></div>
 
         <div id="screenContents" class="absoluteAlign">
+
+            <div id="map" class="hidden menuPanel absoluteAlign"></div>
+
             <div id="topHalf" class="absoluteAlign">
                 <div id="roomName" class="blackBg2"></div>
             </div>
@@ -14,7 +17,6 @@
                 </div>
 
                 <div id="inventory" class="hidden menuPanel absoluteAlign"></div>
-                <div id="map" class="hidden menuPanel absoluteAlign"></div>
                 <div id="party" class="hidden menuPanel absoluteAlign"></div>
 
                 <div id="menuButtons" class="blackBg2">
@@ -31,8 +33,8 @@
 $(function () {
     const ref = window.vapormall;
 
-    ref.Manager.menuButton("mapButton", "map", "Map");
 
+    const map = new ref.MapMenu();
     const party = new ref.PartyMenu();
     const inventory = new ref.InventoryMenu();
 

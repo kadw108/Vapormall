@@ -13,6 +13,7 @@ import {MallMap} from "./map/mallmap";
 
 import {PartyMenu} from "./menu/partyMenu";
 import {InventoryMenu} from "./menu/inventoryMenu";
+import {MapMenu} from "./menu/mapMenu";
 
 export {
   CONSTANTS,
@@ -26,5 +27,6 @@ export {
   Manager,
   MallMap,
   PartyMenu,
-  InventoryMenu
+  InventoryMenu,
+  MapMenu
 }

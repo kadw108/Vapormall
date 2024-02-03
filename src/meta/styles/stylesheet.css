@@ -4,11 +4,6 @@ GENERAL STYLE
 
 /* Can define CSS variables here */
 :root {
-    --color1: #fabb33;
-    --colorb: #fcdd55;
-    --color2: #fff;
-    --shadow: #ddd;
-
   	--screenheight: 675px;
   	--screenwidth: 765px;
   	--screenheightbig: 700px;
@@ -245,13 +240,13 @@ button:hover {
 /* CUSTOM STYLINGS (because reset.css) */
 
 h1 {
-  font-size: 200%;
+  font-size: 225%;
 }
 h2 {
-  font-size: 150%;
+  font-size: 175%;
 }
 h3 {
-  font-size: 125%;
+  font-size: 150%;
 }
 h4 {
   font-size: 115%;
@@ -259,18 +254,24 @@ h4 {
 h5 {
   font-size: 110%;
 }
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
   margin: 15px 0 15px 0;
 }
 h4, h5 {
   margin: 9px 0 9px 0;
 }
+h6 {
+  margin: 3px 0 3px 0;
+}
 
-div, span {
+body > div, span {
   margin: 3px 0 3px 0;
 }
 
 p {
+  margin: 12px 0 12px 0;
+}
+li {
   margin: 12px 0 12px 0;
 }
