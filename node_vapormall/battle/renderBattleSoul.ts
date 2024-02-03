@@ -5,22 +5,16 @@ import { BattleSoul, FieldedPlayerSoul } from "./battleSoul";
 class RenderBattleSoul {
 
     battleSoul: BattleSoul;
+    displayHP: number;
 
     infoContainer: HTMLElement;
     detailedInfoDiv: HTMLElement;
-
-    displayHP: number;
-    hpText: HTMLElement;
     modifiedStatInfoBox: HTMLElement;
 
     constructor(battleSoul: BattleSoul) {
         this.battleSoul = battleSoul;
 
         this.displayHP = this.battleSoul.soul.currentHP;
-        this.hpText = document.createElement("small");
-        this.hpText.append(
-            document.createTextNode(this.getHPString())
-        );
 
         this.infoContainer = this.genInfoContainer();
         document.getElementById("topHalf")?.append(this.infoContainer);
@@ -41,12 +35,18 @@ class RenderBattleSoul {
         const infoDiv = document.createElement("div");
         const nameText = document.createTextNode(this.battleSoul.soul.name);
 
+        const hpText = document.createElement("small");
+        hpText.classList.add("hp-text");
+        hpText.append(
+            document.createTextNode(this.getHPString())
+        );
+
         infoDiv.append(
             nameText,
             document.createElement("br"),
             RenderSoul.getLevelText(this.battleSoul.soul),
             document.createElement("br"),
-            this.hpText
+            hpText
         );
 
         return infoDiv;
@@ -109,7 +109,8 @@ class RenderBattleSoul {
     }
 
     updateHP() {
-        this.hpText.innerHTML = this.getHPString();
+        (this.infoContainer.getElementsByClassName("hp-text")[0] as HTMLElement).innerText = this.getHPString();
+        (this.detailedInfoDiv.getElementsByClassName("hp-text")[0] as HTMLElement).innerText = this.getHPString();
     }
 
     updateStats() {

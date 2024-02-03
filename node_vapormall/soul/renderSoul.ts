@@ -59,6 +59,7 @@ class RenderSoul {
         infoDiv.classList.add("bottomhalf-tip", "outlineDiv", "hoverDiv");
 
         const hpText = document.createElement("small");
+        hpText.classList.add("hp-text");
         hpText.innerText = RenderSoul.getHPText(individualSoul);
 
         infoDiv.append(
