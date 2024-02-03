@@ -14,6 +14,9 @@ class PartyMenu {
             document.querySelectorAll(".detailedPartySoulDiv").forEach(div => {
                 div.classList.add("hidden");
             });
+            document.querySelectorAll(".selected").forEach((element) => {
+                element.classList.remove("selected");
+            })
         });
     }
 
@@ -107,11 +110,15 @@ class PartyMenu {
                 if (detailedInfoDiv.classList.contains("hidden")) {
                     document.querySelectorAll(".detailedPartySoulDiv").forEach(div => {
                         div.classList.add("hidden");
-                    })
+                    });
+                    document.querySelector(".selected")?.classList.remove("selected");
+
                     detailedInfoDiv.classList.remove("hidden");
+                    infoDiv.classList.add("selected");
                 }
                 else {
                     detailedInfoDiv.classList.add("hidden");
+                    infoDiv.classList.remove("selected");
                 }
             });
         });

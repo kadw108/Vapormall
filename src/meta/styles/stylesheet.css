@@ -190,6 +190,10 @@ CUSTOM STYLES
   display: none;
 }
 
+.selected {
+  border: 3px solid #ffc740 !important;
+}
+
 /*
 OVERRIDING DEFAULT CSS STYLES
 */
