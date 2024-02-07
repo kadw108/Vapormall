@@ -1,6 +1,7 @@
 import {PlayerSoul, IndividualSoul} from "./soul/individualSoul";
 import {MallMap} from "./map/mallmap";
 import { Inventory } from "./inventory";
+import { Room } from "./map/room";
 
 class GameState {
     private static _partySouls: Array<PlayerSoul> = [];
@@ -16,6 +17,19 @@ class GameState {
     private static _inventory: Inventory = new Inventory();
     public static get Inventory() {
         return GameState._inventory;
+    }
+
+    private static _visitedRooms: Array<Room> = [];
+    public static get VisitedRooms() {
+        return GameState._visitedRooms;
+    }
+    public static addVisitedRoom(room: Room) {
+        GameState._visitedRooms.forEach((r) => {
+            if (r.coord === room.coord) {
+                return;
+            }
+        })
+        GameState._visitedRooms.push(room);
     }
 
     // used to pass info from room.ejs to battle.ejs

@@ -5,7 +5,7 @@ import { CONSTANTS } from "../data/constants"
 
 class MallMap {
     adjacencyList: Array<Room>;
-	mapArray: Array<Array<Room>>;
+	mapArray: Array<Array<Room>>; // south increases y
 	mapLength: number;
 	centerCoord: [number, number];
 
@@ -23,6 +23,7 @@ class MallMap {
 
 		this.generateFloor();
 		this.currentLocation = this.centerCoord;
+		GameState.addVisitedRoom(this.currentRoom());
 
 		this.renderRoom();
 	}
@@ -125,6 +126,8 @@ class MallMap {
 				this.currentLocation = [this.currentLocation[0] - 1, this.currentLocation[1]];
 				break;
 		}
+
+		GameState.addVisitedRoom(this.currentRoom());
 
 		this.renderRoom();
 	}
