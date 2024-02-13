@@ -1,0 +1,43 @@
+.menuPanel {
+  overflow: scroll;
+  padding: 3px 7px 3px 7px;
+  margin: 5px;
+
+  background-color: #001020;
+  border: 1px dotted #ccc;
+  border-radius: 10px;
+}
+
+.menuButton {
+  z-index: 2;
+}
+
+/* Soul/Skill Info */
+
+.soulInfo {
+  width: 20%;
+  padding: 3px;
+  position: absolute;
+}
+
+.topHalf-tip, .bottomhalf-tip {
+  font-size: 0.75rem;
+  text-align: left;
+}
+
+.topHalf-tip {
+  width: 300%;
+}
+
+.bottomhalf-tip {
+  width: 60%;
+}
+
+.enemyInfo, .enemyInfo .topHalf-tip {
+  right: 0;
+}
+
+.playerInfo {
+  bottom: 0px;
+  margin-bottom: 5px;
+}

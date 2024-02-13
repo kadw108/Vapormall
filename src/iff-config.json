@@ -13,6 +13,7 @@
         "story": [
             "meta/styles/reset.css",
             "meta/styles/stylesheet.css",
+            "meta/styles/menuStyle.css",
             "meta/styles/fonts.css",
             "meta/styles/skillTypes.css"
         ]
