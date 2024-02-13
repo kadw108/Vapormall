@@ -34,13 +34,8 @@ class PartyMenu {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("partySoulDiv");
 
-        const levelText = RenderSoul.getLevelText(playerSoul);
-        levelText.style.marginLeft = "10px";
-
         infoDiv.append(
-            RenderSoul.getNameText(playerSoul),
-            levelText,
-            document.createElement("br"),
+            RenderSoul.getNameAndLevel(playerSoul),
             RenderSoul.getHPText(playerSoul)
         );
 
@@ -50,9 +45,6 @@ class PartyMenu {
     detailedPartySoulDiv(playerSoul: PlayerSoul) {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("menuPanel", "hidden", "absoluteAlign", "detailedPartySoulDiv");
-
-        const levelText = RenderSoul.getLevelText(playerSoul);
-        levelText.style.marginLeft = "10px";
 
         const typeContainer = RenderSoul.genTypeContainer(playerSoul);
         typeContainer.style.marginLeft = "10px";
@@ -85,8 +77,7 @@ class PartyMenu {
         });
 
         infoDiv.append(
-            RenderSoul.getNameText(playerSoul),
-            levelText,
+            RenderSoul.getNameAndLevel(playerSoul),
             typeContainer,
             divider,
             statContainer,

@@ -4,7 +4,7 @@ import { capitalizeFirstLetter } from "../utility";
 
 class RenderSoul {
     public static getNameText(individualSoul: IndividualSoul) {
-        const nameText = document.createElement("h4");
+        const nameText = document.createElement("h6");
         nameText.classList.add("big-text");
         nameText.innerText = individualSoul.name;
         if (individualSoul.name !== individualSoul.soul_species.name) {
@@ -13,18 +13,24 @@ class RenderSoul {
         return nameText;
     }
 
+    public static getLevelText(individualSoul: IndividualSoul) {
+        const levelText = document.createElement("small");
+        levelText.innerText = "Lv " + individualSoul.level;
+        return levelText;
+    }
+
+    public static getNameAndLevel(individualSoul: IndividualSoul) {
+        const nameAndLevel = RenderSoul.getNameText(individualSoul);
+        nameAndLevel.append(" ", RenderSoul.getLevelText(individualSoul));
+        return nameAndLevel;
+    }
+
     public static genTypeContainer(individualSoul: IndividualSoul) {
         const typeContainer = document.createElement("p");
         individualSoul.soul_species.types.forEach((type, i) => {
             typeContainer.innerText += type + "/";
         });
         return typeContainer;
-    }
-
-    public static getLevelText(individualSoul: IndividualSoul) {
-        const levelText = document.createElement("small");
-        levelText.innerText = "Lv " + individualSoul.level;
-        return levelText;
     }
 
     public static getHPText(individualSoul: IndividualSoul) {
@@ -85,15 +91,12 @@ class RenderSoul {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("bottomhalf-tip", "outlineDiv", "hoverDiv");
 
-        const nameAndLevelText = RenderSoul.getNameText(individualSoul);
-        nameAndLevelText.append(" ", RenderSoul.getLevelText(individualSoul));
-
         const hpText = document.createElement("p");
         hpText.classList.add("hp-text");
         hpText.innerText = RenderSoul.getHPText(individualSoul);
 
         infoDiv.append(
-            nameAndLevelText,
+            RenderSoul.getNameAndLevel(individualSoul),
             RenderSoul.genTypeContainer(individualSoul),
             document.createElement("hr"),
             hpText,

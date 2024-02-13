@@ -193,6 +193,36 @@ CUSTOM STYLES
   border: 3px solid #ffc740 !important;
 }
 
+/* Soul/Skill Info */
+
+.soulInfo {
+  width: 20%;
+  padding: 3px;
+  position: absolute;
+}
+
+.topHalf-tip, .bottomhalf-tip {
+  font-size: 0.75rem;
+  text-align: left;
+}
+
+.topHalf-tip {
+  width: 300%;
+}
+
+.bottomhalf-tip {
+  width: 60%;
+}
+
+.enemyInfo, .enemyInfo .topHalf-tip {
+  right: 0;
+}
+
+.playerInfo {
+  bottom: 0px;
+  margin-bottom: 5px;
+}
+
 /*
 OVERRIDING DEFAULT CSS STYLES
 */
@@ -245,28 +275,29 @@ button:hover {
 
 h1 {
   font-size: 225%;
+  margin: 1em 0;
 }
 h2 {
   font-size: 175%;
+  margin: 1em 0;
 }
 h3 {
   font-size: 150%;
+  margin: 0.8em 0;
 }
 h4 {
   font-size: 115%;
+  margin: 0.4em 0;
 }
 h5 {
   font-size: 110%;
+  margin: 0.2em 0;
+}
+h6 {
+  margin: 0.1em 0;
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
-  margin: 1.1em 0;
-}
-h4, h5 {
-  margin: 1em 0;
-}
-h6 {
-  margin: 0.8em 0;
 }
 
 body > div, span {
