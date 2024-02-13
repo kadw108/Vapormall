@@ -40,28 +40,23 @@ class Skill{
         const skillTip = document.createElement("div");
         skillTip.classList.add("bottomhalf-tip", "outlineDiv", "hoverDiv", "hidden");
 
-        const nameText = document.createTextNode(this.data.name);
+        const nameText = document.createElement("p");
+        nameText.innerText = this.data.name;
         skillTip.append(nameText);
-        skillTip.append(document.createElement("br"));
 
-        const typeText = document.createElement("small");
-        typeText.append(
-            document.createTextNode(this.data.type + " | ")
-        );
-        skillTip.append(typeText);
-
-        const categoryText = document.createElement("small");
-        categoryText.append(
+        const categoryTypeText = document.createElement("p");
+        categoryTypeText.append(
+            document.createTextNode(this.data.type + " | "),
             document.createTextNode(this.data.meta.category + " ")
         );
-        skillTip.append(categoryText);
+        skillTip.append(categoryTypeText);
 
         skillTip.append(
             document.createElement("hr")
         );
 
         if (this.data.power !== null) {
-            const powerText = document.createElement("small");
+            const powerText = document.createElement("p");
             powerText.append(
                 document.createTextNode("Power: " + this.data.power)
             );
@@ -72,7 +67,7 @@ class Skill{
             )
         }
 
-        const description = document.createElement("small");
+        const description = document.createElement("p");
         description.append(
             document.createTextNode(this.data.description)
         );

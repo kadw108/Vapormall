@@ -68,12 +68,17 @@
   position: absolute;
 }
 
+.topHalf-tip, .bottomhalf-tip {
+  font-size: 75%;
+  text-align: left;
+}
+
 .topHalf-tip {
-  width: 400%;
+  width: 300%;
 }
 
 .bottomhalf-tip {
-  width: 40%;
+  width: 60%;
 }
 
 .enemyInfo, .enemyInfo .topHalf-tip {

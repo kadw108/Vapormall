@@ -79,7 +79,9 @@ class RenderBattleSoul {
         infoDiv.classList.add("topHalf-tip");
 
         this.modifiedStatInfoBox = this.modifiedStatInfo();
-        infoDiv.append(
+        const skillDiv = infoDiv.querySelector(".skillDiv");
+        skillDiv?.insertAdjacentElement(
+            "beforebegin",
             this.modifiedStatInfoBox
         );
 

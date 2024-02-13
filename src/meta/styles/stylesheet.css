@@ -177,6 +177,10 @@ CUSTOM STYLES
   font-size: 0.8em;
 }
 
+.big-text {
+  font-size: 110%;
+}
+
 .noClick{
   pointer-events: none;
 }
@@ -256,13 +260,13 @@ h5 {
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
-  margin: 15px 0 15px 0;
+  margin: 1.1em 0;
 }
 h4, h5 {
-  margin: 9px 0 9px 0;
+  margin: 1em 0;
 }
 h6 {
-  margin: 3px 0 3px 0;
+  margin: 0.8em 0;
 }
 
 body > div, span {
@@ -270,8 +274,8 @@ body > div, span {
 }
 
 p {
-  margin: 12px 0 12px 0;
+  margin: 1em 0;
 }
 li {
-  margin: 12px 0 12px 0;
+  margin: 1em 0;
 }

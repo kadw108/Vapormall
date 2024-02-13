@@ -166,7 +166,8 @@ class RoomInfo {
 		let exits = "";
 		let encounters = "";
 
-		if (this.encounter.length === 0) {
+		// if (this.encounter.length === 0) {
+		if (this.encounter.length === this.encounter.length) {
 			exits = "<p>Exits: ";
 			for (let i = 0; i < this.room.connections.length; i++) {
 				const c = this.room.connections[i];

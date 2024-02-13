@@ -7,6 +7,14 @@ export namespace CONSTANTS {
     GLITCHDEFENSE = "glitch defense",
     SPEED = "speed"
   }
+  export const STAT_ABBREVIATION: { [id: string] : string; } = {
+    "HP": "HP",
+    "attack": "atk",
+    "defense": "def",
+    "glitch attack": "glA",
+    "glitch defense": "glD",
+    "speed": "spe"
+  };
 
   export enum SKILLCATEGORIES {
     NORMALDAMAGE = "normal damage",
