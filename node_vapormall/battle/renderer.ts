@@ -6,22 +6,19 @@ import { Skill } from "../soul/skill";
 import { RenderSoul } from "../soul/renderSoul";
 
 import { GameState } from "../gameState";
-import { SwitchOut } from "./action";
+import { SwitchOut, UseSkill } from "./action";
 
 class Renderer { 
 
-    skillHandlerCreator: Function;
-    switchHandlerCreator: Function;
-    switchFaintHandlerCreator: Function;
+    createActionHandler: Function;
+    createSwitchFaintHandler: Function;
 
     constructor(
-        skillHandlerCreator: Function,
-        switchHandlerCreator: Function,
-        switchFaintHandlerCreator: Function
+        actionHanderCreator: Function,
+        createSwitchFaintHandler: Function,
     ) {
-        this.skillHandlerCreator = skillHandlerCreator;
-        this.switchHandlerCreator = switchHandlerCreator;
-        this.switchFaintHandlerCreator = switchFaintHandlerCreator;
+        this.createActionHandler = actionHanderCreator;
+        this.createSwitchFaintHandler = createSwitchFaintHandler;
     }
 
     private makeSkillWrapper(playerSoul: FieldedPlayerSoul, skill: Skill, i: number) {
@@ -29,8 +26,9 @@ class Renderer {
         const skillButton = skillWrapper.getElementsByTagName("button")[0];
 
         if (skill.pp > 0) {
+            const useSkill = new UseSkill(playerSoul.index, i);
             skillButton.addEventListener("click",
-                this.skillHandlerCreator(playerSoul, i),
+                this.createActionHandler(useSkill),
                 false);
         }
         else {
@@ -90,12 +88,12 @@ class Renderer {
         if (battleSoul.soul.currentHP > 0 && offField) {
             if (!switchOutFainted) {
                 switchButton.addEventListener("click",
-                    this.switchHandlerCreator(action.soulPartyIndex, action.switchInIndex),
+                    this.createActionHandler(action),
                     false);
             }
             else {
                 switchButton.addEventListener("click",
-                    this.switchFaintHandlerCreator(action.soulPartyIndex, action.switchInIndex),
+                    this.createSwitchFaintHandler(action.soulPartyIndex, action.switchInIndex),
                     false);
             }
         }

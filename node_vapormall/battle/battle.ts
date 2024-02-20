@@ -39,9 +39,8 @@ class Battle {
         this.battleOver = false;
 
         this.renderer = new Renderer(
-            this.createSkillClickHandler.bind(this),
-            this.createSwitchClickHandler.bind(this),
-            this.createSwitchFaintClickHandler.bind(this));
+            this.createActionHandler.bind(this),
+            this.createSwitchFaintHandler.bind(this));
         const playerSoul = this.playerSouls[0];
         this.renderer.showActions(playerSoul!, this.playerParty, this.playerSouls);
         this.calculator = new Calculator(this);
@@ -210,7 +209,7 @@ class Battle {
         return entering;
     }
 
-    switchSoulFainted(action: SwitchOut): FieldedPlayerSoul {
+    switchSoulFainted(faint: FaintData, switchIn: number): FieldedPlayerSoul {
         const entering = new FieldedPlayerSoul(this.playerParty[switchIn]);
 
         faint.soul.removeUI();
@@ -276,7 +275,7 @@ class Battle {
         }
     }
 
-    createSwitchFaintClickHandler(faint: FaintData, switchIn: number) {
+    createSwitchFaintHandler(faint: FaintData, switchIn: number) {
         return () => {
             this.renderer.hideActions();
 
