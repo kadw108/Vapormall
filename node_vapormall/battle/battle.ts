@@ -6,7 +6,7 @@ import { Renderer } from "./renderer";
 import { MessageTimer } from "./messageTimer";
 import { Calculator } from "./calculator";
 import { GameState } from "../gameState";
-import { SwitchOut } from "./action";
+import { Action,SwitchOut, UseSkill } from "./action";
 
 interface FaintData {
   soul: FieldedPlayerSoul;
@@ -193,9 +193,9 @@ class Battle {
         }
     }
 
-    switchSoul(switchOut: number, switchIn: number): FieldedPlayerSoul {
-        const leaving = this.playerSouls[switchOut];
-        const entering = new FieldedPlayerSoul(this.playerParty[switchIn]);
+    switchSoul(action: SwitchOut): FieldedPlayerSoul {
+        const leaving = this.playerSouls[action.soulPartyIndex];
+        const entering = new FieldedPlayerSoul(this.playerParty[action.switchInIndex]);
 
         if (leaving === null) {
             console.error("switching out null soul!");
@@ -203,14 +203,14 @@ class Battle {
         }
 
         leaving.removeUI();
-        this.playerSouls[switchOut] = entering;
+        this.playerSouls[action.soulPartyIndex] = entering;
         this.messageTimer.addMessage("Switching out " + leaving.renderer.getName() + " for " + entering.soul.name + ".");
         this.messageTimer.endMessageBlock();
 
         return entering;
     }
 
-    switchSoulFainted(faint: FaintData, switchIn: number): FieldedPlayerSoul {
+    switchSoulFainted(action: SwitchOut): FieldedPlayerSoul {
         const entering = new FieldedPlayerSoul(this.playerParty[switchIn]);
 
         faint.soul.removeUI();
@@ -229,49 +229,51 @@ class Battle {
         this.playerSouls[destroyedSoul] = null;
     }
 
-    createSkillClickHandler(playerSoul: FieldedPlayerSoul, whichSkill: number) {
+    createActionHandler(action: Action) {
         // from https://stackoverflow.com/questions/8941183/pass-multiple-arguments-along-with-an-event-object-to-an-event-handler
-        return () => {
-            // arrow function for `this` https://stackoverflow.com/a/73068955
-            this.renderer.hideActions();
 
-            playerSoul.selected_skill = playerSoul.soul.skills[whichSkill];
-            this.selectPlayerTarget(playerSoul);
+        if (action.constructor.name === SwitchOut.name) {
+            return () => {
+                // arrow function for `this` https://stackoverflow.com/a/73068955
+                this.renderer.hideActions();
 
-            this.selectEnemySkills();
-            this.runSkills();
-            this.messageTimer.addMessage(
-                this.nextTurnChoices(playerSoul)
-            );
-            this.messageTimer.addMessage(
-                () => {
-                    playerSoul.selected_skill = null;
+                const switchInFieldedPlayerSoul = this.switchSoul(action as SwitchOut);
+
+                this.selectEnemySkills();
+                this.runSkills();
+                this.messageTimer.addMessage(
+                    this.nextTurnChoices(switchInFieldedPlayerSoul)
+                );
+                this.messageTimer.displayMessages(this.turns);
+            }
+        }
+        else if (action.constructor.name === UseSkill.name) {
+            return () => {
+                this.renderer.hideActions();
+                
+                const battleSoul = this.playerSouls[action.soulPartyIndex];
+                if (battleSoul === null) {
+                    console.error("battleSoul is null ???");
+                    return;
                 }
-            )
-            this.messageTimer.displayMessages(this.turns);
 
+                battleSoul.selected_skill = battleSoul.soul.skills[(action as UseSkill).whichSkill];
+                this.selectPlayerTarget(battleSoul);
+
+                this.selectEnemySkills();
+                this.runSkills();
+                this.messageTimer.addMessage(
+                    this.nextTurnChoices(battleSoul)
+                );
+                this.messageTimer.addMessage(
+                    () => {
+                        battleSoul.selected_skill = null;
+                    }
+                )
+                this.messageTimer.displayMessages(this.turns);
+
+            }
         }
-    }
-
-    createSwitchClickHandler(switchOut: number, switchIn: number) {
-        // from https://stackoverflow.com/questions/8941183/pass-multiple-arguments-along-with-an-event-object-to-an-event-handler
-        return () => {
-            // arrow function for `this` https://stackoverflow.com/a/73068955
-            this.renderer.hideActions();
-
-            const switchInFieldedPlayerSoul = this.switchSoul(switchOut, switchIn);
-
-            this.selectEnemySkills();
-            this.runSkills();
-            this.messageTimer.addMessage(
-                this.nextTurnChoices(switchInFieldedPlayerSoul)
-            );
-            this.messageTimer.displayMessages(this.turns);
-        }
-    }
-
-    passTurn() {
-        
     }
 
     createSwitchFaintClickHandler(faint: FaintData, switchIn: number) {

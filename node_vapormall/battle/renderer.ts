@@ -6,6 +6,7 @@ import { Skill } from "../soul/skill";
 import { RenderSoul } from "../soul/renderSoul";
 
 import { GameState } from "../gameState";
+import { SwitchOut } from "./action";
 
 class Renderer { 
 
@@ -66,30 +67,35 @@ class Renderer {
     }
 
     private makeSwitchWrapper(
-        switchOut: number | FaintData,
-        playerSoul: PlayerSoul,
-        switchIn: number,
+        switchOutFainted: boolean,
+        action: SwitchOut,
         playerSouls: Array<FieldedPlayerSoul | null>,
     ){
-        const switchContainer = RenderSoul.getSwitchContainer(playerSoul);
+        const battleSoul = playerSouls[action.soulPartyIndex];
+        if (battleSoul === null) {
+            console.error("battleSoul is null ???");
+            return;
+        }
+
+        const switchContainer = RenderSoul.getSwitchContainer(battleSoul.soul);
         const switchButton = switchContainer.getElementsByTagName("button")[0];
 
         let offField = true;
         playerSouls.forEach((s) => {
-            if (s !== null && s.soul === playerSoul) {
+            if (s !== null && s.soul === battleSoul.soul) {
                 offField = false;
             }
         })
 
-        if (playerSoul.currentHP > 0 && offField) {
-            if (typeof switchOut === "number") {
+        if (battleSoul.soul.currentHP > 0 && offField) {
+            if (!switchOutFainted) {
                 switchButton.addEventListener("click",
-                    this.switchHandlerCreator(switchOut, switchIn),
+                    this.switchHandlerCreator(action.soulPartyIndex, action.switchInIndex),
                     false);
             }
             else {
                 switchButton.addEventListener("click",
-                    this.switchFaintHandlerCreator(switchOut, switchIn),
+                    this.switchFaintHandlerCreator(action.soulPartyIndex, action.switchInIndex),
                     false);
             }
         }
@@ -109,7 +115,13 @@ class Renderer {
         switchContent[1].textContent = "SWITCH ACTIVE PROCESS?";
 
         playerParty.forEach((playerSoul, i) => {
-            const switchWrapper = this.makeSwitchWrapper(0, playerSoul, i, playerSouls);
+            const switchWrapper = this.makeSwitchWrapper(
+                false,
+                new SwitchOut(0, i), playerSouls);
+            if (switchWrapper === undefined) {
+                console.error("switchWrapper is undefined");
+                return;
+            }
             switchContent[0].append(switchWrapper);
         });
     }
@@ -124,7 +136,15 @@ class Renderer {
         switchContent[1].textContent = "PROCESS DESTROYED. MUST DEPLOY NEW PROCESS.";
 
         playerParty.forEach((playerSoul, i) => {
-            const switchWrapper = this.makeSwitchWrapper(faintInfo, playerSoul, i, playerSouls);
+            const switchWrapper = this.makeSwitchWrapper(
+                true,
+                new SwitchOut(faintInfo.playerSoulsIndex, i),
+                playerSouls
+            );
+            if (switchWrapper === undefined) {
+                console.error("switchWrapper is undefined");
+                return;
+            }
             switchContent[0].append(switchWrapper);
         });
     }
