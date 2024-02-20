@@ -1,11 +1,11 @@
-import {Skill} from "../soul/skill";
 import {IndividualSoul, PlayerSoul} from "../soul/individualSoul";
 import {StatDict, CONSTANTS } from "../data/constants";
 import { RenderBattleSoul } from "./renderBattleSoul";
+import { Action, UseSkill } from "./action";
 
 abstract class BattleSoul {
     soul: IndividualSoul;
-    selected_skill: Skill | null;
+    selected_action: Action | null;
     selected_target: Array<BattleSoul> | null;
 
     stat_changes: StatDict;
@@ -16,7 +16,7 @@ abstract class BattleSoul {
 
     constructor(soul: IndividualSoul) {
         this.soul = soul;
-        this.selected_skill = null;
+        this.selected_action = null;
         this.selected_target = null;
 
         this.stat_changes = {
@@ -98,9 +98,10 @@ class EnemySoul extends BattleSoul {
 
         // const randomSkill = Math.floor(Math.random() * this.soul.skills.length);
         const randomSkill = 1;
-        this.selected_skill = this.soul.skills[randomSkill];
+        const selected_skill = this.soul.skills[randomSkill];
+        this.selected_action = new UseSkill(this.index, selected_skill);
 
-        switch (this.selected_skill.data.target) {
+        switch (selected_skill.data.target) {
             case CONSTANTS.TARGETS.SELECTED:
             case CONSTANTS.TARGETS.OPPOSING:
                 let randomTarget = Math.floor(Math.random() * playerSouls.length);

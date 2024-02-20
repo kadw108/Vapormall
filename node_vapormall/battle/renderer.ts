@@ -21,12 +21,12 @@ class Renderer {
         this.createSwitchFaintHandler = createSwitchFaintHandler;
     }
 
-    private makeSkillWrapper(playerSoul: FieldedPlayerSoul, skill: Skill, i: number) {
+    private makeSkillWrapper(playerSoul: FieldedPlayerSoul, skill: Skill) {
         const skillWrapper = skill.getSkillContainer();
         const skillButton = skillWrapper.getElementsByTagName("button")[0];
 
         if (skill.pp > 0) {
-            const useSkill = new UseSkill(playerSoul.index, i);
+            const useSkill = new UseSkill(playerSoul.index, skill);
             skillButton.addEventListener("click",
                 this.createActionHandler(useSkill),
                 false);
@@ -46,7 +46,7 @@ class Renderer {
         skillContainer.append(prompt);
 
         playerSoul.soul.skills.forEach((skill, i) => {
-            const skillWrapper = this.makeSkillWrapper(playerSoul, skill, i);
+            const skillWrapper = this.makeSkillWrapper(playerSoul, skill);
             skillContainer?.append(skillWrapper);
         });
         document.getElementById("bottomContent")?.append(skillContainer);
@@ -147,14 +147,31 @@ class Renderer {
         });
     }
 
-    renderItems() {
-        
+    private renderItems(
+        playerParty: Array<PlayerSoul>,
+    ){
+        /*
+        const switchContent = this.makeSwitchContainer();
+
+        switchContent[1].textContent = "SWITCH ACTIVE PROCESS?";
+
+        playerParty.forEach((playerSoul, i) => {
+            const switchWrapper = this.makeSwitchWrapper(
+                false,
+                new SwitchOut(0, i), playerSouls);
+            if (switchWrapper === undefined) {
+                console.error("switchWrapper is undefined");
+                return;
+            }
+            switchContent[0].append(switchWrapper);
+        });
+        */
     }
 
     showActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul | null>) {
         this.renderSkills(playerSoul);
         this.renderSwitch(playerParty, playerSouls);
-        this.renderItems();
+        this.renderItems(playerParty);
     }
 
     hideActions() {
@@ -162,7 +179,7 @@ class Renderer {
         bottomContent!.innerHTML = "";
     }
 
-    endBattle() {
+    showEndScreen() {
         document.getElementById("endScreen")!.classList.remove("hidden");
     }
 }

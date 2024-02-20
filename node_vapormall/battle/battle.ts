@@ -6,7 +6,8 @@ import { Renderer } from "./renderer";
 import { MessageTimer } from "./messageTimer";
 import { Calculator } from "./calculator";
 import { GameState } from "../gameState";
-import { Action,SwitchOut, UseSkill } from "./action";
+import { Action, SwitchOut, UseSkill, UseItem } from "./action";
+import { Inventory } from "../inventory";
 
 interface FaintData {
   soul: FieldedPlayerSoul;
@@ -58,12 +59,13 @@ class Battle {
     }
 
     private selectPlayerTarget(playerSoul: FieldedPlayerSoul) {
-        if (playerSoul.selected_skill === null) {
+        if (playerSoul.selected_action === null || !playerSoul.selected_action.isUseSkill()) {
             console.error("SELECTING TARGET FOR NULL PLAYER SKILL");
             return;
         }
 
-        switch (playerSoul.selected_skill.data.target)  {
+        const selected_skill = (playerSoul.selected_action as UseSkill).skill;
+        switch (selected_skill.data.target)  {
             case CONSTANTS.TARGETS.SELECTED:
             case CONSTANTS.TARGETS.OPPOSING:
                 const j = 0;
@@ -82,6 +84,14 @@ class Battle {
                 playerSoul.selected_target = [];
                 break;
             }
+    }
+
+    private runItems() {
+        this.allSouls().forEach(soul => {
+            if (soul !== null && soul.selected_action !== null && soul.selected_action.isUseItem()) {
+                this.useItem(soul);
+            }
+        });
     }
 
     private runSkills() {
@@ -146,7 +156,7 @@ class Battle {
             this.messageTimer.addMessage(
                 () => {
                     this.messageTimer.clearAll();
-                    this.renderer.endBattle();
+                    this.renderer.showEndScreen();
                 }
             );
         }
@@ -160,7 +170,7 @@ class Battle {
     }
 
     useSkill(user: BattleSoul) {
-        const skill = user.selected_skill;
+        const skill = (user.selected_action as UseSkill).skill;
         if (skill === null) {
             console.log("Using null skill!");
             return;
@@ -190,6 +200,20 @@ class Battle {
             case CONSTANTS.TARGETS.NONE:
                 break;
         }
+    }
+
+    useItem(user: BattleSoul) {
+        const item = (user.selected_action as UseItem).item;
+        if (item === null) {
+            console.log("Using null item!");
+            return;
+        }
+        if (!GameState.Inventory.hasItem(item)) {
+            console.error("Using item player does not have!");
+            return;
+        }
+        GameState.Inventory.removeItem(item);
+        item.itemEffect(user);
     }
 
     switchSoul(action: SwitchOut): FieldedPlayerSoul {
@@ -231,7 +255,7 @@ class Battle {
     createActionHandler(action: Action) {
         // from https://stackoverflow.com/questions/8941183/pass-multiple-arguments-along-with-an-event-object-to-an-event-handler
 
-        if (action.constructor.name === SwitchOut.name) {
+        if (action.isSwitchOut()) {
             return () => {
                 // arrow function for `this` https://stackoverflow.com/a/73068955
                 this.renderer.hideActions();
@@ -239,14 +263,20 @@ class Battle {
                 const switchInFieldedPlayerSoul = this.switchSoul(action as SwitchOut);
 
                 this.selectEnemySkills();
+                this.runItems();
                 this.runSkills();
                 this.messageTimer.addMessage(
                     this.nextTurnChoices(switchInFieldedPlayerSoul)
                 );
+                this.messageTimer.addMessage(
+                    () => {
+                        switchInFieldedPlayerSoul.selected_action = null;
+                    }
+                );
                 this.messageTimer.displayMessages(this.turns);
             }
         }
-        else if (action.constructor.name === UseSkill.name) {
+        else if (action.isUseSkill()) {
             return () => {
                 this.renderer.hideActions();
                 
@@ -256,21 +286,48 @@ class Battle {
                     return;
                 }
 
-                battleSoul.selected_skill = battleSoul.soul.skills[(action as UseSkill).whichSkill];
+                battleSoul.selected_action = action;
                 this.selectPlayerTarget(battleSoul);
 
                 this.selectEnemySkills();
+                this.runItems();
                 this.runSkills();
                 this.messageTimer.addMessage(
                     this.nextTurnChoices(battleSoul)
                 );
                 this.messageTimer.addMessage(
                     () => {
-                        battleSoul.selected_skill = null;
+                        battleSoul.selected_action = null;
                     }
                 )
                 this.messageTimer.displayMessages(this.turns);
 
+            }
+        }
+        else if (action.isUseItem()) {
+            return () => {
+                this.renderer.hideActions();
+
+                const battleSoul = this.playerSouls[action.soulPartyIndex];
+                if (battleSoul === null) {
+                    console.error("battleSoul is null ???");
+                    return;
+                }
+
+                battleSoul.selected_action = action;
+
+                this.selectEnemySkills();
+                this.runItems();
+                this.runSkills();
+                this.messageTimer.addMessage(
+                    this.nextTurnChoices(battleSoul)
+                );
+                this.messageTimer.addMessage(
+                    () => {
+                        battleSoul.selected_action = null;
+                    }
+                )
+                this.messageTimer.displayMessages(this.turns);
             }
         }
     }

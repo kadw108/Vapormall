@@ -25,7 +25,7 @@ class Inventory {
         ];
     }
 
-    addItem(newItem: Item) {
+    addItem(newItem: Item): void {
         this._keys.forEach(i => {
             if (i.item === newItem) {
                 i.count++;
@@ -57,6 +57,10 @@ class Inventory {
 
         console.error("Removing item that inventory does not have!");
         return false;
+    }
+
+    hasItem(item: Item): boolean {
+        return this._keys.some(i => i.item = item);
     }
 }
 
