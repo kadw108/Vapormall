@@ -5,6 +5,8 @@ import { PlayerSoul } from "../soul/individualSoul";
 import { Skill } from "../soul/skill";
 import { RenderSoul } from "../soul/renderSoul";
 
+import { GameState } from "../gameState";
+
 class Renderer { 
 
     skillHandlerCreator: Function;
@@ -127,9 +129,14 @@ class Renderer {
         });
     }
 
+    renderItems() {
+        
+    }
+
     showActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul | null>) {
         this.renderSkills(playerSoul);
         this.renderSwitch(playerParty, playerSouls);
+        this.renderItems();
     }
 
     hideActions() {

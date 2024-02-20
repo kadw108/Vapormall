@@ -6,6 +6,7 @@ import { Renderer } from "./renderer";
 import { MessageTimer } from "./messageTimer";
 import { Calculator } from "./calculator";
 import { GameState } from "../gameState";
+import { SwitchOut } from "./action";
 
 interface FaintData {
   soul: FieldedPlayerSoul;
@@ -84,7 +85,7 @@ class Battle {
             }
     }
 
-    private passTurn() {
+    private runSkills() {
        function compareSpeed(soulAbsA: BattleSoul | null, soulAbsB: BattleSoul | null)  {
             if (soulAbsA === null || soulAbsB === null) {
                 console.error("comparing speed with null souls");
@@ -238,7 +239,7 @@ class Battle {
             this.selectPlayerTarget(playerSoul);
 
             this.selectEnemySkills();
-            this.passTurn();
+            this.runSkills();
             this.messageTimer.addMessage(
                 this.nextTurnChoices(playerSoul)
             );
@@ -261,12 +262,16 @@ class Battle {
             const switchInFieldedPlayerSoul = this.switchSoul(switchOut, switchIn);
 
             this.selectEnemySkills();
-            this.passTurn();
+            this.runSkills();
             this.messageTimer.addMessage(
                 this.nextTurnChoices(switchInFieldedPlayerSoul)
             );
             this.messageTimer.displayMessages(this.turns);
         }
+    }
+
+    passTurn() {
+        
     }
 
     createSwitchFaintClickHandler(faint: FaintData, switchIn: number) {
