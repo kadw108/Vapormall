@@ -10,8 +10,8 @@ GENERAL STYLE
   	--screenwidthbig: 800px;
 }
 
-/* Background */
-#bg {
+/* Background and fullscreen cover (for menus) */
+.fullscreenBg {
   height: 100%;
   width: 100%;
 
@@ -21,6 +21,14 @@ GENERAL STYLE
 
   z-index: -1;
   
+}
+
+#bg {
+  background-image: url("assets/background.png");
+  background-color: #000000;
+}
+
+#screenCover {
   background-image: url("assets/background.png");
   background-color: #000000;
 }

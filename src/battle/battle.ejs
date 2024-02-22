@@ -1,32 +1,22 @@
 <snippet name="Battle" styles="./battle/battleStyle.css; meta/styles/inventoryStyle.css">
 
-<div id="contents">
-    <div id="bg"></div>
-    <div id="screenCover" class="fullscreenBg"></div>
-    <div id="passages"><div class="passage">
-        <div id="screenBg"></div>
+<div id="endScreen" class="hidden">
+    <div>
+        <p>THE BATTLE IS OVER</p>
 
-        <div id="screenContents" class="absoluteAlign">
-            <div id="endScreen" class="hidden">
-                <div>
-                    <p>THE BATTLE IS OVER</p>
+        <p><button type="button" id="next">Next</button></p>
+    </div>
+</div>
 
-                    <p><button type="button" id="next">Next</button></p>
-                </div>
-            </div>
+<div id="topHalf" class="absoluteAlign">
+    <div id="messageContainer"></div>
+</div>
+<div id="bottomhalf" class="absoluteAlign blackBg">
+    <button type="button" class="menuButton" id="logButton">Battle Log</button>
+    <div id="battleLog" class="hidden menuPanel absoluteAlign"></div>
 
-            <div id="topHalf" class="absoluteAlign">
-                <div id="messageContainer"></div>
-            </div>
-            <div id="bottomhalf" class="absoluteAlign blackBg">
-                <button type="button" class="menuButton" id="logButton">Battle Log</button>
-                <div id="battleLog" class="hidden menuPanel absoluteAlign"></div>
-
-                <div id="bottomContent">
-                </div>
-            </div>
-        </div>
-    </div></div>
+    <div id="bottomContent">
+    </div>
 </div>
 
 <%

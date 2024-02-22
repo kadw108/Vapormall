@@ -15,6 +15,8 @@ import {PartyMenu} from "./menu/partyMenu";
 import {InventoryMenu} from "./menu/inventoryMenu";
 import {MapMenu} from "./menu/mapMenu";
 
+import {addWrapperHtml} from "./addWrapperHtml";
+
 export {
   CONSTANTS,
   SKILL_LIST,
@@ -28,5 +30,6 @@ export {
   MallMap,
   PartyMenu,
   InventoryMenu,
-  MapMenu
+  MapMenu,
+  addWrapperHtml
 }

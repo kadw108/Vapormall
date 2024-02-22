@@ -7,7 +7,8 @@
         "version": "1.0.0"
     },
     "scripts": {
-        "story": "meta/vapormall.js"
+        "story": "meta/vapormall.js",
+        "global": "meta/scripts/globalScript.js"
     },
     "styles": {
         "story": [
