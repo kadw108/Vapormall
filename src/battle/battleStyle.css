@@ -1,3 +1,7 @@
+#inventoryButton {
+  margin: 20px 0 20px 0;
+}
+
 #endScreen {
   z-index: 4;
   position: absolute;
@@ -46,19 +50,4 @@
   position: absolute;
   top: 5px;
   right: 5px;
-}
-
-/* General Styles */
-
-.noClick {
-  color: #666;
-  background-color: #333;
-}
-
-.choice-wrapper {
-  display: inline-block;
-  margin: 0.5%;
-}
-.choice-wrapper > button {
-  width: 100%;
 }

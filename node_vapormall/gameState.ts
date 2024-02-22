@@ -24,11 +24,11 @@ class GameState {
         return GameState._visitedRooms;
     }
     public static addVisitedRoom(room: Room) {
-        GameState._visitedRooms.forEach((r) => {
+        for (const r of GameState.VisitedRooms) {
             if (r.coord === room.coord) {
                 return;
             }
-        })
+        }
         GameState._visitedRooms.push(room);
     }
 

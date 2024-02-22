@@ -8,6 +8,7 @@ interface Item {
     description: string;
     soulCanUse: Function;
     itemEffect: Function;
+    useMessage: string;
 }
 
 interface ItemList { [key: string]: Item };
@@ -30,7 +31,8 @@ const ITEMS : ItemList = {
         sprite: "temp.png",
         description: "Restores integrity of damaged process by 10.",
         soulCanUse: hpOverZero,
-        itemEffect: makeHealHPFunction(10, 0)
+        itemEffect: makeHealHPFunction(10, 0),
+        useMessage: "[target] was healed."
     },
     advanced_repair_module: {
         name: "Adv. Repair Module",
@@ -38,7 +40,8 @@ const ITEMS : ItemList = {
         sprite: "temp.png",
         description: "Restores integrity of damaged process by 25.",
         soulCanUse: hpOverZero,
-        itemEffect: makeHealHPFunction(25, 0)
+        itemEffect: makeHealHPFunction(25, 0),
+        useMessage: "[target] was healed."
     },
     full_repair_module: {
         name: "Full Repair Module",
@@ -46,7 +49,8 @@ const ITEMS : ItemList = {
         sprite: "temp.png",
         description: "Restores all integrity of damaged process.",
         soulCanUse: hpOverZero,
-        itemEffect: makeHealHPFunction(0, 100)
+        itemEffect: makeHealHPFunction(0, 100),
+        useMessage: "[target] was healed."
     }
 }
 

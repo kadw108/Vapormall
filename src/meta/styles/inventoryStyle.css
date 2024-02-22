@@ -1,10 +1,14 @@
 #inventory {
   overflow: hidden;
 }
+#inventory > .inventoryButton {
+  position: absolute;
+  bottom: 0;
+}
 #inventoryGrid {
   display: grid;
   grid-template-columns: 50% 50%;
-  height: calc(100% - 25px);
+  height: calc(100% - 30px);
   width: calc(100% - 10px);
   grid-gap: 5px;
 }
@@ -36,4 +40,9 @@
   padding-top: 7px;
   grid-row: 1;
   height: 100%;
+}
+
+#useItemDiv {
+  height: 20%;
+  top: auto;
 }

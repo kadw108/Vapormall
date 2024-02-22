@@ -1,8 +1,15 @@
+import { ItemKey } from "../inventory";
 import { Manager } from "../manager";
 import { InventoryMenuAbstract } from "../menu/inventoryMenuAbstract";
+import { PlayerSoul } from "../soul/individualSoul";
+import { UseItem } from "./action";
+import { FieldedPlayerSoul } from "./battleSoul";
 
 class BattleItemMenu extends InventoryMenuAbstract {
-    constructor() {
+    playerSoul: FieldedPlayerSoul;
+    createActionHandler: Function;
+
+    constructor(playerSoul: FieldedPlayerSoul, createActionHandler: Function) {
         super();
 
         const itemButton = document.createElement("button");
@@ -26,6 +33,9 @@ class BattleItemMenu extends InventoryMenuAbstract {
 
         this.selected = null;
         this.refreshMenu();
+
+        this.playerSoul = playerSoul;
+        this.createActionHandler = createActionHandler;
     }
 
     addCloseButton() {
@@ -52,6 +62,16 @@ class BattleItemMenu extends InventoryMenuAbstract {
         super.fillInventoryDiv();
         this.addCloseButton();
     }
+
+    override createUseItemHandler(playerSoul: PlayerSoul, itemKey: ItemKey): EventListenerOrEventListenerObject {
+        const handler = (event: Event) => {
+            const action = new UseItem(this.playerSoul.index, itemKey.item, playerSoul);
+            const test = this.createActionHandler(action);
+            console.log(test);
+            test();
+        };
+        return handler;
+    };
 }
 
 export {

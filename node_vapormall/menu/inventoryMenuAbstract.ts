@@ -2,6 +2,7 @@ import { GameState } from "../gameState";
 import { PlayerSoul } from "../soul/individualSoul";
 import { RenderSoul } from "../soul/renderSoul";
 import { ItemKey } from "../inventory";
+import { Item } from "../data/item";
 
 abstract class InventoryMenuAbstract {
 
@@ -138,15 +139,7 @@ abstract class InventoryMenuAbstract {
 
         if (itemKey.item.soulCanUse(playerSoul)) {
             useButton.addEventListener("click",
-                (event) => {
-                    itemKey.item.itemEffect(playerSoul);
-                    const itemRemains = GameState.Inventory.removeItem(itemKey.item);
-                    if (!itemRemains) {
-                        this.clearSelection();
-                    }
-
-                    this.refreshMenu();
-                },
+                this.createUseItemHandler(playerSoul, itemKey),
                 false);
         }
         else {
@@ -155,6 +148,21 @@ abstract class InventoryMenuAbstract {
 
         return useButton;
     }
+
+    displayUseMessage(
+        playerSoul: PlayerSoul,
+        item: Item,
+    ) {
+        const useMessageDiv = document.createElement("div");
+        useMessageDiv.id = "useMessageDiv";
+        useMessageDiv.classList.add("menuPanel", "absoluteAlign");
+        const useMessage = item.useMessage.replace("[target]", playerSoul.name);
+        useMessageDiv.innerText = useMessage;
+
+        document.getElementById("topHalf")?.append(useMessageDiv);
+    }
+
+    abstract createUseItemHandler(playerSoul: PlayerSoul, itemKey: ItemKey): EventListenerOrEventListenerObject;
 }
 
 export {

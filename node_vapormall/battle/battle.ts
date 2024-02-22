@@ -52,6 +52,15 @@ class Battle {
         this.turns = 0;
     }
 
+    private getFieldedSoul(soul: IndividualSoul): BattleSoul | null {
+        for (const battleSoul of this.allSouls()) {
+            if (battleSoul !== null && battleSoul.soul === soul) {
+                return battleSoul;
+            }
+        }
+        return null;
+    }
+
     private selectEnemySkills() {
         for (const i of this.enemySouls) {
             i.chooseMove(this.allSouls(), this.playerSouls, this.enemySouls);
@@ -87,11 +96,31 @@ class Battle {
     }
 
     private runItems() {
-        this.allSouls().forEach(soul => {
+        for (const soul of this.allSouls()) {
             if (soul !== null && soul.selected_action !== null && soul.selected_action.isUseItem()) {
-                this.useItem(soul);
+                const item = (soul.selected_action as UseItem).item
+                const target = (soul.selected_action as UseItem).targetSoul;
+
+                if (!GameState.Inventory.hasItem(item)) {
+                    console.error("Using item player does not have!");
+                    return;
+                }
+
+                this.messageTimer.addMessage(
+                    () => {
+                        GameState.Inventory.removeItem(item);
+                        item.itemEffect(target);
+
+                        const battleSoul = this.getFieldedSoul(target);
+                        if (battleSoul !== null) {
+                            battleSoul.renderer.displayHP += drain;
+                            battleSoul.renderer.updateHP();
+                        }
+                    }
+                );
+                this.messageTimer.addMessage("You used " + item.long_name + " on " + target.name + "!");
             }
-        });
+        }
     }
 
     private runSkills() {
@@ -106,7 +135,7 @@ class Battle {
        const speed_order = this.allSouls().sort(compareSpeed);
 
        for (let i = 0; i < speed_order.length; i++) {
-            if (speed_order[i] !== null) {
+            if (speed_order[i] !== null && speed_order[i]?.selected_action?.isUseSkill()) {
                 this.useSkill(speed_order[i]!);
             }
        }
@@ -202,20 +231,6 @@ class Battle {
         }
     }
 
-    useItem(user: BattleSoul) {
-        const item = (user.selected_action as UseItem).item;
-        if (item === null) {
-            console.log("Using null item!");
-            return;
-        }
-        if (!GameState.Inventory.hasItem(item)) {
-            console.error("Using item player does not have!");
-            return;
-        }
-        GameState.Inventory.removeItem(item);
-        item.itemEffect(user);
-    }
-
     switchSoul(action: SwitchOut): FieldedPlayerSoul {
         const leaving = this.playerSouls[action.soulPartyIndex];
         const entering = new FieldedPlayerSoul(this.playerParty[action.switchInIndex]);
@@ -276,7 +291,7 @@ class Battle {
                 this.messageTimer.displayMessages(this.turns);
             }
         }
-        else if (action.isUseSkill()) {
+        else {
             return () => {
                 this.renderer.hideActions();
                 
@@ -302,32 +317,6 @@ class Battle {
                 )
                 this.messageTimer.displayMessages(this.turns);
 
-            }
-        }
-        else if (action.isUseItem()) {
-            return () => {
-                this.renderer.hideActions();
-
-                const battleSoul = this.playerSouls[action.soulPartyIndex];
-                if (battleSoul === null) {
-                    console.error("battleSoul is null ???");
-                    return;
-                }
-
-                battleSoul.selected_action = action;
-
-                this.selectEnemySkills();
-                this.runItems();
-                this.runSkills();
-                this.messageTimer.addMessage(
-                    this.nextTurnChoices(battleSoul)
-                );
-                this.messageTimer.addMessage(
-                    () => {
-                        battleSoul.selected_action = null;
-                    }
-                )
-                this.messageTimer.displayMessages(this.turns);
             }
         }
     }

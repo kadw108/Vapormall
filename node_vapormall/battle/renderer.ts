@@ -150,7 +150,10 @@ class Renderer {
     showActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul | null>) {
         this.renderSkills(playerSoul);
         this.renderSwitch(playerParty, playerSouls);
-        const battleItemMenu = new BattleItemMenu();
+        const battleItemMenu = new BattleItemMenu(
+            playerSoul,
+            this.createActionHandler,
+        );
     }
 
     hideActions() {

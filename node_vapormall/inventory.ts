@@ -26,34 +26,35 @@ class Inventory {
     }
 
     addItem(newItem: Item): void {
-        this._keys.forEach(i => {
+        for (const i of this._keys) {
             if (i.item === newItem) {
                 i.count++;
                 return;
             }
-        });
+        }
 
         this._keys.push(new ItemKey(newItem, 1));
     }
 
     // boolean is whether there is an item left or not
     removeItem(usedItem: Item): boolean {
-        this._keys.forEach((key, index) => {
+        for (let i = 0; i < this.Keys.length; i++) {
+            const key = this.Keys[i];
+
             if (key.item === usedItem) {
                 if (key.count > 1) {
                     key.count--;
                     return true;
                 }
                 else if (key.count === 1) {
-                    this._keys.splice(index, 1);
+                    this._keys.splice(i, 1);
                     return false;
                 }
-                else {
-                    console.error("Inventory has 0 or less of an item!");
-                    return false;
-                }
+
+                console.error("Inventory has 0 or less of an item!");
+                return false;
             }
-        });
+        }
 
         console.error("Removing item that inventory does not have!");
         return false;

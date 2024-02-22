@@ -1,9 +1,13 @@
 import { Item } from "../data/item";
+import { IndividualSoul } from "../soul/individualSoul";
 import { Skill } from "../soul/skill";
-import { BattleSoul } from "./battleSoul";
 
 class Action {
     soulPartyIndex: number;
+
+    constructor(soulPartyIndex: number) {
+        this.soulPartyIndex = soulPartyIndex;
+    }
 
     isUseItem() {
         return this.constructor.name === UseItem.name;
@@ -18,10 +22,12 @@ class Action {
 
 class UseItem extends Action {
     item: Item;
+    targetSoul: IndividualSoul;
 
-    constructor(soulPartyIndex: number, item: Item) {
-        super();
+    constructor(soulPartyIndex: number, item: Item, targetSoul: IndividualSoul) {
+        super(soulPartyIndex);
         this.item = item;
+        this.targetSoul = targetSoul;
     }
 }
 
@@ -29,8 +35,7 @@ class SwitchOut extends Action {
     switchInIndex: number;
 
     constructor(soulPartyIndex: number, switchInIndex: number) {
-        super();
-        this.soulPartyIndex = soulPartyIndex;
+        super(soulPartyIndex);
         this.switchInIndex = switchInIndex;
     }
 }
@@ -39,8 +44,7 @@ class UseSkill extends Action {
     skill: Skill;
 
     constructor(soulPartyIndex: number, skill: Skill) {
-        super();
-        this.soulPartyIndex = soulPartyIndex;
+        super(soulPartyIndex);
         this.skill = skill;
     }
 }

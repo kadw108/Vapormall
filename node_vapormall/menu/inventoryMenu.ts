@@ -1,8 +1,7 @@
 import { GameState } from "../gameState";
-import { PlayerSoul } from "../soul/individualSoul";
-import { Manager } from "../manager";
-import { RenderSoul } from "../soul/renderSoul";
 import { ItemKey } from "../inventory";
+import { Manager } from "../manager";
+import { PlayerSoul } from "../soul/individualSoul";
 import { InventoryMenuAbstract } from "./inventoryMenuAbstract";
 
 class InventoryMenu extends InventoryMenuAbstract {
@@ -20,6 +19,21 @@ class InventoryMenu extends InventoryMenuAbstract {
 
         this.selected = null;
     }
+
+    override createUseItemHandler(playerSoul: PlayerSoul, itemKey: ItemKey): EventListenerOrEventListenerObject {
+        const handler = (event: Event) => {
+            itemKey.item.itemEffect(playerSoul);
+            const itemRemains = GameState.Inventory.removeItem(itemKey.item);
+            if (!itemRemains) {
+                this.clearSelection();
+            }
+
+            this.refreshMenu();
+
+            this.displayUseMessage(playerSoul, itemKey.item);
+        };
+        return handler;
+    };
 }
 
 export {
