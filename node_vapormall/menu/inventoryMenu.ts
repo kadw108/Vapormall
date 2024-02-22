@@ -1,10 +1,8 @@
 import { GameState } from "../gameState";
 import { PlayerSoul } from "../soul/individualSoul";
-import { CONSTANTS } from "../data/constants";
 import { Manager } from "../manager";
 import { RenderSoul } from "../soul/renderSoul";
-import { Inventory, ItemKey } from "../inventory";
-import { Item } from "../data/item";
+import { ItemKey } from "../inventory";
 
 class InventoryMenu {
 
@@ -33,17 +31,29 @@ class InventoryMenu {
     }
 
     private fillInventoryDiv() {
+        const inventoryDiv = document.getElementById("inventory");
+        if (inventoryDiv === null) {
+            console.error("Inventory menu is null!");
+            return;
+        }
+        const inventoryGrid = document.createElement("div");
+        inventoryGrid.id = "inventoryGrid";
+        inventoryDiv.append(inventoryGrid);
+
+        const itemList = document.createElement("div");
+        itemList.id = "itemList"
+        inventoryGrid.append(itemList);
         GameState.Inventory.Keys.forEach(key => {
             const infoDiv = this.itemDiv(key);
-            const inventoryDiv = document.getElementById("inventory");
-            inventoryDiv?.append(infoDiv);
+            itemList.append(infoDiv);
         });
+        inventoryGrid.append(itemList);
     }
 
     private addDetailedInfoDiv(key: ItemKey) {
         const detailedInfoDiv = this.itemInfoDiv(key);
-        const topHalf = document.getElementById("topHalf");
-        topHalf?.append(detailedInfoDiv);
+        const inventoryGrid = document.getElementById("inventoryGrid");
+        inventoryGrid?.append(detailedInfoDiv);
     }
 
     private removeDetailedInfoDiv() {
@@ -58,9 +68,10 @@ class InventoryMenu {
         this.selected?.classList.remove("selected");
         this.removeDetailedInfoDiv();
         this.removeUseMenu();
+        this.selected = null;
     }
 
-    private itemDiv(itemKey: ItemKey) {
+    renderItem(itemKey: ItemKey) {
         const infoDiv = document.createElement("div");
         infoDiv.classList.add("itemKeyDiv");
 
@@ -72,6 +83,11 @@ class InventoryMenu {
             itemKey.item.name,
             countText
         );
+        return infoDiv;
+    }
+
+    private itemDiv(itemKey: ItemKey) {
+        const infoDiv = this.renderItem(itemKey);
 
         infoDiv.addEventListener("mouseenter", () => {
             if (this.selected === null) {
@@ -101,10 +117,6 @@ class InventoryMenu {
                 this.selected = infoDiv;
                 this.selected.classList.add("selected");
                 document.getElementById("itemInfoDiv")?.classList.add("selected");
-
-                const useMenu = this.useMenu(itemKey);
-                const topHalf = document.getElementById("topHalf");
-                topHalf?.append(useMenu);
             }
         });
 
@@ -114,17 +126,25 @@ class InventoryMenu {
     private itemInfoDiv(itemKey: ItemKey) {
         const infoDiv = document.createElement("div");
         infoDiv.id = "itemInfoDiv";
-        infoDiv.classList.add("menuPanel", "absoluteAlign");
+        infoDiv.classList.add("menuPanel");
 
-        const name = document.createElement("h4");
+        const name = document.createElement("h6");
         name.innerText = itemKey.item.long_name;
 
         const description = document.createElement("p");
         description.innerText = itemKey.item.description;
 
+        const useButtonContainer = document.createElement("div");
+        useButtonContainer.id = "useButtonContainer";
+        GameState.partySouls.forEach((playerSoul, i) => {
+            const useButton = this.makeUseButton(playerSoul, itemKey);
+            useButtonContainer.append(useButton);
+        });
+
         infoDiv.append(
             name,
-            description
+            description,
+            useButtonContainer
         );
 
         return infoDiv;
@@ -150,34 +170,10 @@ class InventoryMenu {
                 false);
         }
         else {
-            // useButton.classList.add("noClick");
+            useButton.classList.add("noClick");
         }
 
         return useButton;
-    }
-
-    private useMenu(itemKey: ItemKey) {
-        const useMenu = document.createElement("div");
-        useMenu.id = "itemUseMenu";
-        useMenu.classList.add("menuPanel", "absoluteAlign", "selected");
-
-        const name = document.createElement("h4");
-        name.innerText = "Use " + itemKey.item.long_name;
-
-        const useButtonContainer = document.createElement("div");
-        useButtonContainer.id = "useButtonContainer";
-
-        GameState.partySouls.forEach((playerSoul, i) => {
-            const useButton = this.makeUseButton(playerSoul, itemKey);
-            useButtonContainer.append(useButton);
-        });
-
-        useMenu.append(
-            name,
-            useButtonContainer
-        );
-
-        return useMenu;
     }
 }
 

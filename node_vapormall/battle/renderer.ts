@@ -5,8 +5,8 @@ import { PlayerSoul } from "../soul/individualSoul";
 import { Skill } from "../soul/skill";
 import { RenderSoul } from "../soul/renderSoul";
 
-import { GameState } from "../gameState";
 import { SwitchOut, UseSkill } from "./action";
+import { BattleItemMenu } from "./battleItemMenu";
 
 class Renderer { 
 
@@ -147,31 +147,12 @@ class Renderer {
         });
     }
 
-    private renderItems(
-        playerParty: Array<PlayerSoul>,
-    ){
-        /*
-        const switchContent = this.makeSwitchContainer();
-
-        switchContent[1].textContent = "SWITCH ACTIVE PROCESS?";
-
-        playerParty.forEach((playerSoul, i) => {
-            const switchWrapper = this.makeSwitchWrapper(
-                false,
-                new SwitchOut(0, i), playerSouls);
-            if (switchWrapper === undefined) {
-                console.error("switchWrapper is undefined");
-                return;
-            }
-            switchContent[0].append(switchWrapper);
-        });
-        */
-    }
-
     showActions(playerSoul: FieldedPlayerSoul, playerParty: Array<PlayerSoul>, playerSouls: Array<FieldedPlayerSoul | null>) {
         this.renderSkills(playerSoul);
         this.renderSwitch(playerParty, playerSouls);
-        this.renderItems(playerParty);
+
+        const battleItemMenu = new BattleItemMenu();
+        battleItemMenu.renderItems(playerParty);
     }
 
     hideActions() {
