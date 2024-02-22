@@ -60,14 +60,9 @@ class InventoryMenu {
         document.getElementById("itemInfoDiv")?.remove();
     }
 
-    private removeUseMenu() {
-        document.getElementById("itemUseMenu")?.remove();
-    }
-
     private clearSelection() {
         this.selected?.classList.remove("selected");
         this.removeDetailedInfoDiv();
-        this.removeUseMenu();
         this.selected = null;
     }
 
@@ -105,8 +100,6 @@ class InventoryMenu {
                 this.selected.classList.remove("selected");
                 document.getElementById("itemInfoDiv")?.classList.remove("selected");
                 this.selected = null;
-
-                this.removeUseMenu();
             }
             else {
                 if (this.selected !== null) {

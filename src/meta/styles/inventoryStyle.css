@@ -9,10 +9,6 @@
   grid-gap: 5px;
 }
 
-.choice-wrapper {
-  width: 100%;
-}
-
 #itemList {
   grid-column: 2;
 }

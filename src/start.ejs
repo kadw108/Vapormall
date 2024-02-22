@@ -24,6 +24,7 @@ $(function () {
         const player1 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 5);
         player1.changeName("cool dude");
         const player1_real = ref.PlayerSoul.createPlayerSoul(player1);
+        player1_real.changeHP(-1);
         ref.GameState.addSoul(player1_real);
 
         const player2 = new ref.IndividualSoul(ref.SOUL_LIST.Adware, 1);
