@@ -1,7 +1,7 @@
-import {SkillData} from "../data/skills";
-import {h} from "dom-chef";
+import { SkillData } from "../data/skills";
+import { h } from "dom-chef";
 
-class Skill{
+class Skill {
     data: SkillData;
     pp: number;
 
@@ -12,11 +12,16 @@ class Skill{
 
     private SkillButton(): JSX.Element {
         return (
-            <button type="button" className={"skill-button outlineDiv skill-" + this.data.type}>
+            <button
+                type="button"
+                className={"skill-button outlineDiv skill-" + this.data.type}
+            >
                 {this.data.name}
-                <br/>
+                <br />
                 <small>{this.data.type + " "}</small>
-                <small>{this.pp}/{this.data.max_pp}</small>
+                <small>
+                    {this.pp}/{this.data.max_pp}
+                </small>
             </button>
         );
     }
@@ -25,12 +30,12 @@ class Skill{
         return (
             <div className="bottomhalf-tip outlineDiv hoverDiv hidden">
                 {this.data.name}
-                <p>{this.data.type} | {this.data.meta.category}</p>
-                <hr/>
-                {(this.data.power !== null) &&
-                    <p>Power: {this.data.power}</p>
-                }
-                <hr/>
+                <p>
+                    {this.data.type} | {this.data.meta.category}
+                </p>
+                <hr />
+                {this.data.power !== null && <p>Power: {this.data.power}</p>}
+                <hr />
                 <p>{this.data.description}</p>
             </div>
         );
@@ -40,19 +45,20 @@ class Skill{
         const skillButton = this.SkillButton();
         const skillTip = this.SkillTip();
 
-        skillButton.onmouseover = function(){
+        skillButton.onmouseover = function () {
             skillTip.style.display = "block";
-        }
-        skillButton.onmouseout = function(){
+        };
+        skillButton.onmouseout = function () {
             skillTip.style.display = "none";
-        }
+        };
 
-        return <div className="choice-wrapper">
-            {skillButton}{skillTip}
-        </div>;
+        return (
+            <div className="choice-wrapper">
+                {skillButton}
+                {skillTip}
+            </div>
+        );
     }
 }
 
-export {
-    Skill
-};
+export { Skill };

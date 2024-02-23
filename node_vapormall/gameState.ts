@@ -1,5 +1,5 @@
-import {PlayerSoul, IndividualSoul} from "./soul/individualSoul";
-import {MallMap} from "./map/mallmap";
+import { PlayerSoul, IndividualSoul } from "./soul/individualSoul";
+import { MallMap } from "./map/mallmap";
 import { Inventory } from "./inventory";
 import { Room } from "./map/room";
 
@@ -33,7 +33,7 @@ class GameState {
     }
 
     // used to pass info from room.ejs to battle.ejs
-    public static currentEnemy: IndividualSoul|null = null;
+    public static currentEnemy: IndividualSoul | null = null;
 
     static addSoul(ownedSoul: PlayerSoul) {
         GameState._partySouls.push(ownedSoul);
@@ -41,8 +41,9 @@ class GameState {
 
     static removeSoul(ownedSoul: PlayerSoul) {
         GameState._partySouls.splice(
-            GameState._partySouls.indexOf(ownedSoul), 1
-        )
+            GameState._partySouls.indexOf(ownedSoul),
+            1
+        );
     }
 
     static generateFloor() {
@@ -50,6 +51,4 @@ class GameState {
     }
 }
 
-export {
-    GameState
-};
+export { GameState };

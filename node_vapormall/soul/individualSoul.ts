@@ -1,6 +1,6 @@
-import {Skill} from "./skill";
-import {SoulSpecies, SOUL_LIST} from "../data/soul";
-import {CONSTANTS, StatDict} from "../data/constants";
+import { Skill } from "./skill";
+import { SoulSpecies, SOUL_LIST } from "../data/soul";
+import { CONSTANTS, StatDict } from "../data/constants";
 import { RenderIndividualSoul, RenderPlayerSoul } from "./renderIndividualSoul";
 
 /*
@@ -30,8 +30,8 @@ class IndividualSoul {
             [CONSTANTS.STATS.DEFENSE]: 0,
             [CONSTANTS.STATS.GLITCHATTACK]: 0,
             [CONSTANTS.STATS.GLITCHDEFENSE]: 0,
-            [CONSTANTS.STATS.SPEED]: 0
-        }
+            [CONSTANTS.STATS.SPEED]: 0,
+        };
         this.initializeStats();
         this.levelUpSimulate();
 
@@ -51,7 +51,9 @@ class IndividualSoul {
         let newMoveSlot = 0;
 
         this.soul_species.levelUp
-            .filter((levelUpChange) => {return levelUpChange.level <= this.level})
+            .filter((levelUpChange) => {
+                return levelUpChange.level <= this.level;
+            })
             .forEach((levelUpChange, i) => {
                 if (levelUpChange.statChanges !== undefined) {
                     levelUpChange.statChanges.forEach((statChange) => {
@@ -69,7 +71,10 @@ class IndividualSoul {
     }
 
     changeHP(num: number) {
-        this.currentHP = Math.min(this.stats[CONSTANTS.STATS.HP], this.currentHP + num);
+        this.currentHP = Math.min(
+            this.stats[CONSTANTS.STATS.HP],
+            this.currentHP + num
+        );
         this.currentHP = Math.max(0, this.currentHP);
     }
 
@@ -93,7 +98,10 @@ class PlayerSoul extends IndividualSoul {
     // https://stackoverflow.com/questions/45502366/best-practice-way-of-converting-from-one-type-to-another-in-typescript
     // doesn't work, whatever, manual mapping is the way
     public static createPlayerSoul(individualSoul: IndividualSoul): PlayerSoul {
-        const newSoul = new PlayerSoul(individualSoul.soul_species, individualSoul.level);
+        const newSoul = new PlayerSoul(
+            individualSoul.soul_species,
+            individualSoul.level
+        );
         const returnSoul = Object.assign(newSoul, individualSoul);
 
         // Can't put it into the constructor because of the weird
@@ -105,7 +113,4 @@ class PlayerSoul extends IndividualSoul {
     }
 }
 
-export {
-    IndividualSoul,
-    PlayerSoul
-};
+export { IndividualSoul, PlayerSoul };

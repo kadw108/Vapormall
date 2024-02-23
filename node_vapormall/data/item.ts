@@ -11,20 +11,26 @@ interface Item {
     useMessage: string;
 }
 
-interface ItemList { [key: string]: Item };
+interface ItemList {
+    [key: string]: Item;
+}
 
 function hpOverZero(soul: IndividualSoul): boolean {
-    return ((soul.currentHP !== soul.stats[CONSTANTS.STATS.HP]) && (soul.currentHP > 0));
+    return (
+        soul.currentHP !== soul.stats[CONSTANTS.STATS.HP] && soul.currentHP > 0
+    );
 }
 
 function makeHealHPFunction(healAmount: number, healPercent: number): Function {
     return (playerSoul: IndividualSoul) => {
         playerSoul.changeHP(healAmount);
-        playerSoul.changeHP(Math.ceil(playerSoul.stats[CONSTANTS.STATS.HP] * healPercent * 0.01));
-    }
+        playerSoul.changeHP(
+            Math.ceil(playerSoul.stats[CONSTANTS.STATS.HP] * healPercent * 0.01)
+        );
+    };
 }
 
-const ITEMS : ItemList = {
+const ITEMS: ItemList = {
     repair_module: {
         name: "Repair Module",
         long_name: "Repair Module",
@@ -32,7 +38,7 @@ const ITEMS : ItemList = {
         description: "Restores integrity of damaged process by 10.",
         soulCanUse: hpOverZero,
         itemEffect: makeHealHPFunction(10, 0),
-        useMessage: "[target] was healed."
+        useMessage: "[target] was healed.",
     },
     advanced_repair_module: {
         name: "Adv. Repair Module",
@@ -41,7 +47,7 @@ const ITEMS : ItemList = {
         description: "Restores integrity of damaged process by 25.",
         soulCanUse: hpOverZero,
         itemEffect: makeHealHPFunction(25, 0),
-        useMessage: "[target] was healed."
+        useMessage: "[target] was healed.",
     },
     full_repair_module: {
         name: "Full Repair Module",
@@ -50,8 +56,8 @@ const ITEMS : ItemList = {
         description: "Restores all integrity of damaged process.",
         soulCanUse: hpOverZero,
         itemEffect: makeHealHPFunction(0, 100),
-        useMessage: "[target] was healed."
-    }
-}
+        useMessage: "[target] was healed.",
+    },
+};
 
-export {Item, ITEMS};
+export { Item, ITEMS };

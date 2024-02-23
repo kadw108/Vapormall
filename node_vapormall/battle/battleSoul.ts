@@ -26,7 +26,7 @@ abstract class BattleSoul {
             [CONSTANTS.STATS.GLITCHATTACK]: 0,
             [CONSTANTS.STATS.GLITCHDEFENSE]: 0,
             [CONSTANTS.STATS.SPEED]: 0,
-        }
+        };
 
         this.index = 0;
 
@@ -46,11 +46,19 @@ abstract class BattleSoul {
     modifiedStatDict(): StatDict {
         return {
             [CONSTANTS.STATS.HP]: this.soul.currentHP,
-            [CONSTANTS.STATS.ATTACK]: this.calculateStat(CONSTANTS.STATS.ATTACK),
-            [CONSTANTS.STATS.DEFENSE]: this.calculateStat(CONSTANTS.STATS.DEFENSE),
-            [CONSTANTS.STATS.GLITCHATTACK]: this.calculateStat(CONSTANTS.STATS.GLITCHATTACK),
-            [CONSTANTS.STATS.GLITCHDEFENSE]: this.calculateStat(CONSTANTS.STATS.GLITCHDEFENSE),
-            [CONSTANTS.STATS.SPEED]: this.calculateStat(CONSTANTS.STATS.SPEED)
+            [CONSTANTS.STATS.ATTACK]: this.calculateStat(
+                CONSTANTS.STATS.ATTACK
+            ),
+            [CONSTANTS.STATS.DEFENSE]: this.calculateStat(
+                CONSTANTS.STATS.DEFENSE
+            ),
+            [CONSTANTS.STATS.GLITCHATTACK]: this.calculateStat(
+                CONSTANTS.STATS.GLITCHATTACK
+            ),
+            [CONSTANTS.STATS.GLITCHDEFENSE]: this.calculateStat(
+                CONSTANTS.STATS.GLITCHDEFENSE
+            ),
+            [CONSTANTS.STATS.SPEED]: this.calculateStat(CONSTANTS.STATS.SPEED),
         };
     }
 
@@ -64,8 +72,7 @@ abstract class BattleSoul {
         let modifier;
         if (this.stat_changes[stat] > 0) {
             modifier = (2 + this.stat_changes[stat]) / 2;
-        }
-        else {
+        } else {
             modifier = 2 / (2 - this.stat_changes[stat]);
         }
 
@@ -80,14 +87,22 @@ abstract class BattleSoul {
 class FieldedPlayerSoul extends BattleSoul {
     constructor(soul: PlayerSoul) {
         super(soul);
-        this.renderer.infoContainer.classList.add("playerInfo", "soulInfo", "blackBg");
+        this.renderer.infoContainer.classList.add(
+            "playerInfo",
+            "soulInfo",
+            "blackBg"
+        );
     }
 }
 
 class EnemySoul extends BattleSoul {
     constructor(soul: IndividualSoul) {
         super(soul);
-        this.renderer.infoContainer.classList.add("enemyInfo", "soulInfo", "blackBg");
+        this.renderer.infoContainer.classList.add(
+            "enemyInfo",
+            "soulInfo",
+            "blackBg"
+        );
     }
 
     chooseMove(
@@ -95,7 +110,6 @@ class EnemySoul extends BattleSoul {
         playerSouls: Array<FieldedPlayerSoul | null>,
         enemySouls: Array<EnemySoul>
     ) {
-
         // const randomSkill = Math.floor(Math.random() * this.soul.skills.length);
         const randomSkill = 1;
         const selected_skill = this.soul.skills[randomSkill];
@@ -104,8 +118,10 @@ class EnemySoul extends BattleSoul {
         switch (selected_skill.data.target) {
             case CONSTANTS.TARGETS.SELECTED:
             case CONSTANTS.TARGETS.OPPOSING:
-                let randomTarget = Math.floor(Math.random() * playerSouls.length);
-                while (playerSouls[randomTarget] === null)  {
+                let randomTarget = Math.floor(
+                    Math.random() * playerSouls.length
+                );
+                while (playerSouls[randomTarget] === null) {
                     randomTarget++;
 
                     if (randomTarget > 500) {
@@ -125,11 +141,7 @@ class EnemySoul extends BattleSoul {
             case CONSTANTS.TARGETS.NONE:
                 break;
         }
-    } 
+    }
 }
 
-export {
-    BattleSoul,
-    FieldedPlayerSoul,
-    EnemySoul
-}
+export { BattleSoul, FieldedPlayerSoul, EnemySoul };

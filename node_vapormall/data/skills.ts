@@ -1,35 +1,37 @@
-import {CONSTANTS} from "./constants";
+import { CONSTANTS } from "./constants";
 
 interface StatChange {
-  change: -3|-2|-1|1|2|3;
-  stat: CONSTANTS.STATS;
-  target: CONSTANTS.TARGETS;
+    change: -3 | -2 | -1 | 1 | 2 | 3;
+    stat: CONSTANTS.STATS;
+    target: CONSTANTS.TARGETS;
 }
 
 interface SkillData {
-  name: string;
-  description: string;
-  power: number | null;
-  max_pp: number;
-  priority: number;
-  stat_changes: Array<StatChange>;
-  target: CONSTANTS.TARGETS;
-  type: CONSTANTS.TYPES;
-  meta: {
-    category: CONSTANTS.SKILLCATEGORIES;
-    crit_rate: number;  
-    drain: number;
-    healing: number;
-    max_hits: number | null;
-    max_turns: number | null;
-    min_hits: number | null;
-    min_turns: number | null;
-  };
+    name: string;
+    description: string;
+    power: number | null;
+    max_pp: number;
+    priority: number;
+    stat_changes: Array<StatChange>;
+    target: CONSTANTS.TARGETS;
+    type: CONSTANTS.TYPES;
+    meta: {
+        category: CONSTANTS.SKILLCATEGORIES;
+        crit_rate: number;
+        drain: number;
+        healing: number;
+        max_hits: number | null;
+        max_turns: number | null;
+        min_hits: number | null;
+        min_turns: number | null;
+    };
 }
 
-interface Skills { [key: string]: SkillData };
+interface Skills {
+    [key: string]: SkillData;
+}
 
-const SKILL_LIST : Skills = {
+const SKILL_LIST: Skills = {
     basic_attack: {
         name: "Attack",
         description: "Basic attack.",
@@ -95,20 +97,21 @@ const SKILL_LIST : Skills = {
 
     dazzling_polish: {
         name: "Dazzling Polish",
-        description: "Polish simulated aesthetics for enhanced beauty. Raise Offense, Glitch Offense.",
+        description:
+            "Polish simulated aesthetics for enhanced beauty. Raise Offense, Glitch Offense.",
         power: null,
         max_pp: 15,
-        priority: 0, 
+        priority: 0,
         stat_changes: [
             {
                 change: 1,
                 stat: CONSTANTS.STATS.ATTACK,
-                target: CONSTANTS.TARGETS.SELF
+                target: CONSTANTS.TARGETS.SELF,
             },
             {
                 change: 1,
                 stat: CONSTANTS.STATS.GLITCHATTACK,
-                target: CONSTANTS.TARGETS.SELF
+                target: CONSTANTS.TARGETS.SELF,
             },
         ],
         target: CONSTANTS.TARGETS.SELF,
@@ -126,4 +129,4 @@ const SKILL_LIST : Skills = {
     },
 };
 
-export {SkillData, SKILL_LIST, StatChange};
+export { SkillData, SKILL_LIST, StatChange };

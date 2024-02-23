@@ -3,11 +3,10 @@ import { PlayerSoul } from "../soul/individualSoul";
 import { ItemKey } from "../inventory";
 import { Item } from "../data/item";
 
-import {h} from "dom-chef";
+import { h } from "dom-chef";
 
 abstract class InventoryMenuAbstract {
-
-    selected: HTMLElement|null;
+    selected: HTMLElement | null;
 
     refreshMenu() {
         const inventoryDiv = document.getElementById("inventory");
@@ -30,9 +29,9 @@ abstract class InventoryMenuAbstract {
         inventoryDiv.append(inventoryGrid);
 
         const itemList = document.createElement("div");
-        itemList.id = "itemList"
+        itemList.id = "itemList";
         inventoryGrid.append(itemList);
-        GameState.Inventory.Keys.forEach(key => {
+        GameState.Inventory.Keys.forEach((key) => {
             const infoDiv = this.itemDiv(key);
             itemList.append(infoDiv);
         });
@@ -56,10 +55,12 @@ abstract class InventoryMenuAbstract {
     }
 
     RenderItem(itemKey: ItemKey) {
-        return <div className="itemKeyDiv">
-            {itemKey.item.name}
-            <small className="countText">x{itemKey.count}</small>
-        </div>;
+        return (
+            <div className="itemKeyDiv">
+                {itemKey.item.name}
+                <small className="countText">x{itemKey.count}</small>
+            </div>
+        );
     }
 
     itemDiv(itemKey: ItemKey) {
@@ -79,10 +80,11 @@ abstract class InventoryMenuAbstract {
         infoDiv.addEventListener("click", () => {
             if (this.selected === infoDiv) {
                 this.selected.classList.remove("selected");
-                document.getElementById("itemInfoDiv")?.classList.remove("selected");
+                document
+                    .getElementById("itemInfoDiv")
+                    ?.classList.remove("selected");
                 this.selected = null;
-            }
-            else {
+            } else {
                 if (this.selected !== null) {
                     this.clearSelection();
                     this.addDetailedInfoDiv(itemKey);
@@ -90,7 +92,9 @@ abstract class InventoryMenuAbstract {
 
                 this.selected = infoDiv;
                 this.selected.classList.add("selected");
-                document.getElementById("itemInfoDiv")?.classList.add("selected");
+                document
+                    .getElementById("itemInfoDiv")
+                    ?.classList.add("selected");
             }
         });
 
@@ -99,40 +103,35 @@ abstract class InventoryMenuAbstract {
 
     ItemInfoDiv(itemKey: ItemKey) {
         return (
-        <div id = "itemInfoDiv" className="menuPanel">
-            <h6>{itemKey.item.long_name}</h6>
-            <p>{itemKey.item.description}</p>
-            <div id="useButtonContainer">
-                {GameState.partySouls.map((playerSoul, i) => {
-                    return this.makeUseButton(playerSoul, itemKey);
-                })}
+            <div id="itemInfoDiv" className="menuPanel">
+                <h6>{itemKey.item.long_name}</h6>
+                <p>{itemKey.item.description}</p>
+                <div id="useButtonContainer">
+                    {GameState.partySouls.map((playerSoul, i) => {
+                        return this.makeUseButton(playerSoul, itemKey);
+                    })}
+                </div>
             </div>
-        </div>
         );
     }
 
-    makeUseButton(
-        playerSoul: PlayerSoul,
-        itemKey: ItemKey,
-    ){
+    makeUseButton(playerSoul: PlayerSoul, itemKey: ItemKey) {
         const useButton = playerSoul.renderer.getSwitchContainer();
 
         if (itemKey.item.soulCanUse(playerSoul)) {
-            useButton.addEventListener("click",
+            useButton.addEventListener(
+                "click",
                 this.createUseItemHandler(playerSoul, itemKey),
-                false);
-        }
-        else {
+                false
+            );
+        } else {
             useButton.classList.add("noClick");
         }
 
         return useButton;
     }
 
-    displayUseMessage(
-        playerSoul: PlayerSoul,
-        item: Item,
-    ) {
+    displayUseMessage(playerSoul: PlayerSoul, item: Item) {
         const useMessageDiv = document.createElement("div");
         useMessageDiv.id = "useMessageDiv";
         useMessageDiv.classList.add("menuPanel", "absoluteAlign");
@@ -142,9 +141,10 @@ abstract class InventoryMenuAbstract {
         document.getElementById("topHalf")?.append(useMessageDiv);
     }
 
-    abstract createUseItemHandler(playerSoul: PlayerSoul, itemKey: ItemKey): EventListenerOrEventListenerObject;
+    abstract createUseItemHandler(
+        playerSoul: PlayerSoul,
+        itemKey: ItemKey
+    ): EventListenerOrEventListenerObject;
 }
 
-export {
-    InventoryMenuAbstract
-};
+export { InventoryMenuAbstract };

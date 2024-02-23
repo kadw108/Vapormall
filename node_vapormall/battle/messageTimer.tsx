@@ -1,15 +1,15 @@
 import { capitalizeFirstLetter } from "../utility";
-import {h} from "dom-chef";
+import { h } from "dom-chef";
 
 enum DURATIONS {
     BETWEENBLOCKS = 3100,
     BETWEENLINES = 750,
 }
 
-class MessageTimer { 
+class MessageTimer {
     private static readonly ENDBLOCK_STRING: string = "ENDBLOCK";
 
-    private messages: Array<string|Function>;
+    private messages: Array<string | Function>;
     private blocks: number;
     private timeouts: Array<NodeJS.Timeout>;
 
@@ -27,7 +27,7 @@ class MessageTimer {
         this.battleLog.innerHTML = "<p>BATTLE LOG</p>";
     }
 
-    private enqueueBlock(messages: Array<string|Function>) {
+    private enqueueBlock(messages: Array<string | Function>) {
         const displayDelay = this.blocks * DURATIONS.BETWEENBLOCKS;
 
         const timeout = setTimeout(() => {
@@ -39,39 +39,39 @@ class MessageTimer {
     }
 
     private getHTMLFromMessage(message: string, small: boolean): HTMLElement {
-        const html = <span>
-            {capitalizeFirstLetter(message)}<br/>
-        </span>;
+        const html = (
+            <span>
+                {capitalizeFirstLetter(message)}
+                <br />
+            </span>
+        );
 
         if (small) {
             html.style.setProperty("font-size", "90%");
-        }
-        else {
+        } else {
             html.style.setProperty("font-weight", "bold");
         }
 
         return html;
     }
 
-    private displayBlock(messages: Array<string|Function>) {
+    private displayBlock(messages: Array<string | Function>) {
         let displayDiv = false;
 
-        const messageDiv = <div className="message topMessage blackBg"/>;
-        const logDiv = <div className="message bottomMessage"/>;
+        const messageDiv = <div className="message topMessage blackBg" />;
+        const logDiv = <div className="message bottomMessage" />;
 
         let stringNum = 0;
         messages.forEach((item, i) => {
-
             const delay = stringNum * DURATIONS.BETWEENLINES;
-            
+
             if (typeof item === "string") {
                 displayDiv = true;
 
                 let messageHTML: HTMLElement;
                 if (i === 0) {
                     messageHTML = this.getHTMLFromMessage(item, false);
-                }
-                else {
+                } else {
                     messageHTML = this.getHTMLFromMessage(item, true);
                 }
 
@@ -82,8 +82,7 @@ class MessageTimer {
                 this.timeouts.push(timeout);
 
                 stringNum++;
-            }
-            else {
+            } else {
                 const timeout = setTimeout(() => {
                     item();
                 }, delay);
@@ -103,7 +102,7 @@ class MessageTimer {
         }
     }
 
-    addMessage(message: string|Function) {
+    addMessage(message: string | Function) {
         this.messages.push(message);
     }
 
@@ -125,11 +124,13 @@ class MessageTimer {
         let startIndex = 0;
         this.messages.forEach((message, i) => {
             if (message === MessageTimer.ENDBLOCK_STRING) {
-               this.enqueueBlock(this.messages.slice(startIndex, i));
-               startIndex = i + 1;
+                this.enqueueBlock(this.messages.slice(startIndex, i));
+                startIndex = i + 1;
             }
         });
-        this.enqueueBlock(this.messages.slice(startIndex, this.messages.length));
+        this.enqueueBlock(
+            this.messages.slice(startIndex, this.messages.length)
+        );
 
         this.messages = [];
     }
@@ -152,6 +153,4 @@ class MessageTimer {
     }
 }
 
-export {
-    MessageTimer
-};
+export { MessageTimer };

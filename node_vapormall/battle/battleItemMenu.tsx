@@ -5,7 +5,7 @@ import { PlayerSoul } from "../soul/individualSoul";
 import { UseItem } from "./action";
 import { FieldedPlayerSoul } from "./battleSoul";
 
-import {h} from "dom-chef";
+import { h } from "dom-chef";
 
 class BattleItemMenu extends InventoryMenuAbstract {
     playerSoul: FieldedPlayerSoul;
@@ -15,17 +15,25 @@ class BattleItemMenu extends InventoryMenuAbstract {
         super();
 
         const itemButton = (
-            <button type="button" id="inventoryButton" className="itemMenuButton">
+            <button
+                type="button"
+                id="inventoryButton"
+                className="itemMenuButton"
+            >
                 Inventory
             </button>
         );
         itemButton.addEventListener("click", () => {
             this.clearSelection();
         });
-        const inventory = <div id="inventory" className="hidden menuPanel absoluteAlign"/>;
+        const inventory = (
+            <div id="inventory" className="hidden menuPanel absoluteAlign" />
+        );
 
         document.getElementById("bottomContent")?.append(itemButton);
-        document.getElementById("battleLog")?.insertAdjacentElement("beforebegin", inventory);
+        document
+            .getElementById("battleLog")
+            ?.insertAdjacentElement("beforebegin", inventory);
         Manager.menuButton("inventoryButton", "inventory", "Inventory");
 
         this.playerSoul = playerSoul;
@@ -44,9 +52,11 @@ class BattleItemMenu extends InventoryMenuAbstract {
         itemButton.addEventListener("click", () => {
             inventoryDiv.classList.add("hidden");
             document.getElementById("inventoryButton")!.innerText = "Inventory";
-            document.getElementById("bottomContent")!.classList.remove("hidden");
+            document
+                .getElementById("bottomContent")!
+                .classList.remove("hidden");
 
-            document.querySelectorAll(".menuButton").forEach(element => {
+            document.querySelectorAll(".menuButton").forEach((element) => {
                 if (element.id !== "inventoryButton") {
                     element.classList.remove("hidden");
                 }
@@ -60,17 +70,22 @@ class BattleItemMenu extends InventoryMenuAbstract {
         this.addCloseButton();
     }
 
-    override createUseItemHandler(playerSoul: PlayerSoul, itemKey: ItemKey): EventListenerOrEventListenerObject {
+    override createUseItemHandler(
+        playerSoul: PlayerSoul,
+        itemKey: ItemKey
+    ): EventListenerOrEventListenerObject {
         const handler = (event: Event) => {
-            const action = new UseItem(this.playerSoul.index, itemKey.item, playerSoul);
+            const action = new UseItem(
+                this.playerSoul.index,
+                itemKey.item,
+                playerSoul
+            );
             const test = this.createActionHandler(action);
             console.log(test);
             test();
         };
         return handler;
-    };
+    }
 }
 
-export {
-    BattleItemMenu
-};
+export { BattleItemMenu };

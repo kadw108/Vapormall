@@ -24,7 +24,11 @@ class UseItem extends Action {
     item: Item;
     targetSoul: IndividualSoul;
 
-    constructor(soulPartyIndex: number, item: Item, targetSoul: IndividualSoul) {
+    constructor(
+        soulPartyIndex: number,
+        item: Item,
+        targetSoul: IndividualSoul
+    ) {
         super(soulPartyIndex);
         this.item = item;
         this.targetSoul = targetSoul;
@@ -49,4 +53,4 @@ class UseSkill extends Action {
     }
 }
 
-export {Action, UseItem, SwitchOut, UseSkill};
+export { Action, UseItem, SwitchOut, UseSkill };

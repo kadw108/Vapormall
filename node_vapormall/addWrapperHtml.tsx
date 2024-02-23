@@ -13,7 +13,7 @@ iff-story and iff-snippet are necessary; Iffinity won't work without them.
 
 */
 
-import {h} from "dom-chef";
+import { h } from "dom-chef";
 
 export function addWrapperHtml() {
     if (document.getElementById("contents") === null) {
@@ -28,13 +28,15 @@ export function addWrapperHtml() {
             <div id="contents">
                 <div id="bg" className="fullscreenBg"></div>
                 <div id="screenCover" className="fullscreenBg"></div>
-                <div id="passages"><div className="passage">
-                    <div id="screenBg"></div>
+                <div id="passages">
+                    <div className="passage">
+                        <div id="screenBg"></div>
 
-                    <div id="screenContents" className="absoluteAlign">
-                        {iffSnippet}
+                        <div id="screenContents" className="absoluteAlign">
+                            {iffSnippet}
+                        </div>
                     </div>
-                </div></div>
+                </div>
             </div>
         );
         document.getElementById("iff-story")?.appendChild(contents);

@@ -1,7 +1,7 @@
-import {IndividualSoul, PlayerSoul} from "../soul/individualSoul";
-import {CONSTANTS} from "../data/constants";
+import { IndividualSoul, PlayerSoul } from "../soul/individualSoul";
+import { CONSTANTS } from "../data/constants";
 
-import {BattleSoul, FieldedPlayerSoul, EnemySoul} from "./battleSoul";
+import { BattleSoul, FieldedPlayerSoul, EnemySoul } from "./battleSoul";
 import { Renderer } from "./renderer";
 import { MessageTimer } from "./messageTimer";
 import { Calculator } from "./calculator";
@@ -10,8 +10,8 @@ import { Action, SwitchOut, UseSkill, UseItem } from "./action";
 import { Inventory } from "../inventory";
 
 interface FaintData {
-  soul: FieldedPlayerSoul;
-  playerSoulsIndex: number;
+    soul: FieldedPlayerSoul;
+    playerSoulsIndex: number;
 }
 
 class Battle {
@@ -30,7 +30,10 @@ class Battle {
 
     turns: number;
 
-    constructor(playerSouls: Array<PlayerSoul>, enemySouls: Array<IndividualSoul>) {
+    constructor(
+        playerSouls: Array<PlayerSoul>,
+        enemySouls: Array<IndividualSoul>
+    ) {
         this.playerParty = playerSouls;
         this.enemyParty = enemySouls;
 
@@ -41,9 +44,14 @@ class Battle {
 
         this.renderer = new Renderer(
             this.createActionHandler.bind(this),
-            this.createSwitchFaintHandler.bind(this));
+            this.createSwitchFaintHandler.bind(this)
+        );
         const playerSoul = this.playerSouls[0];
-        this.renderer.showActions(playerSoul!, this.playerParty, this.playerSouls);
+        this.renderer.showActions(
+            playerSoul!,
+            this.playerParty,
+            this.playerSouls
+        );
         this.calculator = new Calculator(this);
         this.messageTimer = new MessageTimer();
 
@@ -68,23 +76,30 @@ class Battle {
     }
 
     private selectPlayerTarget(playerSoul: FieldedPlayerSoul) {
-        if (playerSoul.selected_action === null || !playerSoul.selected_action.isUseSkill()) {
+        if (
+            playerSoul.selected_action === null ||
+            !playerSoul.selected_action.isUseSkill()
+        ) {
             console.error("SELECTING TARGET FOR NULL PLAYER SKILL");
             return;
         }
 
         const selected_skill = (playerSoul.selected_action as UseSkill).skill;
-        switch (selected_skill.data.target)  {
+        switch (selected_skill.data.target) {
             case CONSTANTS.TARGETS.SELECTED:
             case CONSTANTS.TARGETS.OPPOSING:
                 const j = 0;
                 playerSoul.selected_target = [this.enemySouls[j]];
                 break;
             case CONSTANTS.TARGETS.ALLIED:
-                playerSoul.selected_target = this.playerSouls.filter((i) => i !== null) as BattleSoul[];
+                playerSoul.selected_target = this.playerSouls.filter(
+                    (i) => i !== null
+                ) as BattleSoul[];
                 break;
             case CONSTANTS.TARGETS.ALL:
-                playerSoul.selected_target = this.allSouls().filter((i) => i !== null) as BattleSoul[];
+                playerSoul.selected_target = this.allSouls().filter(
+                    (i) => i !== null
+                ) as BattleSoul[];
                 break;
             case CONSTANTS.TARGETS.SELF:
                 playerSoul.selected_target = [playerSoul];
@@ -92,13 +107,17 @@ class Battle {
             case CONSTANTS.TARGETS.NONE:
                 playerSoul.selected_target = [];
                 break;
-            }
+        }
     }
 
     private runItems() {
         for (const soul of this.allSouls()) {
-            if (soul !== null && soul.selected_action !== null && soul.selected_action.isUseItem()) {
-                const item = (soul.selected_action as UseItem).item
+            if (
+                soul !== null &&
+                soul.selected_action !== null &&
+                soul.selected_action.isUseItem()
+            ) {
+                const item = (soul.selected_action as UseItem).item;
                 const target = (soul.selected_action as UseItem).targetSoul;
 
                 if (!GameState.Inventory.hasItem(item)) {
@@ -106,41 +125,49 @@ class Battle {
                     return;
                 }
 
-                this.messageTimer.addMessage(
-                    () => {
-                        GameState.Inventory.removeItem(item);
-                        item.itemEffect(target);
+                this.messageTimer.addMessage(() => {
+                    GameState.Inventory.removeItem(item);
+                    item.itemEffect(target);
 
-                        const battleSoul = this.getFieldedSoul(target);
-                        if (battleSoul !== null) {
-                            battleSoul.renderer.displayHP += drain;
-                            battleSoul.renderer.updateHP();
-                        }
+                    const battleSoul = this.getFieldedSoul(target);
+                    if (battleSoul !== null) {
+                        battleSoul.renderer.displayHP += drain;
+                        battleSoul.renderer.updateHP();
                     }
+                });
+                this.messageTimer.addMessage(
+                    "You used " + item.long_name + " on " + target.name + "!"
                 );
-                this.messageTimer.addMessage("You used " + item.long_name + " on " + target.name + "!");
             }
         }
     }
 
     private runSkills() {
-       function compareSpeed(soulAbsA: BattleSoul | null, soulAbsB: BattleSoul | null)  {
+        function compareSpeed(
+            soulAbsA: BattleSoul | null,
+            soulAbsB: BattleSoul | null
+        ) {
             if (soulAbsA === null || soulAbsB === null) {
                 console.error("comparing speed with null souls");
                 return 1;
             }
-            return soulAbsA.calculateStat(CONSTANTS.STATS.SPEED) -
-                soulAbsB.calculateStat(CONSTANTS.STATS.SPEED);
-       }
-       const speed_order = this.allSouls().sort(compareSpeed);
+            return (
+                soulAbsA.calculateStat(CONSTANTS.STATS.SPEED) -
+                soulAbsB.calculateStat(CONSTANTS.STATS.SPEED)
+            );
+        }
+        const speed_order = this.allSouls().sort(compareSpeed);
 
-       for (let i = 0; i < speed_order.length; i++) {
-            if (speed_order[i] !== null && speed_order[i]?.selected_action?.isUseSkill()) {
+        for (let i = 0; i < speed_order.length; i++) {
+            if (
+                speed_order[i] !== null &&
+                speed_order[i]?.selected_action?.isUseSkill()
+            ) {
                 this.useSkill(speed_order[i]!);
             }
-       }
+        }
 
-       this.turns++;
+        this.turns++;
     }
 
     private checkPartyDefeated(party: Array<IndividualSoul>): boolean {
@@ -159,35 +186,31 @@ class Battle {
     checkBattleOver() {
         const playerDefeat = this.checkPartyDefeated(this.playerParty);
         if (playerDefeat || this.checkPartyDefeated(this.enemyParty)) {
-
             if (playerDefeat) {
-                this.messageTimer.addMessage(
-                    () => {
-                        this.messageTimer.clearAll();
-                        story.showSnippet("Loss", false);
-                    }
-                );
-            }
-            else {
-               const nextButton = document.getElementById("next");
-               if (nextButton === null) {
+                this.messageTimer.addMessage(() => {
+                    this.messageTimer.clearAll();
+                    // @ts-expect-error for story
+                    story.showSnippet("Loss", false);
+                });
+            } else {
+                const nextButton = document.getElementById("next");
+                if (nextButton === null) {
                     console.error("next button not available!");
-               }
-               else {
-                nextButton.addEventListener("click",
+                } else {
+                    nextButton.addEventListener(
+                        "click",
                         () => {
-                            this.victory()
+                            this.victory();
                         },
-                        false);
-               }
+                        false
+                    );
+                }
             }
 
-            this.messageTimer.addMessage(
-                () => {
-                    this.messageTimer.clearAll();
-                    this.renderer.showEndScreen();
-                }
-            );
+            this.messageTimer.addMessage(() => {
+                this.messageTimer.clearAll();
+                this.renderer.showEndScreen();
+            });
         }
     }
 
@@ -195,6 +218,7 @@ class Battle {
         // clear encounter
         GameState.currentFloor.currentRoom().info.encounter = [];
         GameState.currentEnemy = null;
+        // @ts-expect-error for story
         const result = story.showSnippet("Room", false);
     }
 
@@ -221,8 +245,7 @@ class Battle {
                     user.selected_target.forEach((target) => {
                         this.calculator.applySkillEffects(user, skill, target);
                     });
-                }
-                else {
+                } else {
                     console.error("No target for move!");
                 }
                 break;
@@ -233,7 +256,9 @@ class Battle {
 
     switchSoul(action: SwitchOut): FieldedPlayerSoul {
         const leaving = this.playerSouls[action.soulPartyIndex];
-        const entering = new FieldedPlayerSoul(this.playerParty[action.switchInIndex]);
+        const entering = new FieldedPlayerSoul(
+            this.playerParty[action.switchInIndex]
+        );
 
         if (leaving === null) {
             console.error("switching out null soul!");
@@ -242,7 +267,13 @@ class Battle {
 
         leaving.removeUI();
         this.playerSouls[action.soulPartyIndex] = entering;
-        this.messageTimer.addMessage("Switching out " + leaving.renderer.getName() + " for " + entering.soul.name + ".");
+        this.messageTimer.addMessage(
+            "Switching out " +
+                leaving.renderer.getName() +
+                " for " +
+                entering.soul.name +
+                "."
+        );
         this.messageTimer.endMessageBlock();
 
         return entering;
@@ -261,8 +292,10 @@ class Battle {
         if (this.playerSouls[destroyedSoul] === null) {
             console.error("fainted soul is already fainted");
         }
-        this.playersFaintedThisTurn.push(
-            {soul: this.playerSouls[destroyedSoul]!, playerSoulsIndex: destroyedSoul});
+        this.playersFaintedThisTurn.push({
+            soul: this.playerSouls[destroyedSoul]!,
+            playerSoulsIndex: destroyedSoul,
+        });
 
         this.playerSouls[destroyedSoul] = null;
     }
@@ -275,7 +308,9 @@ class Battle {
                 // arrow function for `this` https://stackoverflow.com/a/73068955
                 this.renderer.hideActions();
 
-                const switchInFieldedPlayerSoul = this.switchSoul(action as SwitchOut);
+                const switchInFieldedPlayerSoul = this.switchSoul(
+                    action as SwitchOut
+                );
 
                 this.selectEnemySkills();
                 this.runItems();
@@ -283,18 +318,15 @@ class Battle {
                 this.messageTimer.addMessage(
                     this.nextTurnChoices(switchInFieldedPlayerSoul)
                 );
-                this.messageTimer.addMessage(
-                    () => {
-                        switchInFieldedPlayerSoul.selected_action = null;
-                    }
-                );
+                this.messageTimer.addMessage(() => {
+                    switchInFieldedPlayerSoul.selected_action = null;
+                });
                 this.messageTimer.displayMessages(this.turns);
-            }
-        }
-        else {
+            };
+        } else {
             return () => {
                 this.renderer.hideActions();
-                
+
                 const battleSoul = this.playerSouls[action.soulPartyIndex];
                 if (battleSoul === null) {
                     console.error("battleSoul is null ???");
@@ -307,17 +339,12 @@ class Battle {
                 this.selectEnemySkills();
                 this.runItems();
                 this.runSkills();
-                this.messageTimer.addMessage(
-                    this.nextTurnChoices(battleSoul)
-                );
-                this.messageTimer.addMessage(
-                    () => {
-                        battleSoul.selected_action = null;
-                    }
-                )
+                this.messageTimer.addMessage(this.nextTurnChoices(battleSoul));
+                this.messageTimer.addMessage(() => {
+                    battleSoul.selected_action = null;
+                });
                 this.messageTimer.displayMessages(this.turns);
-
-            }
+            };
         }
     }
 
@@ -325,12 +352,15 @@ class Battle {
         return () => {
             this.renderer.hideActions();
 
-            const switchInFieldedPlayerSoul = this.switchSoulFainted(faint, switchIn);
+            const switchInFieldedPlayerSoul = this.switchSoulFainted(
+                faint,
+                switchIn
+            );
             this.messageTimer.addMessage(
                 this.nextTurnChoices(switchInFieldedPlayerSoul)
             );
             this.messageTimer.displayMessages(this.turns);
-        }
+        };
     }
 
     nextTurnChoices(nextTurnPlayer: FieldedPlayerSoul) {
@@ -340,18 +370,20 @@ class Battle {
                     this.renderer.FaintSwitchMenu(
                         this.playersFaintedThisTurn[i],
                         this.playerParty,
-                        this.playerSouls);
+                        this.playerSouls
+                    );
                 };
             }
         }
 
         return () => {
-            this.renderer.showActions(nextTurnPlayer, this.playerParty, this.playerSouls);
+            this.renderer.showActions(
+                nextTurnPlayer,
+                this.playerParty,
+                this.playerSouls
+            );
         };
     }
 }
 
-export {
-    Battle,
-    FaintData
-};
+export { Battle, FaintData };

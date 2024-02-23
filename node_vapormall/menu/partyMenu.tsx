@@ -3,7 +3,7 @@ import { PlayerSoul } from "../soul/individualSoul";
 import { CONSTANTS } from "../data/constants";
 import { Manager } from "../manager";
 
-import {h} from "dom-chef";
+import { h } from "dom-chef";
 
 class PartyMenu {
     constructor() {
@@ -12,20 +12,24 @@ class PartyMenu {
         Manager.menuButton("partyButton", "party", "Party");
         const partyButton = document.getElementById("partyButton");
         partyButton?.addEventListener("click", () => {
-            document.querySelectorAll(".detailedPartySoulDiv").forEach(div => {
-                div.classList.add("hidden");
-            });
+            document
+                .querySelectorAll(".detailedPartySoulDiv")
+                .forEach((div) => {
+                    div.classList.add("hidden");
+                });
             document.querySelectorAll(".selected").forEach((element) => {
                 element.classList.remove("selected");
-            })
+            });
         });
     }
 
     private PartySoulDiv(soul: PlayerSoul) {
-        return <div className="partySoulDiv">
-            {soul.renderer.getNameAndLevel()}
-            {soul.renderer.getHPText()}
-        </div>
+        return (
+            <div className="partySoulDiv">
+                {soul.renderer.getNameAndLevel()}
+                {soul.renderer.getHPText()}
+            </div>
+        );
     }
 
     private DetailedPartySoulDiv(soul: PlayerSoul) {
@@ -33,19 +37,22 @@ class PartyMenu {
         typeContainer.style.marginLeft = "10px";
 
         return (
-            <div className = "menuPanel hidden absoluteAlign detailedPartySoulDiv">
+            <div className="menuPanel hidden absoluteAlign detailedPartySoulDiv">
                 {soul.renderer.getNameAndLevel()}
                 {typeContainer}
 
-                <hr style={{color: "#4ad", margin: "5px 0 10px 0"}}/>
+                <hr style={{ color: "#4ad", margin: "5px 0 10px 0" }} />
 
                 <div className="partyStatContainer partyContainer">
                     {Object.keys(soul.stats).map((key) => {
                         const keyType = key as unknown as CONSTANTS.STATS;
                         if (key != "HP") {
-                            return <div>{key} {soul.stats[keyType]}</div>;
-                        }
-                        else {
+                            return (
+                                <div>
+                                    {key} {soul.stats[keyType]}
+                                </div>
+                            );
+                        } else {
                             return <div>{soul.renderer.getHPText()}</div>;
                         }
                     })}
@@ -69,7 +76,7 @@ class PartyMenu {
     }
 
     private fillPartyDiv() {
-        GameState.partySouls.forEach(playerSoul => {
+        GameState.partySouls.forEach((playerSoul) => {
             const infoDiv = this.PartySoulDiv(playerSoul);
             document.getElementById("party")?.append(infoDiv);
 
@@ -78,15 +85,18 @@ class PartyMenu {
 
             infoDiv.addEventListener("click", () => {
                 if (detailedInfoDiv.classList.contains("hidden")) {
-                    document.querySelectorAll(".detailedPartySoulDiv").forEach(div => {
-                        div.classList.add("hidden");
-                    });
-                    document.querySelector(".selected")?.classList.remove("selected");
+                    document
+                        .querySelectorAll(".detailedPartySoulDiv")
+                        .forEach((div) => {
+                            div.classList.add("hidden");
+                        });
+                    document
+                        .querySelector(".selected")
+                        ?.classList.remove("selected");
 
                     detailedInfoDiv.classList.remove("hidden");
                     infoDiv.classList.add("selected");
-                }
-                else {
+                } else {
                     detailedInfoDiv.classList.add("hidden");
                     infoDiv.classList.remove("selected");
                 }
@@ -95,6 +105,4 @@ class PartyMenu {
     }
 }
 
-export {
-    PartyMenu
-};
+export { PartyMenu };

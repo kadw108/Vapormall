@@ -5,7 +5,6 @@ import { PlayerSoul } from "../soul/individualSoul";
 import { InventoryMenuAbstract } from "./inventoryMenuAbstract";
 
 class InventoryMenu extends InventoryMenuAbstract {
-
     constructor() {
         super();
 
@@ -20,7 +19,10 @@ class InventoryMenu extends InventoryMenuAbstract {
         this.selected = null;
     }
 
-    override createUseItemHandler(playerSoul: PlayerSoul, itemKey: ItemKey): EventListenerOrEventListenerObject {
+    override createUseItemHandler(
+        playerSoul: PlayerSoul,
+        itemKey: ItemKey
+    ): EventListenerOrEventListenerObject {
         const handler = (event: Event) => {
             itemKey.item.itemEffect(playerSoul);
             const itemRemains = GameState.Inventory.removeItem(itemKey.item);
@@ -33,9 +35,7 @@ class InventoryMenu extends InventoryMenuAbstract {
             this.displayUseMessage(playerSoul, itemKey.item);
         };
         return handler;
-    };
+    }
 }
 
-export {
-    InventoryMenu
-};
+export { InventoryMenu };

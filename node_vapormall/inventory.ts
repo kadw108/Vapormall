@@ -11,7 +11,6 @@ class ItemKey {
 }
 
 class Inventory {
-
     private _keys: Array<ItemKey>;
     public get Keys() {
         return this._keys;
@@ -45,8 +44,7 @@ class Inventory {
                 if (key.count > 1) {
                     key.count--;
                     return true;
-                }
-                else if (key.count === 1) {
+                } else if (key.count === 1) {
                     this._keys.splice(i, 1);
                     return false;
                 }
@@ -61,10 +59,8 @@ class Inventory {
     }
 
     hasItem(item: Item): boolean {
-        return this._keys.some(i => i.item = item);
+        return this._keys.some((i) => (i.item = item));
     }
 }
 
-export {
-    Inventory, ItemKey
-};
+export { Inventory, ItemKey };
