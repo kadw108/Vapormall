@@ -29,8 +29,6 @@ class Manager {
             return;
         }
 
-        console.log(button, menu);
-
         if (button.getAttribute("listener-added") === "true") {
             return;
         }

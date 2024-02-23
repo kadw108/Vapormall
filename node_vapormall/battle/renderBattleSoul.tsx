@@ -1,5 +1,4 @@
 import { CONSTANTS } from "../data/constants";
-import { RenderSoul } from "../soul/renderSoul";
 import { BattleSoul, FieldedPlayerSoul } from "./battleSoul";
 
 import {h} from "dom-chef";
@@ -37,7 +36,7 @@ class RenderBattleSoul {
         return <div>
             {this.battleSoul.soul.name}
             <br/>
-            {RenderSoul.getLevelText(this.battleSoul.soul)}
+            {this.battleSoul.soul.renderer.getLevelText()}
             <br/>
             <small className="hp-text">{this.getHPString()}</small>
         </div>;
@@ -50,15 +49,14 @@ class RenderBattleSoul {
                 <br/><br/>(After stat modifiers:)<br/>
             </small>}
 
-            {RenderSoul.genStatText(
-                this.battleSoul.soul,
+            {this.battleSoul.soul.renderer.genStatText(
                 this.battleSoul.modifiedStatDict()
             )}
         </div>;
     }
 
     DetailedInfo(): JSX.Element {
-        const infoDiv = RenderSoul.DetailedInfo(this.battleSoul.soul);
+        const infoDiv = this.battleSoul.soul.renderer.DetailedInfo();
         infoDiv.classList.remove("bottomhalf-tip");
         infoDiv.classList.add("topHalf-tip");
 

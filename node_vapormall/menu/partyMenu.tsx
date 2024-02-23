@@ -2,7 +2,6 @@ import { GameState } from "../gameState";
 import { PlayerSoul } from "../soul/individualSoul";
 import { CONSTANTS } from "../data/constants";
 import { Manager } from "../manager";
-import { RenderSoul } from "../soul/renderSoul";
 
 import {h} from "dom-chef";
 
@@ -24,18 +23,18 @@ class PartyMenu {
 
     private PartySoulDiv(soul: PlayerSoul) {
         return <div className="partySoulDiv">
-            {RenderSoul.getNameAndLevel(soul)}
-            {RenderSoul.getHPText(soul)}
+            {soul.renderer.getNameAndLevel()}
+            {soul.renderer.getHPText()}
         </div>
     }
 
     private DetailedPartySoulDiv(soul: PlayerSoul) {
-        const typeContainer = RenderSoul.genTypeContainer(soul);
+        const typeContainer = soul.renderer.genTypeContainer();
         typeContainer.style.marginLeft = "10px";
 
         return (
             <div className = "menuPanel hidden absoluteAlign detailedPartySoulDiv">
-                {RenderSoul.getNameAndLevel(soul)}
+                {soul.renderer.getNameAndLevel()}
                 {typeContainer}
 
                 <hr style={{color: "#4ad", margin: "5px 0 10px 0"}}/>
@@ -47,7 +46,7 @@ class PartyMenu {
                             return <div>{key} {soul.stats[keyType]}</div>;
                         }
                         else {
-                            return <div>{RenderSoul.getHPText(soul)}</div>;
+                            return <div>{soul.renderer.getHPText()}</div>;
                         }
                     })}
                 </div>
@@ -70,8 +69,6 @@ class PartyMenu {
     }
 
     private fillPartyDiv() {
-        console.log(PlayerSoul);
-
         GameState.partySouls.forEach(playerSoul => {
             const infoDiv = this.PartySoulDiv(playerSoul);
             document.getElementById("party")?.append(infoDiv);

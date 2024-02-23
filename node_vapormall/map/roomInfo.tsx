@@ -37,14 +37,16 @@ class RoomInfo {
 		// if (this.encounter.length === 0) {
 		if (this.encounter.length === this.encounter.length) {
 			exits = <p>
-				Exits: {this.room.connections.filter(c => c !== null).map((c, i) => {
-					return <span>
-						{CONSTANTS.DIRECTIONS[i].name} to {" "}
-						{/* @ts-ignore for direction */}
-						<a className="exitLink" direction={CONSTANTS.DIRECTIONS[i].name}>
-							{c!.otherRoom(this.room).info.name}
-						</a> | {" "}
-					</span>;
+				Exits: {this.room.connections.map((c, i) => {
+					if (c !== null) {
+						return <span>
+							{CONSTANTS.DIRECTIONS[i].name} to {" "}
+							{/* @ts-ignore for direction */}
+							<a className="exitLink" direction={CONSTANTS.DIRECTIONS[i].name}>
+								{c!.otherRoom(this.room).info.name}
+							</a> | {" "}
+						</span>;
+					}
 				})}
 			</p>;
 		}

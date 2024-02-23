@@ -1,6 +1,7 @@
 import {Skill} from "./skill";
 import {SoulSpecies, SOUL_LIST} from "../data/soul";
 import {CONSTANTS, StatDict} from "../data/constants";
+import { RenderIndividualSoul, RenderPlayerSoul } from "./renderIndividualSoul";
 
 /*
 Individual soul of a particular species
@@ -14,6 +15,8 @@ class IndividualSoul {
     stats: StatDict;
 
     skills: Array<Skill>;
+
+    renderer: RenderIndividualSoul;
 
     constructor(soul_species: SoulSpecies, level: number) {
         this.soul_species = soul_species;
@@ -33,6 +36,8 @@ class IndividualSoul {
         this.levelUpSimulate();
 
         this.currentHP = this.stats[CONSTANTS.STATS.HP];
+
+        this.renderer = new RenderIndividualSoul(this);
     }
 
     initializeStats() {
@@ -79,7 +84,9 @@ Individual soul owned/captured by the player
 (can be souls in player's party but not on the field during a battle)
 */
 class PlayerSoul extends IndividualSoul {
-    constructor(soul_species: SoulSpecies, level: number) {
+    renderer: RenderPlayerSoul;
+
+    private constructor(soul_species: SoulSpecies, level: number) {
         super(soul_species, level);
     }
 
@@ -88,6 +95,12 @@ class PlayerSoul extends IndividualSoul {
     public static createPlayerSoul(individualSoul: IndividualSoul): PlayerSoul {
         const newSoul = new PlayerSoul(individualSoul.soul_species, individualSoul.level);
         const returnSoul = Object.assign(newSoul, individualSoul);
+
+        // Can't put it into the constructor because of the weird
+        // way new PlayerSouls are created - Object.assign doesn't copy over methods or
+        // something?
+        returnSoul.renderer = new RenderPlayerSoul(returnSoul);
+
         return returnSoul;
     }
 }

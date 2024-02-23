@@ -3,12 +3,12 @@ import { FaintData } from "./battle";
 
 import { PlayerSoul } from "../soul/individualSoul";
 import { Skill } from "../soul/skill";
-import { RenderSoul } from "../soul/renderSoul";
 
 import { SwitchOut, UseSkill } from "./action";
 import { BattleItemMenu } from "./battleItemMenu";
 
 import {h} from "dom-chef";
+import { RenderPlayerSoul } from "../soul/renderIndividualSoul";
 
 class Renderer { 
 
@@ -62,7 +62,7 @@ class Renderer {
         playerParty: Array<PlayerSoul>
     ): JSX.Element {
         const switchInSoul = playerParty[action.switchInIndex];
-        const switchContainer = RenderSoul.getSwitchContainer(switchInSoul);
+        const switchContainer = switchInSoul.renderer.getSwitchContainer();
         const switchButton = switchContainer.getElementsByTagName("button")[0];
 
         let offField = true;

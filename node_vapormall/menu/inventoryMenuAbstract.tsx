@@ -1,6 +1,5 @@
 import { GameState } from "../gameState";
 import { PlayerSoul } from "../soul/individualSoul";
-import { RenderSoul } from "../soul/renderSoul";
 import { ItemKey } from "../inventory";
 import { Item } from "../data/item";
 
@@ -116,7 +115,7 @@ abstract class InventoryMenuAbstract {
         playerSoul: PlayerSoul,
         itemKey: ItemKey,
     ){
-        const useButton = RenderSoul.getSwitchContainer(playerSoul);
+        const useButton = playerSoul.renderer.getSwitchContainer();
 
         if (itemKey.item.soulCanUse(playerSoul)) {
             useButton.addEventListener("click",
