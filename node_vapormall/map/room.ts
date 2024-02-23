@@ -1,6 +1,6 @@
-import { RoomGen } from "./roomNameGenerator";
-import { randomInterval, indefinite_article, popIndex, randIndex } from "../utility";
+import { randomInterval} from "../utility";
 import { CONSTANTS } from "../data/constants";
+import {RoomInfo} from "./roomInfo";
 
 export type ConnectionDict = [Connection | null, Connection | null, Connection | null, Connection | null];
 
@@ -127,118 +127,6 @@ class Connection {
 			return this.nodes[1];
 		}
 		return this.nodes[0];
-	}
-}
-
-import { ROOMS } from "../data/room_data";
-import { randItem } from "../utility";
-import { IndividualSoul } from "../soul/individualSoul";
-import { SOUL_LIST } from "../data/soul";
-import { randomInt } from "crypto";
-
-class RoomInfo {
-	room: Room;
-
-	name: string;
-	description: string;
-	
-	encounter: Array<IndividualSoul>;
-
-	constructor(room: Room) {
-		this.room = room;
-
-        const randNoun = randItem(ROOMS.CLOTHING);
-		
-        this.name = randNoun.word + " " + randItem(ROOMS.PLACES);
-        this.name = RoomGen.addNumber(this.name);
-        this.name = RoomGen.format(this.name);
-
-        this.description = randItem(randNoun.descriptions);
-
-		this.encounter = this.generateEncounters();
-    }
-
-	html(): string {
-		const title = "<h3>" + this.name + "</h3>";
-
-		const description = "<p>" + this.description + "</p>";
-
-		let exits = "";
-		let encounters = "";
-
-		// if (this.encounter.length === 0) {
-		if (this.encounter.length === this.encounter.length) {
-			exits = "<p>Exits: ";
-			for (let i = 0; i < this.room.connections.length; i++) {
-				const c = this.room.connections[i];
-				if (c !== null) {
-					exits += CONSTANTS.DIRECTIONS[i].name + " to ";
-
-					exits += "<a class='exitLink' direction='" + CONSTANTS.DIRECTIONS[i].name + "'>";
-					exits += c.otherRoom(this.room).info.name;
-					exits += "</a>";
-
-					exits += " | ";
-				}
-			}
-			exits += "</p>";
-		}
-
-		if (this.encounter.length === 0) {
-		}
-		else {
-			encounters = "<p>"
-			encounters += "<a class='battleLink'>";
-			if (this.encounter.length === 1) {
-				encounters += "You see " + indefinite_article(this.encounter[0].name) + " " + this.encounter[0].name + "!";
-			}
-			/*
-			else if (this.encounter.length >= 1) {
-				encounters += "You see: ";
-				for (let i = 0; i < this.encounter.length; i++) {
-					encounters += indefinite_article(this.encounter[i].name) + " " + this.encounter[i].name;
-
-					if (i === this.encounter.length - 2) {
-						encounters += ", and "
-					}
-					else if (i < this.encounter.length - 1) {
-						encounters += ", "
-					}
-				}
-				encounters += "!";
-			}
-			*/
-			else {
-				console.error("Room contains encounter with 0 or >1 enemies!");
-			}
-			encounters += "</a></p>";
-		}
-
-
-		return title + description + exits + encounters;
-	}
-
-	generateEncounters() {
-		const encounterArray = [];
-		for (let i = 0; i < 1; i++) {
-			const enemy1 = new IndividualSoul(SOUL_LIST.Adware, Math.ceil(Math.random() * 4));
-			encounterArray.push(enemy1);
-
-			if (Math.random() < 0.6) {
-				break;
-			}
-		}
-		return encounterArray;
-	}
-
-	popEncounter() {
-		if (this.encounter.length === 0) {
-			console.error("Trying to get encounter from room with no encounters!");
-			return null;
-		}
-		else {
-			return popIndex(this.encounter, randIndex(this.encounter));
-		}
 	}
 }
 

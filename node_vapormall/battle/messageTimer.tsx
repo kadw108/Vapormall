@@ -1,4 +1,5 @@
 import { capitalizeFirstLetter } from "../utility";
+import {h} from "dom-chef";
 
 enum DURATIONS {
     BETWEENBLOCKS = 3100,
@@ -38,8 +39,9 @@ class MessageTimer {
     }
 
     private getHTMLFromMessage(message: string, small: boolean): HTMLElement {
-
-        const html = document.createElement("span");
+        const html = <span>
+            {capitalizeFirstLetter(message)}<br/>
+        </span>;
 
         if (small) {
             html.style.setProperty("font-size", "90%");
@@ -48,23 +50,14 @@ class MessageTimer {
             html.style.setProperty("font-weight", "bold");
         }
 
-        html.appendChild(
-            document.createTextNode(capitalizeFirstLetter(message))
-        );
-        html.appendChild(
-            document.createElement("br")
-        );
         return html;
     }
 
     private displayBlock(messages: Array<string|Function>) {
         let displayDiv = false;
 
-        const messageDiv = document.createElement("div");
-        messageDiv.classList.add("message", "topMessage", "blackBg");
-
-        const logDiv = document.createElement("div");
-        logDiv.classList.add("message", "bottomMessage")
+        const messageDiv = <div className="message topMessage blackBg"/>;
+        const logDiv = <div className="message bottomMessage"/>;
 
         let stringNum = 0;
         messages.forEach((item, i) => {
@@ -142,11 +135,7 @@ class MessageTimer {
     }
 
     addTurnToLog(turnCount: number) {
-        const html = document.createElement("h4");
-        html.appendChild(
-            document.createTextNode("TURN " + turnCount)
-        );
-        this.battleLog.append(html);
+        this.battleLog.append(<h4>TURN {turnCount}</h4>);
     }
 
     clearAll() {

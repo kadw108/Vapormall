@@ -4,9 +4,11 @@ import { RenderSoul } from "../soul/renderSoul";
 import { ItemKey } from "../inventory";
 import { Item } from "../data/item";
 
+import {h} from "dom-chef";
+
 abstract class InventoryMenuAbstract {
 
-    selected: HTMLDivElement|null;
+    selected: HTMLElement|null;
 
     refreshMenu() {
         const inventoryDiv = document.getElementById("inventory");
@@ -39,7 +41,7 @@ abstract class InventoryMenuAbstract {
     }
 
     addDetailedInfoDiv(key: ItemKey) {
-        const detailedInfoDiv = this.itemInfoDiv(key);
+        const detailedInfoDiv = this.ItemInfoDiv(key);
         const inventoryGrid = document.getElementById("inventoryGrid");
         inventoryGrid?.append(detailedInfoDiv);
     }
@@ -54,23 +56,14 @@ abstract class InventoryMenuAbstract {
         this.selected = null;
     }
 
-    renderItem(itemKey: ItemKey) {
-        const infoDiv = document.createElement("div");
-        infoDiv.classList.add("itemKeyDiv");
-
-        const countText = document.createElement("small");
-        countText.classList.add("countText");
-        countText.innerText = "x" + itemKey.count;
-
-        infoDiv.append(
-            itemKey.item.name,
-            countText
-        );
-        return infoDiv;
+    RenderItem(itemKey: ItemKey) {
+        return <div className="itemKeyDiv">
+            <small className="countText">x{itemKey.count}</small>
+        </div>;
     }
 
     itemDiv(itemKey: ItemKey) {
-        const infoDiv = this.renderItem(itemKey);
+        const infoDiv = this.RenderItem(itemKey);
 
         infoDiv.addEventListener("mouseenter", () => {
             if (this.selected === null) {
@@ -104,38 +97,25 @@ abstract class InventoryMenuAbstract {
         return infoDiv;
     }
 
-    itemInfoDiv(itemKey: ItemKey) {
-        const infoDiv = document.createElement("div");
-        infoDiv.id = "itemInfoDiv";
-        infoDiv.classList.add("menuPanel");
-
-        const name = document.createElement("h6");
-        name.innerText = itemKey.item.long_name;
-
-        const description = document.createElement("p");
-        description.innerText = itemKey.item.description;
-
-        const useButtonContainer = document.createElement("div");
-        useButtonContainer.id = "useButtonContainer";
-        GameState.partySouls.forEach((playerSoul, i) => {
-            const useButton = this.makeUseButton(playerSoul, itemKey);
-            useButtonContainer.append(useButton);
-        });
-
-        infoDiv.append(
-            name,
-            description,
-            useButtonContainer
+    ItemInfoDiv(itemKey: ItemKey) {
+        return (
+        <div id = "itemInfoDiv" className="menuPanel">
+            <h6>{itemKey.item.long_name}</h6>
+            <p>{itemKey.item.description}</p>
+            <div id="useButtonContainer">
+                {GameState.partySouls.map((playerSoul, i) => {
+                    return this.makeUseButton(playerSoul, itemKey);
+                })}
+            </div>
+        </div>
         );
-
-        return infoDiv;
     }
 
     makeUseButton(
         playerSoul: PlayerSoul,
         itemKey: ItemKey,
     ){
-        const useButton = RenderSoul.getSwitchContainer(playerSoul);
+        const useButton = RenderSoul.getSwitchContainer({playerSoul});
 
         if (itemKey.item.soulCanUse(playerSoul)) {
             useButton.addEventListener("click",

@@ -1,10 +1,5 @@
 import { capitalizeAllWords } from "../utility";
 
-interface RoomInfo {
-    name: string;
-    description: string;
-}
-
 class RoomGen {
     // add number in front xor back of name with x chance, returns new name
     static addNumber(name: string): string {

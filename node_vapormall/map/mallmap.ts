@@ -1,7 +1,5 @@
-import {Room, Connection} from "./room";
-import { popIndex } from "../utility";
+import {Room} from "./room";
 import { GameState } from "../gameState";
-import { CONSTANTS } from "../data/constants"
 
 class MallMap {
     adjacencyList: Array<Room>;
@@ -142,7 +140,7 @@ class MallMap {
 
 		const bottomContent = document.getElementById("bottomContent");
 		if (bottomContent !== null) {
-			bottomContent.innerHTML = room.info.html();
+			bottomContent.append(room.info.html());
 		}
 
 		const exits = document.querySelectorAll('.exitLink');

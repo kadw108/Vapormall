@@ -337,7 +337,7 @@ class Battle {
         for (let i = 0; i < this.playersFaintedThisTurn.length; i++) {
             if (this.playersFaintedThisTurn[i].soul === nextTurnPlayer) {
                 return () => {
-                    this.renderer.renderFaintSwitch(
+                    this.renderer.FaintSwitchMenu(
                         this.playersFaintedThisTurn[i],
                         this.playerParty,
                         this.playerSouls);
