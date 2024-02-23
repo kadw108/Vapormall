@@ -140,6 +140,7 @@ class MallMap {
 
 		const bottomContent = document.getElementById("bottomContent");
 		if (bottomContent !== null) {
+			bottomContent.innerHTML = "";
 			bottomContent.append(room.info.html());
 		}
 

@@ -22,42 +22,38 @@ class PartyMenu {
         });
     }
 
-    private PartySoulDiv(props: {soul: PlayerSoul}) {
+    private PartySoulDiv(soul: PlayerSoul) {
         return <div className="partySoulDiv">
-            <RenderSoul.getNameAndLevel soul={props.soul}/>
-            {RenderSoul.getHPText(props.soul)}
+            {RenderSoul.getNameAndLevel(soul)}
+            {RenderSoul.getHPText(soul)}
         </div>
     }
 
-    private DetailedPartySoulDiv(props: {soul: PlayerSoul}) {
-        console.log("????", props);
-
-        const typeContainer = <RenderSoul.genTypeContainer soul={props.soul}/>;
+    private DetailedPartySoulDiv(soul: PlayerSoul) {
+        const typeContainer = RenderSoul.genTypeContainer(soul);
         typeContainer.style.marginLeft = "10px";
 
         return (
             <div className = "menuPanel hidden absoluteAlign detailedPartySoulDiv">
-                <RenderSoul.getNameAndLevel soul={props.soul}/>
+                {RenderSoul.getNameAndLevel(soul)}
                 {typeContainer}
 
                 <hr style={{color: "#4ad", margin: "5px 0 10px 0"}}/>
 
                 <div className="partyStatContainer partyContainer">
-                    {Object.keys(props.soul.stats).map((key) => {
+                    {Object.keys(soul.stats).map((key) => {
                         const keyType = key as unknown as CONSTANTS.STATS;
                         if (key != "HP") {
-                            return <div>{key} {props.soul.stats[keyType]}</div>;
+                            return <div>{key} {soul.stats[keyType]}</div>;
                         }
                         else {
-                            return <div>{RenderSoul.getHPText(props.soul)}</div>;
+                            return <div>{RenderSoul.getHPText(soul)}</div>;
                         }
                     })}
                 </div>
 
                 <div className="partySkillContainer partyContainer">
-                    {props.soul.skills.map((skill) => {
-                        return <skill.SkillContainer/>
-                    })}
+                    {soul.skills.map((skill) => skill.SkillContainer())}
                 </div>
             </div>
         );
@@ -77,13 +73,10 @@ class PartyMenu {
         console.log(PlayerSoul);
 
         GameState.partySouls.forEach(playerSoul => {
-            /*
-            const infoDiv = <this.PartySoulDiv soul={playerSoul}/>;
+            const infoDiv = this.PartySoulDiv(playerSoul);
             document.getElementById("party")?.append(infoDiv);
-            */
-            const infoDiv = <div/>;
 
-            const detailedInfoDiv = <this.DetailedPartySoulDiv soul={{playerSoul}}/>;
+            const detailedInfoDiv = this.DetailedPartySoulDiv(playerSoul);
             document.getElementById("topHalf")?.append(detailedInfoDiv);
 
             infoDiv.addEventListener("click", () => {

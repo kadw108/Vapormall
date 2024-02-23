@@ -8,6 +8,8 @@ import { SOUL_LIST } from "../data/soul";
 import { IndividualSoul } from "../soul/individualSoul";
 import { indefinite_article, popIndex, randIndex, randItem } from "../utility";
 
+import {h} from "dom-chef";
+
 class RoomInfo {
 	room: Room;
 
@@ -35,15 +37,13 @@ class RoomInfo {
 		// if (this.encounter.length === 0) {
 		if (this.encounter.length === this.encounter.length) {
 			exits = <p>
-				Exits:
-				{this.room.connections.filter(c => c !== null).map((c, i) => {
+				Exits: {this.room.connections.filter(c => c !== null).map((c, i) => {
 					return <span>
-						{CONSTANTS.DIRECTIONS[i].name} to 
-
+						{CONSTANTS.DIRECTIONS[i].name} to {" "}
 						{/* @ts-ignore for direction */}
 						<a className="exitLink" direction={CONSTANTS.DIRECTIONS[i].name}>
 							{c!.otherRoom(this.room).info.name}
-						</a> | 
+						</a> | {" "}
 					</span>;
 				})}
 			</p>;

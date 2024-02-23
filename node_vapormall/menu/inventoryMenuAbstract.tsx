@@ -58,6 +58,7 @@ abstract class InventoryMenuAbstract {
 
     RenderItem(itemKey: ItemKey) {
         return <div className="itemKeyDiv">
+            {itemKey.item.name}
             <small className="countText">x{itemKey.count}</small>
         </div>;
     }
@@ -115,7 +116,7 @@ abstract class InventoryMenuAbstract {
         playerSoul: PlayerSoul,
         itemKey: ItemKey,
     ){
-        const useButton = RenderSoul.getSwitchContainer({playerSoul});
+        const useButton = RenderSoul.getSwitchContainer(playerSoul);
 
         if (itemKey.item.soulCanUse(playerSoul)) {
             useButton.addEventListener("click",

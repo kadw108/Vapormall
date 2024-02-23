@@ -4,33 +4,32 @@ import { capitalizeFirstLetter } from "../utility";
 
 import {h} from "dom-chef";
 import { Skill } from "./skill";
-import { ReactNode } from "react";
 
 class RenderSoul {
-    public static NameText(props: {soul: IndividualSoul, children: ReactNode}): JSX.Element {
+    public static NameText(soul: IndividualSoul): JSX.Element {
         return (
-        <h6 className="big-text">{props.soul.name}
+        <h6 className="big-text">{soul.name + " "}
             {
-            props.soul.name !== props.soul.soul_species.name &&
-                "(" + props.soul.soul_species.name + ")"
+            soul.name !== soul.soul_species.name &&
+                "(" + soul.soul_species.name + ")"
             }
         </h6>
         );
     }
 
-    public static getLevelText(props: {soul: IndividualSoul}): JSX.Element {
-        return <small>Lv {props.soul.level}</small>;
+    public static getLevelText(soul: IndividualSoul): JSX.Element {
+        return <small>Lv {soul.level}</small>;
     }
 
-    public static getNameAndLevel(props: {soul: IndividualSoul}): JSX.Element {
-        return <RenderSoul.NameText soul={props.soul}>
-            <RenderSoul.getLevelText soul={props.soul}/>
-        </RenderSoul.NameText>;
+    public static getNameAndLevel(soul: IndividualSoul): JSX.Element {
+        const element = RenderSoul.NameText(soul);
+        element.append(document.createTextNode(" "), RenderSoul.getLevelText(soul));
+        return element;
     }
 
-    public static genTypeContainer(props: {soul: IndividualSoul}): JSX.Element {
+    public static genTypeContainer(soul: IndividualSoul): JSX.Element {
         return <p>
-            {props.soul.soul_species.types.map((type: CONSTANTS.TYPES) => {
+            {soul.soul_species.types.map((type: CONSTANTS.TYPES) => {
                 return type + "/";
             })}
         </p>;
@@ -40,61 +39,56 @@ class RenderSoul {
         return "HP: " + soul.currentHP + "/" + soul.stats[CONSTANTS.STATS.HP];
     }
 
-    public static genStatText(props: {soul: IndividualSoul, dict: StatDict}): JSX.Element {
+    public static genStatText(soul: IndividualSoul, dict: StatDict): JSX.Element {
         return <span>
-            {Object.keys(props.soul.stats).map((key) => {
+            {Object.keys(soul.stats).filter((i) => i !== "HP").map((key) => {
                 const keyType = key as unknown as CONSTANTS.STATS;
                 const statName = capitalizeFirstLetter(CONSTANTS.STAT_ABBREVIATION[key]);
 
-                const statSpan = <span className="big-text">{props.dict[keyType]}</span>;
-
-                if (props.dict[keyType] < props.soul.stats[keyType]) {
+                const statSpan = <span className="big-text">{dict[keyType]}</span>;
+                if (dict[keyType] < soul.stats[keyType]) {
                     statSpan.classList.add("red-text");
                 }
-                else if (props.dict[keyType] > props.soul.stats[keyType]) {
+                else if (dict[keyType] > soul.stats[keyType]) {
                     statSpan.classList.add("green-text");
                 }
 
-                const divider = <span style={{fontSize: "60%"}}> / </span>;
-
-                return (
-                    document.createTextNode(statName + " "),
-                    statSpan,
-                    divider
-                );
+                return <span>
+                    {document.createTextNode(statName + " ")}
+                    {statSpan}
+                    <span style={{fontSize: "60%"}}> / </span>
+                </span>;
             })}
         </span>;
     }
 
-    public static genSkillInfo(props: {soul: IndividualSoul}): JSX.Element {
+    public static genSkillInfo(soul: IndividualSoul): JSX.Element {
         return (
             <div className="skillDiv">
                 <hr/>
                 <ul>
-                    {props.soul.skills.map((skill: Skill) => {
-                        return <li>{skill.data.name}</li>
-                    })}
+                    {soul.skills.map((skill: Skill) => <li>{skill.data.name}</li>)}
                 </ul>
             </div>
         );
     }
 
-    public static DetailedInfo(props: {soul: IndividualSoul}): JSX.Element {
+    public static DetailedInfo(soul: IndividualSoul): JSX.Element {
         return (
             <div className="bottomhalf-tip outlineDiv hoverDiv">
-                <RenderSoul.getNameAndLevel soul={props.soul}/>
-                <RenderSoul.genTypeContainer soul={props.soul}/>
+                {RenderSoul.getNameAndLevel(soul)}
+                {RenderSoul.genTypeContainer(soul)}
                 <hr/>
-                <p className="hp-text">{RenderSoul.getHPText(props.soul)}</p>
-                <RenderSoul.genStatText soul={props.soul} dict={props.soul.stats}/>
-                <RenderSoul.genSkillInfo soul={props.soul}/>
+                <p className="hp-text">{RenderSoul.getHPText(soul)}</p>
+                {RenderSoul.genStatText(soul, soul.stats)}
+                {RenderSoul.genSkillInfo(soul)}
             </div>
         );
     }
 
-    public static getSwitchContainer(props: {playerSoul: PlayerSoul}): JSX.Element {
-        const switchButton = <RenderSoul.getSwitchButton playerSoul={props.playerSoul}/>;
-        const detailedInfoDiv = <RenderSoul.DetailedInfo soul={props.playerSoul}/>;
+    public static getSwitchContainer(playerSoul: PlayerSoul): JSX.Element {
+        const switchButton = RenderSoul.getSwitchButton(playerSoul);
+        const detailedInfoDiv = RenderSoul.DetailedInfo(playerSoul);
 
         const switchContainer = <div className="choice-wrapper">
             {switchButton}
@@ -111,9 +105,9 @@ class RenderSoul {
         return switchContainer;
     }
 
-    public static getSwitchButton(props: {playerSoul: PlayerSoul}): JSX.Element {
+    public static getSwitchButton(playerSoul: PlayerSoul): JSX.Element {
         return <button type="button" className="outlineDiv">
-            {props.playerSoul.name}
+            {playerSoul.name}
         </button>
     }
 }

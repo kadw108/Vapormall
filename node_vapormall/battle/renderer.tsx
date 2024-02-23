@@ -24,16 +24,14 @@ class Renderer {
     }
 
     private SkillWrapper(
-        props: {
-            playerSoul: FieldedPlayerSoul,
-            skill: Skill
-        }
+        playerSoul: FieldedPlayerSoul,
+        skill: Skill
     ): JSX.Element {
-        const skillWrapper = props.skill.SkillContainer();
+        const skillWrapper = skill.SkillContainer();
         const skillButton = skillWrapper.getElementsByTagName("button")[0];
 
-        if (props.skill.pp > 0) {
-            const useSkill = new UseSkill(props.playerSoul.index, props.skill);
+        if (skill.pp > 0) {
+            const useSkill = new UseSkill(playerSoul.index, skill);
             skillButton.addEventListener("click",
                 this.createActionHandler(useSkill),
                 false);
@@ -44,51 +42,45 @@ class Renderer {
         return skillWrapper;
     }
 
-    private SkillMenu(props: {playerSoul: FieldedPlayerSoul}): JSX.Element {
+    private SkillMenu(playerSoul: FieldedPlayerSoul): JSX.Element {
         return (
             <div id="skillContainer">
 
                 <p>AGGRESSION PROTOCOL INITIATED.</p>
 
-                {props.playerSoul.soul.skills.map((skill) => {
-                    <this.SkillWrapper playerSoul={props.playerSoul} skill={skill}/>
+                {playerSoul.soul.skills.map((skill) => {
+                    return this.SkillWrapper(playerSoul, skill);
                 })}
             </div>
         );
     }
 
     private SwitchWrapper(
-        props: {
-            switchOutFainted: boolean,
-            action: SwitchOut,
-            playerSouls: Array<FieldedPlayerSoul | null>,
-        }
+        switchOutFainted: boolean,
+        action: SwitchOut,
+        playerSouls: Array<FieldedPlayerSoul | null>,
+        playerParty: Array<PlayerSoul>
     ): JSX.Element {
-        const battleSoul = props.playerSouls[props.action.soulPartyIndex];
-        if (battleSoul === null) {
-            console.error("battleSoul is null ???");
-            return <div></div>;
-        }
-
-        const switchContainer = <RenderSoul.getSwitchContainer playerSoul={battleSoul.soul}/>;
+        const switchInSoul = playerParty[action.switchInIndex];
+        const switchContainer = RenderSoul.getSwitchContainer(switchInSoul);
         const switchButton = switchContainer.getElementsByTagName("button")[0];
 
         let offField = true;
-        props.playerSouls.forEach((s) => {
-            if (s !== null && s.soul === battleSoul.soul) {
+        playerSouls.forEach((s) => {
+            if (s !== null && s.soul === switchInSoul) {
                 offField = false;
             }
         })
 
-        if (battleSoul.soul.currentHP > 0 && offField) {
-            if (!props.switchOutFainted) {
+        if (switchInSoul.currentHP > 0 && offField) {
+            if (!switchOutFainted) {
                 switchButton.addEventListener("click",
-                    this.createActionHandler(props.action),
+                    this.createActionHandler(action),
                     false);
             }
             else {
                 switchButton.addEventListener("click",
-                    this.createSwitchFaintHandler(props.action.soulPartyIndex, props.action.switchInIndex),
+                    this.createSwitchFaintHandler(action.soulPartyIndex, action.switchInIndex),
                     false);
             }
         }
@@ -100,40 +92,38 @@ class Renderer {
     }
 
     private SwitchMenu(
-        props: {
-            playerParty: Array<PlayerSoul>,
-            playerSouls: Array<FieldedPlayerSoul | null>
-        }
+        playerParty: Array<PlayerSoul>,
+        playerSouls: Array<FieldedPlayerSoul | null>
     ): JSX.Element {
         return <div id="switchContainer">
             <p>SWITCH ACTIVE PROCESS?</p>
 
-            {props.playerParty.map((playerSoul, i) => {
-                <this.SwitchWrapper
-                    switchOutFainted = {false}
-                    action = {new SwitchOut(0, i)}
-                    playerSouls = {props.playerSouls}
-                />
+            {playerParty.map((playerSoul, i) => {
+                return this.SwitchWrapper(
+                    false,
+                    new SwitchOut(0, i),
+                    playerSouls,
+                    playerParty
+                );
             })}
         </div>;
     }
 
     FaintSwitchMenu(
-        props: {
-            faintInfo: FaintData,
-            playerParty: Array<PlayerSoul>,
-            playerSouls: Array<FieldedPlayerSoul | null>
-        }
+        faintInfo: FaintData,
+        playerParty: Array<PlayerSoul>,
+        playerSouls: Array<FieldedPlayerSoul | null>
     ): JSX.Element {
         return <div id="switchContainer">
             <p>PROCESS DESTROYED. MUST DEPLOY NEW PROCESS.</p>
 
-            {props.playerParty.map((playerSoul, i) => {
-                <this.SwitchWrapper
-                    switchOutFainted = {true}
-                    action = {new SwitchOut(props.faintInfo.playerSoulsIndex, i)}
-                    playerSouls = {props.playerSouls}
-                />
+            {playerParty.map((playerSoul, i) => {
+                return this.SwitchWrapper(
+                    true,
+                    new SwitchOut(faintInfo.playerSoulsIndex, i),
+                    playerSouls,
+                    playerParty
+                );
             })}
         </div>
     }
@@ -144,12 +134,8 @@ class Renderer {
         playerSouls: Array<FieldedPlayerSoul | null>
     ) {
         document.getElementById("bottomContent")?.append(
-            <this.SkillMenu
-                playerSoul={playerSoul}/>,
-
-            <this.SwitchMenu
-                playerParty={playerParty}
-                playerSouls={playerSouls}/>
+            this.SkillMenu(playerSoul),
+            this.SwitchMenu(playerParty, playerSouls)
         );
 
         const battleItemMenu = new BattleItemMenu(

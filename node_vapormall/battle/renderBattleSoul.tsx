@@ -37,7 +37,7 @@ class RenderBattleSoul {
         return <div>
             {this.battleSoul.soul.name}
             <br/>
-            <RenderSoul.getLevelText soul={this.battleSoul.soul}/>
+            {RenderSoul.getLevelText(this.battleSoul.soul)}
             <br/>
             <small className="hp-text">{this.getHPString()}</small>
         </div>;
@@ -50,30 +50,30 @@ class RenderBattleSoul {
                 <br/><br/>(After stat modifiers:)<br/>
             </small>}
 
-            <RenderSoul.genStatText
-                soul={this.battleSoul.soul}
-                dict={this.battleSoul.modifiedStatDict()}
-            />
+            {RenderSoul.genStatText(
+                this.battleSoul.soul,
+                this.battleSoul.modifiedStatDict()
+            )}
         </div>;
     }
 
     DetailedInfo(): JSX.Element {
-        const infoDiv = <RenderSoul.DetailedInfo soul={this.battleSoul.soul}/>;
+        const infoDiv = RenderSoul.DetailedInfo(this.battleSoul.soul);
         infoDiv.classList.remove("bottomhalf-tip");
         infoDiv.classList.add("topHalf-tip");
 
         const skillDiv = infoDiv.querySelector(".skillDiv");
         skillDiv?.insertAdjacentElement(
             "beforebegin",
-            <this.ModifiedStatInfo/>
+            this.ModifiedStatInfo()
         );
 
         return infoDiv;
     }
 
     InfoContainer(): JSX.Element {
-        const infoDiv = <this.InfoDiv/>;
-        const detailedInfoDiv = <this.DetailedInfo/>;
+        const infoDiv = this.InfoDiv();
+        const detailedInfoDiv = this.DetailedInfo();
 
         infoDiv.onmouseover = function(){
             detailedInfoDiv.style.display = "block";

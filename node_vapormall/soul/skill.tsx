@@ -1,4 +1,5 @@
 import {SkillData} from "../data/skills";
+import {h} from "dom-chef";
 
 class Skill{
     data: SkillData;
@@ -14,7 +15,7 @@ class Skill{
             <button type="button" className={"skill-button outlineDiv skill-" + this.data.type}>
                 {this.data.name}
                 <br/>
-                <small>{this.data.type }</small>
+                <small>{this.data.type + " "}</small>
                 <small>{this.pp}/{this.data.max_pp}</small>
             </button>
         );
@@ -36,8 +37,8 @@ class Skill{
     }
 
     public SkillContainer() {
-        const skillButton = <this.SkillButton/>
-        const skillTip = <this.SkillTip/>
+        const skillButton = this.SkillButton();
+        const skillTip = this.SkillTip();
 
         skillButton.onmouseover = function(){
             skillTip.style.display = "block";
@@ -48,7 +49,7 @@ class Skill{
 
         return <div className="choice-wrapper">
             {skillButton}{skillTip}
-        </div>
+        </div>;
     }
 }
 
