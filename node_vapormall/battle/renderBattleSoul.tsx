@@ -1,5 +1,5 @@
 import { CONSTANTS } from "../data/constants";
-import { BattleSoul, FieldedPlayerSoul } from "./battleSoul";
+import { BattleSoul, FieldedPlayerSoul } from "./sim/battleSoul";
 
 import { h } from "dom-chef";
 

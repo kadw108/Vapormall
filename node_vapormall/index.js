@@ -2,7 +2,7 @@ import { CONSTANTS } from "./data/constants";
 import { SKILL_LIST } from "./data/skills";
 import { SOUL_LIST } from "./data/soul";
 
-import { Battle } from "./battle/battle";
+import { BattleSim } from "./battle/sim/battleSim";
 import { IndividualSoul, PlayerSoul } from "./soul/individualSoul";
 import { Skill } from "./soul/skill";
 
@@ -21,7 +21,7 @@ export {
     CONSTANTS,
     SKILL_LIST,
     SOUL_LIST,
-    Battle,
+    BattleSim,
     IndividualSoul,
     PlayerSoul,
     Skill,

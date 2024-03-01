@@ -1,7 +1,7 @@
-import { IndividualSoul, PlayerSoul } from "../soul/individualSoul";
-import { StatDict, CONSTANTS } from "../data/constants";
-import { RenderBattleSoul } from "./renderBattleSoul";
-import { Action, UseSkill } from "./action";
+import { IndividualSoul, PlayerSoul } from "../../soul/individualSoul";
+import { StatDict, CONSTANTS } from "../../data/constants";
+import { RenderBattleSoul } from "../renderBattleSoul";
+import { Action, UseSkill } from "../action";
 
 abstract class BattleSoul {
     soul: IndividualSoul;

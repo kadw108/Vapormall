@@ -46,3 +46,12 @@
   height: 20%;
   top: auto;
 }
+
+#useMessageDiv {
+  height: fit-content;
+  top: auto;
+}
+#useMessageDiv > div {
+  width: calc(100% - 2rem);
+  float: right;
+}

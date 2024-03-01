@@ -1,5 +1,5 @@
-import { FieldedPlayerSoul } from "./battleSoul";
-import { FaintData } from "./battle";
+import { FieldedPlayerSoul } from "./sim/battleSoul";
+import { FaintData } from "./sim/battleSim";
 
 import { PlayerSoul } from "../soul/individualSoul";
 import { Skill } from "../soul/skill";

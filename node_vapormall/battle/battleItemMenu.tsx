@@ -3,7 +3,7 @@ import { Manager } from "../manager";
 import { InventoryMenuAbstract } from "../menu/inventoryMenuAbstract";
 import { PlayerSoul } from "../soul/individualSoul";
 import { UseItem } from "./action";
-import { FieldedPlayerSoul } from "./battleSoul";
+import { FieldedPlayerSoul } from "./sim/battleSoul";
 
 import { h } from "dom-chef";
 

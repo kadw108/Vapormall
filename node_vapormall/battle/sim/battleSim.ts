@@ -1,20 +1,20 @@
-import { IndividualSoul, PlayerSoul } from "../soul/individualSoul";
-import { CONSTANTS } from "../data/constants";
+import { IndividualSoul, PlayerSoul } from "../../soul/individualSoul";
+import { CONSTANTS } from "../../data/constants";
 
 import { BattleSoul, FieldedPlayerSoul, EnemySoul } from "./battleSoul";
-import { Renderer } from "./renderer";
-import { MessageTimer } from "./messageTimer";
+import { Renderer } from "../renderer";
+import { MessageTimer } from "../messageTimer";
 import { Calculator } from "./calculator";
-import { GameState } from "../gameState";
-import { Action, SwitchOut, UseSkill, UseItem } from "./action";
-import { Inventory } from "../inventory";
+import { GameState } from "../../gameState";
+import { Action, SwitchOut, UseSkill, UseItem } from "../action";
+import { Inventory } from "../../inventory";
 
 interface FaintData {
     soul: FieldedPlayerSoul;
     playerSoulsIndex: number;
 }
 
-class Battle {
+class BattleSim {
     readonly playerParty: Array<PlayerSoul>;
     readonly enemyParty: Array<IndividualSoul>;
 
@@ -386,4 +386,4 @@ class Battle {
     }
 }
 
-export { Battle, FaintData };
+export { BattleSim, FaintData };

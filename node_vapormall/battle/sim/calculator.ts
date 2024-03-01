@@ -1,14 +1,14 @@
-import { Battle } from "./battle";
-import { Skill } from "../soul/skill";
-import { StatChange } from "../data/skills";
-import { CONSTANTS } from "../data/constants";
+import { BattleSim } from "./battleSim";
+import { Skill } from "../../soul/skill";
+import { StatChange } from "../../data/skills";
+import { CONSTANTS } from "../../data/constants";
 import { BattleSoul, FieldedPlayerSoul, EnemySoul } from "./battleSoul";
-import { IndividualSoul } from "../soul/individualSoul";
+import { IndividualSoul } from "../../soul/individualSoul";
 
 class Calculator {
-    battle: Battle;
+    battle: BattleSim;
 
-    constructor(battle: Battle) {
+    constructor(battle: BattleSim) {
         this.battle = battle;
     }
 

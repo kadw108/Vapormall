@@ -1,8 +1,8 @@
 import { GameState } from "./gameState";
-import { Battle } from "./battle/battle";
+import { BattleSim } from "./battle/sim/battleSim";
 
 class Manager {
-    static startBattle(): Battle | null {
+    static startBattle(): BattleSim | null {
         const players = GameState.partySouls;
         const enemy1 = GameState.currentEnemy;
 
@@ -11,7 +11,7 @@ class Manager {
             return null;
         }
 
-        return new Battle(players, [enemy1]);
+        return new BattleSim(players, [enemy1]);
     }
 
     static menuButton(buttonId: string, menuId: string, menuName: string) {
