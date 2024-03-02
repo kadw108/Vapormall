@@ -50,19 +50,24 @@ class BattleItemMenu extends InventoryMenuAbstract {
             </button>
         );
         itemButton.addEventListener("click", () => {
-            inventoryDiv.classList.add("hidden");
-            document.getElementById("inventoryButton")!.innerText = "Inventory";
-            document
-                .getElementById("bottomContent")!
-                .classList.remove("hidden");
-
-            document.querySelectorAll(".menuButton").forEach((element) => {
-                if (element.id !== "inventoryButton") {
-                    element.classList.remove("hidden");
-                }
-            });
+            this.closeMenu();
         });
         inventoryDiv.append(itemButton);
+    }
+
+    private closeMenu() {
+        const inventoryDiv = document.getElementById("inventory")!;
+        inventoryDiv.classList.add("hidden");
+        document.getElementById("inventoryButton")!.innerText = "Inventory";
+        document
+            .getElementById("bottomContent")!
+            .classList.remove("hidden");
+
+        document.querySelectorAll(".menuButton").forEach((element) => {
+            if (element.id !== "inventoryButton") {
+                element.classList.remove("hidden");
+            }
+        });
     }
 
     override fillInventoryDiv() {
@@ -82,6 +87,8 @@ class BattleItemMenu extends InventoryMenuAbstract {
             );
             const test = this.createActionHandler(action);
             console.log(test);
+
+            this.closeMenu();
             test();
         };
         return handler;

@@ -49,11 +49,6 @@ class Calculator {
                             target.soul
                         );
 
-                        this.battle.messageTimer.addMessage(() => {
-                            target.renderer.displayHP -= damage;
-                            target.renderer.updateHP();
-                        });
-
                         if (multiplier > 1) {
                             this.battle.messageTimer.addMessage(
                                 "It's super effective!"
@@ -63,15 +58,13 @@ class Calculator {
                                 "It's not very effective..."
                             );
                         }
-
                         this.battle.messageTimer.addMessage(
                             target.renderer.getName() +
                                 " lost " +
                                 damage +
                                 " HP!"
                         );
-                        target.soul.changeHP(-damage);
-                        this.checkFaint(target);
+                        this.battle.changeHP(target, -damage);
 
                         if (skill.data.meta.drain !== 0) {
                             const drain = this.capDamageToHP(
@@ -80,11 +73,6 @@ class Calculator {
                                 ),
                                 user.soul
                             );
-
-                            this.battle.messageTimer.addMessage(() => {
-                                user.renderer.displayHP += drain;
-                                user.renderer.updateHP();
-                            });
 
                             if (drain > 0) {
                                 this.battle.messageTimer.addMessage(
@@ -101,8 +89,7 @@ class Calculator {
                                         " HP from recoil!"
                                 );
                             }
-                            user.soul.changeHP(drain);
-                            this.checkFaint(user);
+                            this.battle.changeHP(user, drain);
                         }
                     }
                 }
@@ -112,14 +99,14 @@ class Calculator {
                 skill.data.stat_changes.forEach((statChange: StatChange) => {
                     if (statChange.stat === CONSTANTS.STATS.HP) {
                         console.error("Stat change for HP not allowed!");
-                    } else if (target.stat_changes[statChange.stat] === 6) {
+                    } else if (target.statChanges[statChange.stat] === 6) {
                         this.battle.messageTimer.addMessage(
                             target.renderer.getName() +
                                 "'s " +
                                 statChange.stat +
                                 " couldn't go any higher!"
                         );
-                    } else if (target.stat_changes[statChange.stat] === -6) {
+                    } else if (target.statChanges[statChange.stat] === -6) {
                         this.battle.messageTimer.addMessage(
                             target.renderer.getName() +
                                 "'s " +
@@ -127,7 +114,7 @@ class Calculator {
                                 " couldn't go any lower!"
                         );
                     } else {
-                        target.stat_changes[statChange.stat] +=
+                        target.statChanges[statChange.stat] +=
                             statChange.change;
 
                         let changeDesc = " ";

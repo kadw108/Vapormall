@@ -28,7 +28,7 @@ class InventoryMenu extends InventoryMenuAbstract {
         itemKey: ItemKey
     ): EventListenerOrEventListenerObject {
         const handler = (event: Event) => {
-            itemKey.item.itemEffect(playerSoul);
+            itemKey.item.effect(playerSoul);
             const itemRemains = GameState.Inventory.removeItem(itemKey.item);
             if (!itemRemains) {
                 this.clearSelection();

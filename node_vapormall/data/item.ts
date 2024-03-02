@@ -1,5 +1,7 @@
 import { IndividualSoul } from "../soul/individualSoul";
 import { CONSTANTS } from "../data/constants";
+import { BattleSim } from "../battle/sim/battleSim";
+import { BattleSoul } from "../battle/sim/battleSoul";
 
 interface Item {
     name: string;
@@ -7,7 +9,8 @@ interface Item {
     sprite: string;
     description: string;
     soulCanUse: Function;
-    itemEffect: Function;
+    effect: Function;
+    inBattleEffect: Function;
     useMessage: string;
 }
 
@@ -22,12 +25,18 @@ function hpOverZero(soul: IndividualSoul): boolean {
 }
 
 function makeHealHPFunction(healAmount: number, healPercent: number): Function {
-    return (playerSoul: IndividualSoul) => {
-        playerSoul.changeHP(healAmount);
-        playerSoul.changeHP(
-            Math.ceil(playerSoul.stats[CONSTANTS.STATS.HP] * healPercent * 0.01)
+    return (soul: IndividualSoul) => {
+        soul.changeHP(healAmount);
+        soul.changeHP(
+            Math.ceil(soul.stats[CONSTANTS.STATS.HP] * healPercent * 0.01)
         );
     };
+}
+function makeBattleHealHPFunction(healAmount: number, healPercent: number): Function {
+    return (battleSim: BattleSim, battleSoul: BattleSoul) => {
+        const realHealAmount = healAmount + Math.ceil(battleSoul.soul.stats[CONSTANTS.STATS.HP] * healPercent * 0.01);
+        battleSim.changeHP(battleSoul, realHealAmount);
+    }
 }
 
 const ITEMS: ItemList = {
@@ -37,7 +46,8 @@ const ITEMS: ItemList = {
         sprite: "temp.png",
         description: "Restores integrity of damaged process by 10.",
         soulCanUse: hpOverZero,
-        itemEffect: makeHealHPFunction(10, 0),
+        effect: makeHealHPFunction(10, 0),
+        inBattleEffect: makeBattleHealHPFunction(10, 0),
         useMessage: "[target] was healed.",
     },
     advanced_repair_module: {
@@ -46,7 +56,8 @@ const ITEMS: ItemList = {
         sprite: "temp.png",
         description: "Restores integrity of damaged process by 25.",
         soulCanUse: hpOverZero,
-        itemEffect: makeHealHPFunction(25, 0),
+        effect: makeHealHPFunction(25, 0),
+        inBattleEffect: makeBattleHealHPFunction(25, 0),
         useMessage: "[target] was healed.",
     },
     full_repair_module: {
@@ -55,7 +66,8 @@ const ITEMS: ItemList = {
         sprite: "temp.png",
         description: "Restores all integrity of damaged process.",
         soulCanUse: hpOverZero,
-        itemEffect: makeHealHPFunction(0, 100),
+        effect: makeHealHPFunction(0, 100),
+        inBattleEffect: makeBattleHealHPFunction(0, 100),
         useMessage: "[target] was healed.",
     },
 };

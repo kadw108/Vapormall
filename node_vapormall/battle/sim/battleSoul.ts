@@ -5,10 +5,10 @@ import { Action, UseSkill } from "../action";
 
 abstract class BattleSoul {
     soul: IndividualSoul;
-    selected_action: Action | null;
-    selected_target: Array<BattleSoul> | null;
+    selectedAction: Action | null;
+    selectedTarget: Array<BattleSoul> | null;
 
-    stat_changes: StatDict;
+    statChanges: StatDict;
 
     index: number;
 
@@ -16,10 +16,10 @@ abstract class BattleSoul {
 
     constructor(soul: IndividualSoul) {
         this.soul = soul;
-        this.selected_action = null;
-        this.selected_target = null;
+        this.selectedAction = null;
+        this.selectedTarget = null;
 
-        this.stat_changes = {
+        this.statChanges = {
             [CONSTANTS.STATS.HP]: 0, // not allowed to change hp
             [CONSTANTS.STATS.ATTACK]: 0,
             [CONSTANTS.STATS.DEFENSE]: 0,
@@ -36,7 +36,7 @@ abstract class BattleSoul {
     hasModifiers(): boolean {
         for (let key in this.soul.stats) {
             const keyType = key as unknown as CONSTANTS.STATS;
-            if (this.stat_changes[keyType] !== 0) {
+            if (this.statChanges[keyType] !== 0) {
                 return true;
             }
         }
@@ -70,10 +70,10 @@ abstract class BattleSoul {
         const base = this.soul.stats[stat];
 
         let modifier;
-        if (this.stat_changes[stat] > 0) {
-            modifier = (2 + this.stat_changes[stat]) / 2;
+        if (this.statChanges[stat] > 0) {
+            modifier = (2 + this.statChanges[stat]) / 2;
         } else {
-            modifier = 2 / (2 - this.stat_changes[stat]);
+            modifier = 2 / (2 - this.statChanges[stat]);
         }
 
         return Math.max(Math.floor(base * modifier), 1);
@@ -113,7 +113,7 @@ class EnemySoul extends BattleSoul {
         // const randomSkill = Math.floor(Math.random() * this.soul.skills.length);
         const randomSkill = 1;
         const selected_skill = this.soul.skills[randomSkill];
-        this.selected_action = new UseSkill(this.index, selected_skill);
+        this.selectedAction = new UseSkill(this.index, selected_skill);
 
         switch (selected_skill.data.target) {
             case CONSTANTS.TARGETS.SELECTED:
@@ -128,13 +128,13 @@ class EnemySoul extends BattleSoul {
                         console.error("null player skill !!");
                     }
                 }
-                this.selected_target = [playerSouls[randomTarget]!];
+                this.selectedTarget = [playerSouls[randomTarget]!];
                 break;
 
             case CONSTANTS.TARGETS.ALLIED:
             case CONSTANTS.TARGETS.ALLY:
             case CONSTANTS.TARGETS.SELF:
-                this.selected_target = [this];
+                this.selectedTarget = [this];
                 break;
 
             case CONSTANTS.TARGETS.ALL:

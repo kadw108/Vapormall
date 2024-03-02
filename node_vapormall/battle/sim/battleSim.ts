@@ -69,6 +69,15 @@ class BattleSim {
         return null;
     }
 
+    changeHP(battleSoul: BattleSoul, amount: number) {
+        this.messageTimer.addMessage(() => {
+            battleSoul.renderer.displayHP += amount;
+            battleSoul.renderer.updateHP();
+        });
+        battleSoul.soul.changeHP(amount);
+        this.calculator.checkFaint(battleSoul);
+    }
+
     private selectEnemySkills() {
         for (const i of this.enemySouls) {
             i.chooseMove(this.allSouls(), this.playerSouls, this.enemySouls);
@@ -77,35 +86,35 @@ class BattleSim {
 
     private selectPlayerTarget(playerSoul: FieldedPlayerSoul) {
         if (
-            playerSoul.selected_action === null ||
-            !playerSoul.selected_action.isUseSkill()
+            playerSoul.selectedAction === null ||
+            !playerSoul.selectedAction.isUseSkill()
         ) {
             console.error("SELECTING TARGET FOR NULL PLAYER SKILL");
             return;
         }
 
-        const selected_skill = (playerSoul.selected_action as UseSkill).skill;
+        const selected_skill = (playerSoul.selectedAction as UseSkill).skill;
         switch (selected_skill.data.target) {
             case CONSTANTS.TARGETS.SELECTED:
             case CONSTANTS.TARGETS.OPPOSING:
                 const j = 0;
-                playerSoul.selected_target = [this.enemySouls[j]];
+                playerSoul.selectedTarget = [this.enemySouls[j]];
                 break;
             case CONSTANTS.TARGETS.ALLIED:
-                playerSoul.selected_target = this.playerSouls.filter(
+                playerSoul.selectedTarget = this.playerSouls.filter(
                     (i) => i !== null
                 ) as BattleSoul[];
                 break;
             case CONSTANTS.TARGETS.ALL:
-                playerSoul.selected_target = this.allSouls().filter(
+                playerSoul.selectedTarget = this.allSouls().filter(
                     (i) => i !== null
                 ) as BattleSoul[];
                 break;
             case CONSTANTS.TARGETS.SELF:
-                playerSoul.selected_target = [playerSoul];
+                playerSoul.selectedTarget = [playerSoul];
                 break;
             case CONSTANTS.TARGETS.NONE:
-                playerSoul.selected_target = [];
+                playerSoul.selectedTarget = [];
                 break;
         }
     }
@@ -114,11 +123,11 @@ class BattleSim {
         for (const soul of this.allSouls()) {
             if (
                 soul !== null &&
-                soul.selected_action !== null &&
-                soul.selected_action.isUseItem()
+                soul.selectedAction !== null &&
+                soul.selectedAction.isUseItem()
             ) {
-                const item = (soul.selected_action as UseItem).item;
-                const target = (soul.selected_action as UseItem).targetSoul;
+                const item = (soul.selectedAction as UseItem).item;
+                const target = (soul.selectedAction as UseItem).targetSoul;
 
                 if (!GameState.Inventory.hasItem(item)) {
                     console.error("Using item player does not have!");
@@ -127,13 +136,8 @@ class BattleSim {
 
                 this.messageTimer.addMessage(() => {
                     GameState.Inventory.removeItem(item);
-                    item.itemEffect(target);
-
-                    const battleSoul = this.getFieldedSoul(target);
-                    if (battleSoul !== null) {
-                        battleSoul.renderer.displayHP += drain;
-                        battleSoul.renderer.updateHP();
-                    }
+                    item.effect(target);
+                    item.inBattleEffect(this, target);
                 });
                 this.messageTimer.addMessage(
                     "You used " + item.long_name + " on " + target.name + "!"
@@ -161,7 +165,7 @@ class BattleSim {
         for (let i = 0; i < speed_order.length; i++) {
             if (
                 speed_order[i] !== null &&
-                speed_order[i]?.selected_action?.isUseSkill()
+                speed_order[i]?.selectedAction?.isUseSkill()
             ) {
                 this.useSkill(speed_order[i]!);
             }
@@ -223,7 +227,7 @@ class BattleSim {
     }
 
     useSkill(user: BattleSoul) {
-        const skill = (user.selected_action as UseSkill).skill;
+        const skill = (user.selectedAction as UseSkill).skill;
         if (skill === null) {
             console.log("Using null skill!");
             return;
@@ -241,8 +245,8 @@ class BattleSim {
             case CONSTANTS.TARGETS.ALLY:
             case CONSTANTS.TARGETS.ALL:
             case CONSTANTS.TARGETS.SELF:
-                if (user.selected_target !== null) {
-                    user.selected_target.forEach((target) => {
+                if (user.selectedTarget !== null) {
+                    user.selectedTarget.forEach((target) => {
                         this.calculator.applySkillEffects(user, skill, target);
                     });
                 } else {
@@ -319,7 +323,7 @@ class BattleSim {
                     this.nextTurnChoices(switchInFieldedPlayerSoul)
                 );
                 this.messageTimer.addMessage(() => {
-                    switchInFieldedPlayerSoul.selected_action = null;
+                    switchInFieldedPlayerSoul.selectedAction = null;
                 });
                 this.messageTimer.displayMessages(this.turns);
             };
@@ -333,7 +337,7 @@ class BattleSim {
                     return;
                 }
 
-                battleSoul.selected_action = action;
+                battleSoul.selectedAction = action;
                 this.selectPlayerTarget(battleSoul);
 
                 this.selectEnemySkills();
@@ -341,7 +345,7 @@ class BattleSim {
                 this.runSkills();
                 this.messageTimer.addMessage(this.nextTurnChoices(battleSoul));
                 this.messageTimer.addMessage(() => {
-                    battleSoul.selected_action = null;
+                    battleSoul.selectedAction = null;
                 });
                 this.messageTimer.displayMessages(this.turns);
             };
