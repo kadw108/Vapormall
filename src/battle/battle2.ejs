@@ -1,0 +1,18 @@
+<!-- <snippet name="Battle2" scripts="meta/scripts/battle2.js"> -->
+<snippet name="Battle2">
+  <h1>Battle Demo</h1>
+  <div id="app"></div>
+
+<%
+$(function () {
+
+  // add the menus.js script after everything else is done loading
+  // used instead of `scripts="meta/scripts/battle2.js` because that loads the script in the wrong order, the canvas never shows up in #app
+  const script = document.createElement('script');
+  script.src = './menus.js';
+  script.type = 'text/javascript';
+  document.getElementsByTagName('head')[0].appendChild(script);
+});
+%>
+
+</snippet>

@@ -1,0 +1,115 @@
+# Fully Animated Moves
+
+Here is a list of every move that has been fully animated thus far.
+
+This is my main visual reference: https://www.youtube.com/watch?v=oBMqOSxaLC8
+
+- [ ] 1 - Pound
+- [ ] 2 - Karate Chop
+- [ ] 3 - Double Slap
+- [ ] 4 - Comet Punch
+- [x] 10 - Scratch
+- [ ] 12 - Guillotine
+- [x] 14 - Swords Dance 
+- [x] 17 - Wing Attack
+- [x] 19 - Fly
+- [x] 22 - Vine Whip
+- [ ] 26 - Jump Kick
+  - [x] Animation
+  - [ ] Crash damage handling
+- [x] 33 - Tackle
+- [x] 34 - Body Slam
+- [x] 39 - Tail Whip
+- [x] 45 - Growl
+- [x] 46 - Roar
+  - is it supposed to be random, or should the player be allowed to pick
+- [x] 47 - Sing
+- [x] 48 - Supersonic
+- [x] 50 - Disable
+- [x] 53 - Flamethrower
+- [x] 57 - Surf
+- [x] 58 - Ice Beam
+- [x] 59 - Blizzard
+- [ ] 63 - Hyper Beam
+  - [x] mechanics
+  - [ ] vfx
+- [ ] 73 - Leech Seed
+  - [x] mechanics
+  - [ ] vfx
+- [x] 76 - Solar Beam
+- [ ] 82 - Dragon Rage
+- [x] 83 - Fire Spin
+  - should we display text when it ends?
+- [x] 85 - Thunderbolt
+- [x] 87 - Thunder
+- [x] 89 - Earthquake
+- [ ] 92 - Toxic
+  - [x] mechanics
+  - [ ] particles
+  - [ ] background shader 
+- [X] 94 - Psychic
+- [x] 98 - Quick Attack
+- [x] 99 - Rage
+  - actually has modern mechanics, report gen 2 bug
+- [x] 111 - Defense Curl
+- [ ] 113 - Light Screen
+  - [x] mechanics
+  - [ ] vfx
+- [x] 115 - Reflect
+- [x] 116 - Focus Energy
+- [x] 118 - Metronome
+- [x] 126 - Fire Blast
+- [x] 129 - Swift
+- [ ] 130 - Skull Bash
+  - [x] mechanics
+  - [ ] vfx
+- [x] 133 - Amnesia
+- [ ] 153 - Explosion
+  - [x] mechanics
+  - [ ] vfx
+- [x] 156 - Rest
+- [x] 163 - Slash
+- [x] 164 - Substitute
+- [ ] 172 - Flame Wheel
+- [x] 173 - Snore
+- [ ] 174 - Curse
+  - [x] mechanics
+  - [ ] vfx
+- [ ] 182 - Protect
+  - [X] mechanics
+  - [ ] vfx
+- [ ] 187 - Belly Drum
+  - [x] mechanics
+  - [ ] vfx
+- [x] 188 - Sludge Bomb
+- [x] 189 - Mud-Slap
+- [ ] 191 - Spikes
+  - [x] mechanics
+  - [ ] vfx
+- [ ] 194 - Destiny Bond
+  - [x] mechanics
+  - [ ] vfx
+- [x] 202 - Giga Drain
+- [x] 204 - Charm
+- [x] 216 - Return
+- [x] 223 - Dynamic Punch
+- [ ] 226 - Baton Pass
+  - [x] mechanics
+  - [ ] vfx
+- [x] 227 - Encore
+- [ ] 229 - Rapid Spin
+  - [ ] mechanics (removes hazards, like leech seed)
+  - [ ] vfx
+- [x] 235 - Synthesis
+- [x] 236 - Moonlight
+- [x] 240 - Rain Dance
+- [x] 241 - Sunny Day
+  - does the "sun is still strong" message use this vfx?
+- [x] 242 - Crunch
+- [x] 245 - Extreme Speed
+- [X] 247 - Shadow Ball
+- [ ] 248 - Future Sight
+  - [x] mechanics
+  - [ ] vfx
+- [x] 250 - Whirlpool
+- [x] 251 - Beat Up

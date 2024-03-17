@@ -17,6 +17,14 @@
     "dom-chef": "^5.1.1",
     "esbuild": "0.19.2",
     "iffinity": "^0.4.0",
-    "konva": "^9.3.2"
+    "konva": "^9.3.2",
+
+    "@pixi/filter-color-matrix": "^6.5.1",
+    "@pixi/sound": "^4.3.0",
+    "@pkmn/streams": "^1.1.0",
+    "@vapormall/sim": "file:../vapormall-ps/sim",
+    "pixi-filters": "^4.1.6",
+    "pixi.js": "^8.0.2",
+    "pixi.js-legacy": "^6.5.1"
   }
 }

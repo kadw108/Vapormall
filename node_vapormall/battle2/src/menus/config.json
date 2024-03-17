@@ -1,0 +1,10 @@
+{
+    "player": {
+        "level": 25,
+        "moves": [ "METRONOME" ]
+    },
+    "opponent": {
+        "level": 20,
+        "moves": [  "METRONOME" ]
+    }
+}
